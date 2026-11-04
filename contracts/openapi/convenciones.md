@@ -1,6 +1,6 @@
 # Convenciones comunes de los contratos — propuesta funcional
 
-Estado: complemento para revisar junto con los contratos restantes. No es un archivo OpenAPI validado ni código de mocks.
+Estado: complemento funcional del contrato `openapi.yaml`. Este Markdown no es código de mocks; las reglas descritas orientan la futura implementación real, mientras la fase actual solo define contratos y ejemplos.
 
 ## Alcance e identidad confirmados
 
@@ -82,4 +82,6 @@ La precedencia entre validaciones se formalizará en OpenAPI y en los mocks; las
 
 ## Estado de publicación
 
-Estos documentos definen comportamiento. Aún se debe seleccionar versión OpenAPI y validador, trasladar esquemas y ejemplos, validar el archivo y exponerlo en Swagger UI junto a los endpoints mock. No se ha publicado una API ni se han implementado estos pasos.
+El archivo `openapi.yaml` formaliza las siete operaciones con OpenAPI 3.0.3 y se valida mediante Redocly CLI 2.75.0. Define formas, respuestas y ejemplos; no ejecuta reglas entre solicitudes. La autenticación Bearer describe el contrato sin presuponer JWT ni un proveedor real. En el contexto genérico `attributes` admite `{}`; las adaptaciones futuras deberán definir sus propios esquemas explícitos.
+
+Swagger UI está expuesto en `http://localhost:8080/docs/`, solo para explorar documentación y ejemplos. El contrato descargable está en `/docs/openapi.yaml`. Falta el servidor de respuestas prefijadas; Try it out permanece desactivado. La fase actual no implementa lógica, persistencia ni estado compartido de reservas; esas capacidades corresponden al siguiente hito. Ver instrucciones de validación y arranque en [README](README.md).

@@ -1,0 +1,16 @@
+{
+  "name": "bookingms-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Validación del contrato OpenAPI; sin implementación de negocio.",
+  "scripts": {
+    "validate": "redocly lint --config redocly.yaml openapi/openapi.yaml"
+  },
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10"
+  },
+  "devDependencies": {
+    "@redocly/cli": "2.75.0"
+  }
+}

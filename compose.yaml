@@ -1,0 +1,24 @@
+name: bookingms-demo
+
+services:
+  swagger-ui:
+    image: swaggerapi/swagger-ui:v5.32.14@sha256:3d93169968848d371a6a56ca1ab18b47a8906ba461b8eba0688866354f5431d5
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      BASE_URL: /docs
+      SWAGGER_JSON: /contracts/openapi.yaml
+      VALIDATOR_URL: none
+      DOC_EXPANSION: list
+      DISPLAY_REQUEST_DURATION: "true"
+      # Solo documentación hasta publicar el servidor de mocks.
+      SUPPORTED_SUBMIT_METHODS: "[]"
+    volumes:
+      - ./contracts/openapi/openapi.yaml:/contracts/openapi.yaml:ro
+    healthcheck:
+      test: [CMD, wget, --spider, -q, "http://127.0.0.1:8080/docs/"]
+      interval: 5s
+      timeout: 3s
+      start_period: 5s
+      retries: 12
+    restart: unless-stopped

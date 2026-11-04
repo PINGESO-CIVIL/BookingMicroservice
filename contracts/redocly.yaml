@@ -1,0 +1,11 @@
+extends:
+  - recommended
+rules:
+  # No se ha definido una licencia del proyecto; no inventar una para silenciar el aviso.
+  info-license: off
+  # El destino previsto es deliberadamente un mock local, no una API productiva.
+  no-server-example.com: off
+  no-invalid-media-type-examples: error
+  no-invalid-parameter-examples: error
+  operation-operationId-unique: error
+  no-unresolved-refs: error

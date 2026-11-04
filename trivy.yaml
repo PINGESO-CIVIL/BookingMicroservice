@@ -9,6 +9,8 @@ severity:
   - MEDIUM
   - HIGH
   - CRITICAL
+pkg:
+  include-dev-deps: true
 scan:
   scanners:
     - vuln
