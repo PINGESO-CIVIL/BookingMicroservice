@@ -1,0 +1,14 @@
+# Local quality credentials, caches, generated reports and downloaded tools.
+/.quality/
+/reports/
+/.scannerwork/
+**/.scannerwork/
+.env
+.env.local
+.env.*.local
+/spec
+
+# Build outputs and future frontend dependencies.
+Backend/bin/
+node_modules/
+dist/

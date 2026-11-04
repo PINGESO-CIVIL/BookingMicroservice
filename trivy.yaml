@@ -1,0 +1,24 @@
+# Report all severities. scripts/quality.ps1 fails on HIGH/CRITICAL findings
+# and on every detected secret; scanner failures always fail the command.
+format: json
+exit-code: 0
+timeout: 10m
+severity:
+  - UNKNOWN
+  - LOW
+  - MEDIUM
+  - HIGH
+  - CRITICAL
+scan:
+  scanners:
+    - vuln
+    - misconfig
+    - secret
+  skip-dirs:
+    - .git
+    - .quality
+    - reports
+    - .scannerwork
+    - node_modules
+vulnerability:
+  ignore-unfixed: false
