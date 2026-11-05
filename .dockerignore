@@ -1,0 +1,15 @@
+.git
+.quality
+reports
+.scannerwork
+**/node_modules
+**/dist
+**/test-results
+**/playwright-report
+**/.scannerwork
+Backend/bin
+.env
+.env.*
+**/.env
+**/.env.*
+**/*.log

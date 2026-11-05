@@ -19,7 +19,9 @@ La respuesta contiene ventanas continuas libres dentro del rango solicitado, cal
 
 Las ventanas están ordenadas por inicio, no se solapan y no exceden el rango. Las ventanas contiguas se agrupan cuando no existe ninguna separación de disponibilidad. Las reservas canceladas no descuentan ocupación.
 
-Una ventana libre no es un turno de duración predeterminada ni garantiza que todo intervalo dentro de ella cumpla políticas de duración, anticipación u otras restricciones. Esas reglas siguen siendo obligatorias al crear/modificar. La generación de turnos, granularidad y precedencia de horarios/excepciones no se resuelven implícitamente aquí.
+Decisión del usuario: las reservas se seleccionan como **bloques de duración fija configurables por recurso**, sin escribir manualmente inicio y término. `slotDurationSeconds` define esa duración (mínimo 60 segundos, múltiplo de 60). `availableWindows` conserva su significado de ventana continua; `availableSlots` contiene los bloques completos que puede seleccionar la interfaz.
+
+Los bloques se alinean desde la apertura de cada franja semanal y deben caber íntegramente antes del cierre, dentro del rango consultado y en el futuro. Una ocupación o bloqueo que solape parcialmente un bloque elimina ese bloque completo; no desplaza su alineación. Un remanente menor a la duración no genera una opción adicional. Se aplican horarios y zona del recurso, y no se muestran opciones en días cerrados o recursos deshabilitados. La selección no retiene el recurso y la escritura debe volver a validarla.
 
 Si el recurso visible está deshabilitado, la consulta devuelve una lista vacía con `enabled: false`. No confundirlo con un recurso inexistente o ajeno, que devuelve `404`.
 
@@ -36,6 +38,12 @@ En edición, esta consulta incluye la ocupación de la reserva existente; la int
   "timeZone": "America/Santiago",
   "from": "2026-11-10T21:00:00Z",
   "to": "2026-11-11T01:00:00Z",
+  "slotDurationSeconds": 3600,
+  "availableSlots": [
+    {"startAt": "2026-11-10T21:00:00Z", "endAt": "2026-11-10T22:00:00Z"},
+    {"startAt": "2026-11-10T23:00:00Z", "endAt": "2026-11-11T00:00:00Z"},
+    {"startAt": "2026-11-11T00:00:00Z", "endAt": "2026-11-11T01:00:00Z"}
+  ],
   "availableWindows": [
     {
       "startAt": "2026-11-10T21:00:00Z",
@@ -62,4 +70,4 @@ El intervalo [22:00, 23:00) puede estar ocupado o bloqueado; la respuesta no rev
 - La consulta no modifica reservas, bloqueos, versiones ni estado.
 - Que una ventana aparezca libre no obliga a aceptar una creación posterior si otra operación la ocupa antes.
 
-En el futuro mock, las ventanas serán datos simulados explícitos; no se atribuirán garantías de concurrencia MongoDB a una respuesta prefabricada. Los contratos de administración de bloqueos se definirán por separado; sus efectos sí forman parte de esta disponibilidad.
+Los fixtures se generan previamente a partir de configuración, reservas y bloqueos de ejemplo; el mock HTTP Go los sirve sin escrituras persistentes ni garantías de concurrencia MongoDB. Vue consume estos datos por HTTP y no calcula la disponibilidad durante el uso. El backend real debe implementar y validar estas reglas. En edición se conserva además el horario original como opción propia; no se incorpora al listado público de horarios libres ni habilita otras reservas ocupadas.

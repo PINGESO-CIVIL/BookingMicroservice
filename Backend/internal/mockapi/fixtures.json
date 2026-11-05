@@ -1,0 +1,5058 @@
+{
+  "examples": {
+    "AdminReservationPage": {
+      "items": [
+        {
+          "id": "reservation-005",
+          "resourceId": "resource-002",
+          "responsible": {
+            "issuer": "demo",
+            "subject": "user-002"
+          },
+          "startAt": "2026-11-09T13:00:00Z",
+          "endAt": "2026-11-09T13:30:00Z",
+          "status": "confirmed",
+          "attributes": {},
+          "cancellationNoticeSeconds": 7200,
+          "cancellationDeadline": "2026-11-09T11:00:00Z",
+          "version": 1,
+          "createdAt": "2026-11-04T12:00:00Z",
+          "updatedAt": "2026-11-04T12:00:00Z"
+        }
+      ],
+      "nextCursor": null
+    },
+    "CreateRequest": {
+      "resourceId": "resource-001",
+      "startAt": "2026-11-10T19:00:00-03:00",
+      "endAt": "2026-11-10T20:00:00-03:00",
+      "attributes": {}
+    },
+    "UpdateRequest": {
+      "expectedVersion": 1,
+      "startAt": "2026-11-10T20:00:00-03:00",
+      "endAt": "2026-11-10T21:00:00-03:00",
+      "attributes": {}
+    },
+    "ConfirmedReservation": {
+      "id": "reservation-001",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-10T22:00:00Z",
+      "endAt": "2026-11-10T23:00:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-10T20:00:00Z",
+      "version": 1,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    "UpdatedReservation": {
+      "id": "reservation-001",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-10T23:00:00Z",
+      "endAt": "2026-11-11T00:00:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-10T21:00:00Z",
+      "version": 2,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:05:00Z"
+    },
+    "CancelledReservation": {
+      "id": "reservation-001",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-10T22:00:00Z",
+      "endAt": "2026-11-10T23:00:00Z",
+      "status": "cancelled",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-10T20:00:00Z",
+      "version": 2,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:05:00Z"
+    },
+    "ReservationPage": {
+      "items": [
+        {
+          "id": "reservation-001",
+          "resourceId": "resource-001",
+          "responsible": {
+            "issuer": "demo",
+            "subject": "user-001"
+          },
+          "startAt": "2026-11-10T22:00:00Z",
+          "endAt": "2026-11-10T23:00:00Z",
+          "status": "confirmed",
+          "attributes": {},
+          "cancellationNoticeSeconds": 7200,
+          "cancellationDeadline": "2026-11-10T20:00:00Z",
+          "version": 1,
+          "createdAt": "2026-11-04T12:00:00Z",
+          "updatedAt": "2026-11-04T12:00:00Z"
+        }
+      ],
+      "nextCursor": null
+    },
+    "ResourcePage": {
+      "items": [
+        {
+          "id": "resource-001",
+          "name": "Recurso 1",
+          "enabled": true,
+          "timeZone": "America/Santiago",
+          "attributes": {}
+        },
+        {
+          "id": "resource-002",
+          "name": "Recurso 2",
+          "enabled": true,
+          "timeZone": "America/Santiago",
+          "attributes": {}
+        }
+      ],
+      "nextCursor": null
+    },
+    "Availability": {
+      "resourceId": "resource-001",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "from": "2026-11-10T21:00:00Z",
+      "to": "2026-11-11T01:00:00Z",
+      "slotDurationSeconds": 3600,
+      "availableSlots": [
+        {
+          "startAt": "2026-11-10T21:00:00Z",
+          "endAt": "2026-11-10T22:00:00Z"
+        },
+        {
+          "startAt": "2026-11-10T23:00:00Z",
+          "endAt": "2026-11-11T00:00:00Z"
+        },
+        {
+          "startAt": "2026-11-11T00:00:00Z",
+          "endAt": "2026-11-11T01:00:00Z"
+        }
+      ],
+      "availableWindows": [
+        {
+          "startAt": "2026-11-10T21:00:00Z",
+          "endAt": "2026-11-10T22:00:00Z"
+        },
+        {
+          "startAt": "2026-11-10T23:00:00Z",
+          "endAt": "2026-11-11T01:00:00Z"
+        }
+      ]
+    },
+    "NoAvailability": {
+      "resourceId": "resource-001",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "from": "2026-11-10T21:00:00Z",
+      "to": "2026-11-11T01:00:00Z",
+      "slotDurationSeconds": 3600,
+      "availableSlots": [],
+      "availableWindows": []
+    },
+    "DisabledAvailability": {
+      "resourceId": "resource-003",
+      "enabled": false,
+      "timeZone": "America/Santiago",
+      "from": "2026-11-10T21:00:00Z",
+      "to": "2026-11-11T01:00:00Z",
+      "slotDurationSeconds": 3600,
+      "availableSlots": [],
+      "availableWindows": []
+    },
+    "InvalidRequest": {
+      "error": {
+        "code": "INVALID_REQUEST",
+        "message": "La solicitud contiene un campo no admitido.",
+        "requestId": "request-demo-001",
+        "details": [
+          {
+            "field": "responsible",
+            "code": "FIELD_NOT_ALLOWED"
+          }
+        ]
+      }
+    },
+    "Unauthenticated": {
+      "error": {
+        "code": "UNAUTHENTICATED",
+        "message": "Se requiere autenticación.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "Forbidden": {
+      "error": {
+        "code": "FORBIDDEN",
+        "message": "Operación no autorizada.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "ReservationNotFound": {
+      "error": {
+        "code": "RESERVATION_NOT_FOUND",
+        "message": "Reserva no encontrada.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "ResourceNotFound": {
+      "error": {
+        "code": "RESOURCE_NOT_FOUND",
+        "message": "Recurso no encontrado.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "VersionConflict": {
+      "error": {
+        "code": "RESERVATION_VERSION_CONFLICT",
+        "message": "Consulta la versión actual antes de continuar.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "ResourceUnavailable": {
+      "error": {
+        "code": "RESOURCE_UNAVAILABLE",
+        "message": "El recurso no está disponible en ese intervalo.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "ResourceBlocked": {
+      "error": {
+        "code": "RESOURCE_UNAVAILABLE",
+        "message": "El recurso no está disponible en ese intervalo.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "StateConflict": {
+      "error": {
+        "code": "RESERVATION_STATE_CONFLICT",
+        "message": "El estado de la reserva no permite esta operación.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "IdempotencyConflict": {
+      "error": {
+        "code": "IDEMPOTENCY_KEY_CONFLICT",
+        "message": "La clave ya se utilizó con otra solicitud.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "InvalidInterval": {
+      "error": {
+        "code": "INVALID_INTERVAL",
+        "message": "El inicio debe ser anterior al término.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "AlreadyStarted": {
+      "error": {
+        "code": "RESERVATION_ALREADY_STARTED",
+        "message": "La reserva ya comenzó.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "CancellationWindowClosed": {
+      "error": {
+        "code": "CANCELLATION_WINDOW_CLOSED",
+        "message": "El plazo para cancelar o reprogramar venció.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "PolicyViolation": {
+      "error": {
+        "code": "POLICY_VIOLATION",
+        "message": "El intervalo no cumple la política del recurso.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "InvalidAttributes": {
+      "error": {
+        "code": "ATTRIBUTES_INVALID",
+        "message": "Los atributos no cumplen el esquema del contexto.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "InternalError": {
+      "error": {
+        "code": "INTERNAL_ERROR",
+        "message": "No se pudo completar la operación.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "ServiceUnavailable": {
+      "error": {
+        "code": "SERVICE_UNAVAILABLE",
+        "message": "Servicio temporalmente no disponible.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "CreateResourceRequest": {
+      "name": "Recurso 1",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "externalReference": {
+        "system": "catalogo-institucional",
+        "id": "cat-rec-001"
+      },
+      "policy": {
+        "cancellationNoticeSeconds": 7200,
+        "minDurationSeconds": 3600,
+        "maxDurationSeconds": 7200,
+        "slotDurationSeconds": 3600
+      },
+      "weeklySchedule": [
+        {
+          "dayOfWeek": 1,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        },
+        {
+          "dayOfWeek": 2,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        }
+      ],
+      "attributes": {}
+    },
+    "UpdateResourceRequest": {
+      "expectedVersion": 1,
+      "name": "Recurso 1 - Sector Norte",
+      "enabled": true,
+      "policy": {
+        "cancellationNoticeSeconds": 14400,
+        "minDurationSeconds": 3600,
+        "maxDurationSeconds": 7200,
+        "slotDurationSeconds": 3600
+      }
+    },
+    "UpdateResourceScheduleRequest": {
+      "expectedVersion": 1,
+      "policy": {
+        "cancellationNoticeSeconds": 7200,
+        "minDurationSeconds": 3600,
+        "maxDurationSeconds": 7200,
+        "slotDurationSeconds": 3600
+      },
+      "weeklySchedule": [
+        {
+          "dayOfWeek": 1,
+          "startLocalTime": "09:00",
+          "endLocalTime": "21:00"
+        },
+        {
+          "dayOfWeek": 2,
+          "startLocalTime": "09:00",
+          "endLocalTime": "21:00"
+        }
+      ]
+    },
+    "CreateResourceClosureRequest": {
+      "startAt": "2026-11-12T15:00:00Z",
+      "endAt": "2026-11-12T18:00:00Z",
+      "reason": "Mantenimiento preventivo de instalaciones"
+    },
+    "ResourceDetail": {
+      "id": "resource-001",
+      "name": "Recurso 1",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "externalReference": {
+        "system": "catalogo-institucional",
+        "id": "cat-rec-001"
+      },
+      "policy": {
+        "cancellationNoticeSeconds": 7200,
+        "minDurationSeconds": 3600,
+        "maxDurationSeconds": 7200,
+        "slotDurationSeconds": 3600
+      },
+      "weeklySchedule": [
+        {
+          "dayOfWeek": 1,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        },
+        {
+          "dayOfWeek": 2,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        }
+      ],
+      "closures": [
+        {
+          "id": "closure-001",
+          "resourceId": "resource-001",
+          "startAt": "2026-11-12T15:00:00Z",
+          "endAt": "2026-11-12T18:00:00Z",
+          "reason": "Mantenimiento preventivo de instalaciones",
+          "createdAt": "2026-11-04T12:00:00Z"
+        }
+      ],
+      "attributes": {},
+      "version": 1,
+      "createdAt": "2026-11-01T10:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    "UpdatedResourceDetail": {
+      "id": "resource-001",
+      "name": "Recurso 1 - Sector Norte",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "externalReference": {
+        "system": "catalogo-institucional",
+        "id": "cat-rec-001"
+      },
+      "policy": {
+        "cancellationNoticeSeconds": 14400,
+        "minDurationSeconds": 3600,
+        "maxDurationSeconds": 7200,
+        "slotDurationSeconds": 3600
+      },
+      "weeklySchedule": [
+        {
+          "dayOfWeek": 1,
+          "startLocalTime": "09:00",
+          "endLocalTime": "21:00"
+        },
+        {
+          "dayOfWeek": 2,
+          "startLocalTime": "09:00",
+          "endLocalTime": "21:00"
+        }
+      ],
+      "closures": [
+        {
+          "id": "closure-001",
+          "resourceId": "resource-001",
+          "startAt": "2026-11-12T15:00:00Z",
+          "endAt": "2026-11-12T18:00:00Z",
+          "reason": "Mantenimiento preventivo de instalaciones",
+          "createdAt": "2026-11-04T12:00:00Z"
+        }
+      ],
+      "attributes": {},
+      "version": 2,
+      "createdAt": "2026-11-01T10:00:00Z",
+      "updatedAt": "2026-11-04T12:10:00Z"
+    },
+    "ResourceClosure": {
+      "id": "closure-001",
+      "resourceId": "resource-001",
+      "startAt": "2026-11-12T15:00:00Z",
+      "endAt": "2026-11-12T18:00:00Z",
+      "reason": "Mantenimiento preventivo de instalaciones",
+      "createdAt": "2026-11-04T12:00:00Z"
+    },
+    "ResourceVersionConflict": {
+      "error": {
+        "code": "RESOURCE_VERSION_CONFLICT",
+        "message": "El recurso fue modificado por otra operación; consulta su versión actual.",
+        "requestId": "request-demo-001"
+      }
+    },
+    "ResourceScheduleConflict": {
+      "error": {
+        "code": "RESOURCE_SCHEDULE_CONFLICT",
+        "message": "El cambio de disponibilidad o bloqueo afecta reservas confirmadas vigentes.",
+        "requestId": "request-demo-001",
+        "details": [
+          {
+            "field": "reservation-001",
+            "code": "CONFIRMED_RESERVATION_OVERLAP"
+          }
+        ]
+      }
+    },
+    "ClosureNotFound": {
+      "error": {
+        "code": "CLOSURE_NOT_FOUND",
+        "message": "Bloqueo no encontrado para este recurso.",
+        "requestId": "request-demo-001"
+      }
+    }
+  },
+  "resources": [
+    {
+      "id": "resource-001",
+      "name": "Recurso 1",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "attributes": {}
+    },
+    {
+      "id": "resource-002",
+      "name": "Recurso 2",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "attributes": {}
+    },
+    {
+      "id": "resource-003",
+      "name": "Recurso 3",
+      "enabled": false,
+      "timeZone": "America/Santiago",
+      "attributes": {}
+    }
+  ],
+  "reservations": [
+    {
+      "id": "reservation-004",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-03T22:00:00Z",
+      "endAt": "2026-11-03T23:00:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-03T20:00:00Z",
+      "version": 1,
+      "createdAt": "2026-11-01T12:00:00Z",
+      "updatedAt": "2026-11-01T12:00:00Z"
+    },
+    {
+      "id": "reservation-003",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-04T17:00:00Z",
+      "endAt": "2026-11-04T18:00:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-04T15:00:00Z",
+      "version": 1,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    {
+      "id": "reservation-001",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-10T22:00:00Z",
+      "endAt": "2026-11-10T23:00:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-10T20:00:00Z",
+      "version": 1,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    {
+      "id": "reservation-002",
+      "resourceId": "resource-002",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-10T22:00:00Z",
+      "endAt": "2026-11-10T23:00:00Z",
+      "status": "cancelled",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-10T20:00:00Z",
+      "version": 2,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:05:00Z"
+    }
+  ],
+  "adminReservations": [
+    {
+      "id": "reservation-004",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-03T22:00:00Z",
+      "endAt": "2026-11-03T23:00:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-03T20:00:00Z",
+      "version": 1,
+      "createdAt": "2026-11-01T12:00:00Z",
+      "updatedAt": "2026-11-01T12:00:00Z"
+    },
+    {
+      "id": "reservation-003",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-04T17:00:00Z",
+      "endAt": "2026-11-04T18:00:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-04T15:00:00Z",
+      "version": 1,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    {
+      "id": "reservation-005",
+      "resourceId": "resource-002",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-002"
+      },
+      "startAt": "2026-11-09T13:00:00Z",
+      "endAt": "2026-11-09T13:30:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-09T11:00:00Z",
+      "version": 1,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    {
+      "id": "reservation-001",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-10T22:00:00Z",
+      "endAt": "2026-11-10T23:00:00Z",
+      "status": "confirmed",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-10T20:00:00Z",
+      "version": 1,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    {
+      "id": "reservation-002",
+      "resourceId": "resource-002",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-001"
+      },
+      "startAt": "2026-11-10T22:00:00Z",
+      "endAt": "2026-11-10T23:00:00Z",
+      "status": "cancelled",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-10T20:00:00Z",
+      "version": 2,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:05:00Z"
+    },
+    {
+      "id": "reservation-006",
+      "resourceId": "resource-001",
+      "responsible": {
+        "issuer": "demo",
+        "subject": "user-003"
+      },
+      "startAt": "2026-11-16T15:00:00Z",
+      "endAt": "2026-11-16T16:00:00Z",
+      "status": "cancelled",
+      "attributes": {},
+      "cancellationNoticeSeconds": 7200,
+      "cancellationDeadline": "2026-11-16T13:00:00Z",
+      "version": 2,
+      "createdAt": "2026-11-04T12:00:00Z",
+      "updatedAt": "2026-11-04T12:05:00Z"
+    }
+  ],
+  "details": {
+    "resource-001": {
+      "id": "resource-001",
+      "name": "Recurso 1",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "externalReference": {
+        "system": "catalogo-institucional",
+        "id": "cat-rec-001"
+      },
+      "policy": {
+        "cancellationNoticeSeconds": 7200,
+        "minDurationSeconds": 3600,
+        "maxDurationSeconds": 7200,
+        "slotDurationSeconds": 3600
+      },
+      "weeklySchedule": [
+        {
+          "dayOfWeek": 1,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        },
+        {
+          "dayOfWeek": 2,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        }
+      ],
+      "closures": [
+        {
+          "id": "closure-001",
+          "resourceId": "resource-001",
+          "startAt": "2026-11-12T15:00:00Z",
+          "endAt": "2026-11-12T18:00:00Z",
+          "reason": "Mantenimiento preventivo de instalaciones",
+          "createdAt": "2026-11-04T12:00:00Z"
+        }
+      ],
+      "attributes": {},
+      "version": 1,
+      "createdAt": "2026-11-01T10:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    "resource-002": {
+      "id": "resource-002",
+      "name": "Recurso 2",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "externalReference": {
+        "system": "catalogo-institucional",
+        "id": "cat-rec-001"
+      },
+      "policy": {
+        "cancellationNoticeSeconds": 7200,
+        "minDurationSeconds": 1800,
+        "maxDurationSeconds": 1800,
+        "slotDurationSeconds": 1800
+      },
+      "weeklySchedule": [
+        {
+          "dayOfWeek": 1,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        },
+        {
+          "dayOfWeek": 2,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        }
+      ],
+      "closures": [],
+      "attributes": {},
+      "version": 1,
+      "createdAt": "2026-11-01T10:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    },
+    "resource-003": {
+      "id": "resource-003",
+      "name": "Recurso 3",
+      "enabled": false,
+      "timeZone": "America/Santiago",
+      "externalReference": {
+        "system": "catalogo-institucional",
+        "id": "cat-rec-001"
+      },
+      "policy": {
+        "cancellationNoticeSeconds": 7200,
+        "minDurationSeconds": 3600,
+        "maxDurationSeconds": 7200,
+        "slotDurationSeconds": 3600
+      },
+      "weeklySchedule": [
+        {
+          "dayOfWeek": 1,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        },
+        {
+          "dayOfWeek": 2,
+          "startLocalTime": "08:00",
+          "endLocalTime": "22:00"
+        }
+      ],
+      "closures": [],
+      "attributes": {},
+      "version": 1,
+      "createdAt": "2026-11-01T10:00:00Z",
+      "updatedAt": "2026-11-04T12:00:00Z"
+    }
+  },
+  "availability": {
+    "resource-001": {
+      "resourceId": "resource-001",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "from": "2026-11-04T03:00:00Z",
+      "to": "2027-02-01T03:00:00Z",
+      "slotDurationSeconds": 3600,
+      "availableWindows": [
+        {
+          "startAt": "2026-11-09T11:00:00.000Z",
+          "endAt": "2026-11-10T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T11:00:00.000Z",
+          "endAt": "2026-11-10T22:00:00Z"
+        },
+        {
+          "startAt": "2026-11-10T23:00:00Z",
+          "endAt": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T11:00:00.000Z",
+          "endAt": "2026-11-17T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T11:00:00.000Z",
+          "endAt": "2026-11-18T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T11:00:00.000Z",
+          "endAt": "2026-11-24T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T11:00:00.000Z",
+          "endAt": "2026-11-25T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T11:00:00.000Z",
+          "endAt": "2026-12-01T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T11:00:00.000Z",
+          "endAt": "2026-12-02T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T11:00:00.000Z",
+          "endAt": "2026-12-08T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T11:00:00.000Z",
+          "endAt": "2026-12-09T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T11:00:00.000Z",
+          "endAt": "2026-12-15T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T11:00:00.000Z",
+          "endAt": "2026-12-16T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T11:00:00.000Z",
+          "endAt": "2026-12-22T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T11:00:00.000Z",
+          "endAt": "2026-12-23T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T11:00:00.000Z",
+          "endAt": "2026-12-29T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T11:00:00.000Z",
+          "endAt": "2026-12-30T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T11:00:00.000Z",
+          "endAt": "2027-01-05T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T11:00:00.000Z",
+          "endAt": "2027-01-06T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T11:00:00.000Z",
+          "endAt": "2027-01-12T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T11:00:00.000Z",
+          "endAt": "2027-01-13T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T11:00:00.000Z",
+          "endAt": "2027-01-19T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T11:00:00.000Z",
+          "endAt": "2027-01-20T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T11:00:00.000Z",
+          "endAt": "2027-01-26T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T11:00:00.000Z",
+          "endAt": "2027-01-27T01:00:00.000Z"
+        }
+      ],
+      "availableSlots": [
+        {
+          "startAt": "2026-11-09T11:00:00.000Z",
+          "endAt": "2026-11-09T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T12:00:00.000Z",
+          "endAt": "2026-11-09T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T13:00:00.000Z",
+          "endAt": "2026-11-09T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T14:00:00.000Z",
+          "endAt": "2026-11-09T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T15:00:00.000Z",
+          "endAt": "2026-11-09T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T16:00:00.000Z",
+          "endAt": "2026-11-09T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T17:00:00.000Z",
+          "endAt": "2026-11-09T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T18:00:00.000Z",
+          "endAt": "2026-11-09T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T19:00:00.000Z",
+          "endAt": "2026-11-09T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T20:00:00.000Z",
+          "endAt": "2026-11-09T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T21:00:00.000Z",
+          "endAt": "2026-11-09T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T22:00:00.000Z",
+          "endAt": "2026-11-09T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T23:00:00.000Z",
+          "endAt": "2026-11-10T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T00:00:00.000Z",
+          "endAt": "2026-11-10T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T11:00:00.000Z",
+          "endAt": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T12:00:00.000Z",
+          "endAt": "2026-11-10T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T13:00:00.000Z",
+          "endAt": "2026-11-10T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T14:00:00.000Z",
+          "endAt": "2026-11-10T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T15:00:00.000Z",
+          "endAt": "2026-11-10T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T16:00:00.000Z",
+          "endAt": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T17:00:00.000Z",
+          "endAt": "2026-11-10T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T18:00:00.000Z",
+          "endAt": "2026-11-10T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T19:00:00.000Z",
+          "endAt": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T20:00:00.000Z",
+          "endAt": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T21:00:00.000Z",
+          "endAt": "2026-11-10T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T23:00:00.000Z",
+          "endAt": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-11T00:00:00.000Z",
+          "endAt": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T11:00:00.000Z",
+          "endAt": "2026-11-16T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T12:00:00.000Z",
+          "endAt": "2026-11-16T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T13:00:00.000Z",
+          "endAt": "2026-11-16T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T14:00:00.000Z",
+          "endAt": "2026-11-16T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T15:00:00.000Z",
+          "endAt": "2026-11-16T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T16:00:00.000Z",
+          "endAt": "2026-11-16T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T17:00:00.000Z",
+          "endAt": "2026-11-16T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T18:00:00.000Z",
+          "endAt": "2026-11-16T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T19:00:00.000Z",
+          "endAt": "2026-11-16T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T20:00:00.000Z",
+          "endAt": "2026-11-16T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T21:00:00.000Z",
+          "endAt": "2026-11-16T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T22:00:00.000Z",
+          "endAt": "2026-11-16T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T23:00:00.000Z",
+          "endAt": "2026-11-17T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T00:00:00.000Z",
+          "endAt": "2026-11-17T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T11:00:00.000Z",
+          "endAt": "2026-11-17T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T12:00:00.000Z",
+          "endAt": "2026-11-17T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T13:00:00.000Z",
+          "endAt": "2026-11-17T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T14:00:00.000Z",
+          "endAt": "2026-11-17T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T15:00:00.000Z",
+          "endAt": "2026-11-17T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T16:00:00.000Z",
+          "endAt": "2026-11-17T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T17:00:00.000Z",
+          "endAt": "2026-11-17T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T18:00:00.000Z",
+          "endAt": "2026-11-17T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T19:00:00.000Z",
+          "endAt": "2026-11-17T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T20:00:00.000Z",
+          "endAt": "2026-11-17T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T21:00:00.000Z",
+          "endAt": "2026-11-17T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T22:00:00.000Z",
+          "endAt": "2026-11-17T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T23:00:00.000Z",
+          "endAt": "2026-11-18T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-18T00:00:00.000Z",
+          "endAt": "2026-11-18T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T11:00:00.000Z",
+          "endAt": "2026-11-23T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T12:00:00.000Z",
+          "endAt": "2026-11-23T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T13:00:00.000Z",
+          "endAt": "2026-11-23T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T14:00:00.000Z",
+          "endAt": "2026-11-23T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T15:00:00.000Z",
+          "endAt": "2026-11-23T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T16:00:00.000Z",
+          "endAt": "2026-11-23T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T17:00:00.000Z",
+          "endAt": "2026-11-23T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T18:00:00.000Z",
+          "endAt": "2026-11-23T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T19:00:00.000Z",
+          "endAt": "2026-11-23T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T20:00:00.000Z",
+          "endAt": "2026-11-23T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T21:00:00.000Z",
+          "endAt": "2026-11-23T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T22:00:00.000Z",
+          "endAt": "2026-11-23T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T23:00:00.000Z",
+          "endAt": "2026-11-24T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T00:00:00.000Z",
+          "endAt": "2026-11-24T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T11:00:00.000Z",
+          "endAt": "2026-11-24T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T12:00:00.000Z",
+          "endAt": "2026-11-24T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T13:00:00.000Z",
+          "endAt": "2026-11-24T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T14:00:00.000Z",
+          "endAt": "2026-11-24T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T15:00:00.000Z",
+          "endAt": "2026-11-24T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T16:00:00.000Z",
+          "endAt": "2026-11-24T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T17:00:00.000Z",
+          "endAt": "2026-11-24T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T18:00:00.000Z",
+          "endAt": "2026-11-24T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T19:00:00.000Z",
+          "endAt": "2026-11-24T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T20:00:00.000Z",
+          "endAt": "2026-11-24T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T21:00:00.000Z",
+          "endAt": "2026-11-24T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T22:00:00.000Z",
+          "endAt": "2026-11-24T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T23:00:00.000Z",
+          "endAt": "2026-11-25T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-25T00:00:00.000Z",
+          "endAt": "2026-11-25T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T11:00:00.000Z",
+          "endAt": "2026-11-30T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T12:00:00.000Z",
+          "endAt": "2026-11-30T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T13:00:00.000Z",
+          "endAt": "2026-11-30T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T14:00:00.000Z",
+          "endAt": "2026-11-30T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T15:00:00.000Z",
+          "endAt": "2026-11-30T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T16:00:00.000Z",
+          "endAt": "2026-11-30T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T17:00:00.000Z",
+          "endAt": "2026-11-30T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T18:00:00.000Z",
+          "endAt": "2026-11-30T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T19:00:00.000Z",
+          "endAt": "2026-11-30T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T20:00:00.000Z",
+          "endAt": "2026-11-30T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T21:00:00.000Z",
+          "endAt": "2026-11-30T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T22:00:00.000Z",
+          "endAt": "2026-11-30T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T23:00:00.000Z",
+          "endAt": "2026-12-01T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T00:00:00.000Z",
+          "endAt": "2026-12-01T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T11:00:00.000Z",
+          "endAt": "2026-12-01T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T12:00:00.000Z",
+          "endAt": "2026-12-01T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T13:00:00.000Z",
+          "endAt": "2026-12-01T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T14:00:00.000Z",
+          "endAt": "2026-12-01T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T15:00:00.000Z",
+          "endAt": "2026-12-01T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T16:00:00.000Z",
+          "endAt": "2026-12-01T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T17:00:00.000Z",
+          "endAt": "2026-12-01T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T18:00:00.000Z",
+          "endAt": "2026-12-01T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T19:00:00.000Z",
+          "endAt": "2026-12-01T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T20:00:00.000Z",
+          "endAt": "2026-12-01T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T21:00:00.000Z",
+          "endAt": "2026-12-01T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T22:00:00.000Z",
+          "endAt": "2026-12-01T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T23:00:00.000Z",
+          "endAt": "2026-12-02T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-02T00:00:00.000Z",
+          "endAt": "2026-12-02T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T11:00:00.000Z",
+          "endAt": "2026-12-07T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T12:00:00.000Z",
+          "endAt": "2026-12-07T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T13:00:00.000Z",
+          "endAt": "2026-12-07T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T14:00:00.000Z",
+          "endAt": "2026-12-07T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T15:00:00.000Z",
+          "endAt": "2026-12-07T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T16:00:00.000Z",
+          "endAt": "2026-12-07T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T17:00:00.000Z",
+          "endAt": "2026-12-07T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T18:00:00.000Z",
+          "endAt": "2026-12-07T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T19:00:00.000Z",
+          "endAt": "2026-12-07T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T20:00:00.000Z",
+          "endAt": "2026-12-07T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T21:00:00.000Z",
+          "endAt": "2026-12-07T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T22:00:00.000Z",
+          "endAt": "2026-12-07T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T23:00:00.000Z",
+          "endAt": "2026-12-08T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T00:00:00.000Z",
+          "endAt": "2026-12-08T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T11:00:00.000Z",
+          "endAt": "2026-12-08T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T12:00:00.000Z",
+          "endAt": "2026-12-08T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T13:00:00.000Z",
+          "endAt": "2026-12-08T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T14:00:00.000Z",
+          "endAt": "2026-12-08T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T15:00:00.000Z",
+          "endAt": "2026-12-08T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T16:00:00.000Z",
+          "endAt": "2026-12-08T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T17:00:00.000Z",
+          "endAt": "2026-12-08T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T18:00:00.000Z",
+          "endAt": "2026-12-08T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T19:00:00.000Z",
+          "endAt": "2026-12-08T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T20:00:00.000Z",
+          "endAt": "2026-12-08T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T21:00:00.000Z",
+          "endAt": "2026-12-08T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T22:00:00.000Z",
+          "endAt": "2026-12-08T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T23:00:00.000Z",
+          "endAt": "2026-12-09T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-09T00:00:00.000Z",
+          "endAt": "2026-12-09T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T11:00:00.000Z",
+          "endAt": "2026-12-14T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T12:00:00.000Z",
+          "endAt": "2026-12-14T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T13:00:00.000Z",
+          "endAt": "2026-12-14T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T14:00:00.000Z",
+          "endAt": "2026-12-14T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T15:00:00.000Z",
+          "endAt": "2026-12-14T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T16:00:00.000Z",
+          "endAt": "2026-12-14T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T17:00:00.000Z",
+          "endAt": "2026-12-14T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T18:00:00.000Z",
+          "endAt": "2026-12-14T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T19:00:00.000Z",
+          "endAt": "2026-12-14T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T20:00:00.000Z",
+          "endAt": "2026-12-14T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T21:00:00.000Z",
+          "endAt": "2026-12-14T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T22:00:00.000Z",
+          "endAt": "2026-12-14T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T23:00:00.000Z",
+          "endAt": "2026-12-15T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T00:00:00.000Z",
+          "endAt": "2026-12-15T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T11:00:00.000Z",
+          "endAt": "2026-12-15T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T12:00:00.000Z",
+          "endAt": "2026-12-15T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T13:00:00.000Z",
+          "endAt": "2026-12-15T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T14:00:00.000Z",
+          "endAt": "2026-12-15T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T15:00:00.000Z",
+          "endAt": "2026-12-15T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T16:00:00.000Z",
+          "endAt": "2026-12-15T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T17:00:00.000Z",
+          "endAt": "2026-12-15T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T18:00:00.000Z",
+          "endAt": "2026-12-15T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T19:00:00.000Z",
+          "endAt": "2026-12-15T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T20:00:00.000Z",
+          "endAt": "2026-12-15T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T21:00:00.000Z",
+          "endAt": "2026-12-15T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T22:00:00.000Z",
+          "endAt": "2026-12-15T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T23:00:00.000Z",
+          "endAt": "2026-12-16T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-16T00:00:00.000Z",
+          "endAt": "2026-12-16T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T11:00:00.000Z",
+          "endAt": "2026-12-21T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T12:00:00.000Z",
+          "endAt": "2026-12-21T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T13:00:00.000Z",
+          "endAt": "2026-12-21T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T14:00:00.000Z",
+          "endAt": "2026-12-21T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T15:00:00.000Z",
+          "endAt": "2026-12-21T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T16:00:00.000Z",
+          "endAt": "2026-12-21T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T17:00:00.000Z",
+          "endAt": "2026-12-21T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T18:00:00.000Z",
+          "endAt": "2026-12-21T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T19:00:00.000Z",
+          "endAt": "2026-12-21T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T20:00:00.000Z",
+          "endAt": "2026-12-21T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T21:00:00.000Z",
+          "endAt": "2026-12-21T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T22:00:00.000Z",
+          "endAt": "2026-12-21T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T23:00:00.000Z",
+          "endAt": "2026-12-22T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T00:00:00.000Z",
+          "endAt": "2026-12-22T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T11:00:00.000Z",
+          "endAt": "2026-12-22T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T12:00:00.000Z",
+          "endAt": "2026-12-22T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T13:00:00.000Z",
+          "endAt": "2026-12-22T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T14:00:00.000Z",
+          "endAt": "2026-12-22T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T15:00:00.000Z",
+          "endAt": "2026-12-22T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T16:00:00.000Z",
+          "endAt": "2026-12-22T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T17:00:00.000Z",
+          "endAt": "2026-12-22T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T18:00:00.000Z",
+          "endAt": "2026-12-22T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T19:00:00.000Z",
+          "endAt": "2026-12-22T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T20:00:00.000Z",
+          "endAt": "2026-12-22T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T21:00:00.000Z",
+          "endAt": "2026-12-22T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T22:00:00.000Z",
+          "endAt": "2026-12-22T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T23:00:00.000Z",
+          "endAt": "2026-12-23T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-23T00:00:00.000Z",
+          "endAt": "2026-12-23T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T11:00:00.000Z",
+          "endAt": "2026-12-28T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T12:00:00.000Z",
+          "endAt": "2026-12-28T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T13:00:00.000Z",
+          "endAt": "2026-12-28T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T14:00:00.000Z",
+          "endAt": "2026-12-28T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T15:00:00.000Z",
+          "endAt": "2026-12-28T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T16:00:00.000Z",
+          "endAt": "2026-12-28T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T17:00:00.000Z",
+          "endAt": "2026-12-28T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T18:00:00.000Z",
+          "endAt": "2026-12-28T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T19:00:00.000Z",
+          "endAt": "2026-12-28T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T20:00:00.000Z",
+          "endAt": "2026-12-28T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T21:00:00.000Z",
+          "endAt": "2026-12-28T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T22:00:00.000Z",
+          "endAt": "2026-12-28T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T23:00:00.000Z",
+          "endAt": "2026-12-29T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T00:00:00.000Z",
+          "endAt": "2026-12-29T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T11:00:00.000Z",
+          "endAt": "2026-12-29T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T12:00:00.000Z",
+          "endAt": "2026-12-29T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T13:00:00.000Z",
+          "endAt": "2026-12-29T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T14:00:00.000Z",
+          "endAt": "2026-12-29T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T15:00:00.000Z",
+          "endAt": "2026-12-29T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T16:00:00.000Z",
+          "endAt": "2026-12-29T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T17:00:00.000Z",
+          "endAt": "2026-12-29T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T18:00:00.000Z",
+          "endAt": "2026-12-29T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T19:00:00.000Z",
+          "endAt": "2026-12-29T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T20:00:00.000Z",
+          "endAt": "2026-12-29T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T21:00:00.000Z",
+          "endAt": "2026-12-29T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T22:00:00.000Z",
+          "endAt": "2026-12-29T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T23:00:00.000Z",
+          "endAt": "2026-12-30T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-30T00:00:00.000Z",
+          "endAt": "2026-12-30T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T11:00:00.000Z",
+          "endAt": "2027-01-04T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T12:00:00.000Z",
+          "endAt": "2027-01-04T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T13:00:00.000Z",
+          "endAt": "2027-01-04T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T14:00:00.000Z",
+          "endAt": "2027-01-04T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T15:00:00.000Z",
+          "endAt": "2027-01-04T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T16:00:00.000Z",
+          "endAt": "2027-01-04T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T17:00:00.000Z",
+          "endAt": "2027-01-04T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T18:00:00.000Z",
+          "endAt": "2027-01-04T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T19:00:00.000Z",
+          "endAt": "2027-01-04T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T20:00:00.000Z",
+          "endAt": "2027-01-04T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T21:00:00.000Z",
+          "endAt": "2027-01-04T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T22:00:00.000Z",
+          "endAt": "2027-01-04T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T23:00:00.000Z",
+          "endAt": "2027-01-05T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T00:00:00.000Z",
+          "endAt": "2027-01-05T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T11:00:00.000Z",
+          "endAt": "2027-01-05T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T12:00:00.000Z",
+          "endAt": "2027-01-05T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T13:00:00.000Z",
+          "endAt": "2027-01-05T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T14:00:00.000Z",
+          "endAt": "2027-01-05T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T15:00:00.000Z",
+          "endAt": "2027-01-05T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T16:00:00.000Z",
+          "endAt": "2027-01-05T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T17:00:00.000Z",
+          "endAt": "2027-01-05T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T18:00:00.000Z",
+          "endAt": "2027-01-05T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T19:00:00.000Z",
+          "endAt": "2027-01-05T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T20:00:00.000Z",
+          "endAt": "2027-01-05T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T21:00:00.000Z",
+          "endAt": "2027-01-05T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T22:00:00.000Z",
+          "endAt": "2027-01-05T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T23:00:00.000Z",
+          "endAt": "2027-01-06T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-06T00:00:00.000Z",
+          "endAt": "2027-01-06T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T11:00:00.000Z",
+          "endAt": "2027-01-11T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T12:00:00.000Z",
+          "endAt": "2027-01-11T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T13:00:00.000Z",
+          "endAt": "2027-01-11T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T14:00:00.000Z",
+          "endAt": "2027-01-11T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T15:00:00.000Z",
+          "endAt": "2027-01-11T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T16:00:00.000Z",
+          "endAt": "2027-01-11T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T17:00:00.000Z",
+          "endAt": "2027-01-11T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T18:00:00.000Z",
+          "endAt": "2027-01-11T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T19:00:00.000Z",
+          "endAt": "2027-01-11T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T20:00:00.000Z",
+          "endAt": "2027-01-11T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T21:00:00.000Z",
+          "endAt": "2027-01-11T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T22:00:00.000Z",
+          "endAt": "2027-01-11T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T23:00:00.000Z",
+          "endAt": "2027-01-12T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T00:00:00.000Z",
+          "endAt": "2027-01-12T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T11:00:00.000Z",
+          "endAt": "2027-01-12T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T12:00:00.000Z",
+          "endAt": "2027-01-12T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T13:00:00.000Z",
+          "endAt": "2027-01-12T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T14:00:00.000Z",
+          "endAt": "2027-01-12T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T15:00:00.000Z",
+          "endAt": "2027-01-12T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T16:00:00.000Z",
+          "endAt": "2027-01-12T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T17:00:00.000Z",
+          "endAt": "2027-01-12T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T18:00:00.000Z",
+          "endAt": "2027-01-12T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T19:00:00.000Z",
+          "endAt": "2027-01-12T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T20:00:00.000Z",
+          "endAt": "2027-01-12T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T21:00:00.000Z",
+          "endAt": "2027-01-12T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T22:00:00.000Z",
+          "endAt": "2027-01-12T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T23:00:00.000Z",
+          "endAt": "2027-01-13T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-13T00:00:00.000Z",
+          "endAt": "2027-01-13T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T11:00:00.000Z",
+          "endAt": "2027-01-18T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T12:00:00.000Z",
+          "endAt": "2027-01-18T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T13:00:00.000Z",
+          "endAt": "2027-01-18T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T14:00:00.000Z",
+          "endAt": "2027-01-18T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T15:00:00.000Z",
+          "endAt": "2027-01-18T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T16:00:00.000Z",
+          "endAt": "2027-01-18T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T17:00:00.000Z",
+          "endAt": "2027-01-18T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T18:00:00.000Z",
+          "endAt": "2027-01-18T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T19:00:00.000Z",
+          "endAt": "2027-01-18T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T20:00:00.000Z",
+          "endAt": "2027-01-18T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T21:00:00.000Z",
+          "endAt": "2027-01-18T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T22:00:00.000Z",
+          "endAt": "2027-01-18T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T23:00:00.000Z",
+          "endAt": "2027-01-19T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T00:00:00.000Z",
+          "endAt": "2027-01-19T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T11:00:00.000Z",
+          "endAt": "2027-01-19T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T12:00:00.000Z",
+          "endAt": "2027-01-19T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T13:00:00.000Z",
+          "endAt": "2027-01-19T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T14:00:00.000Z",
+          "endAt": "2027-01-19T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T15:00:00.000Z",
+          "endAt": "2027-01-19T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T16:00:00.000Z",
+          "endAt": "2027-01-19T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T17:00:00.000Z",
+          "endAt": "2027-01-19T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T18:00:00.000Z",
+          "endAt": "2027-01-19T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T19:00:00.000Z",
+          "endAt": "2027-01-19T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T20:00:00.000Z",
+          "endAt": "2027-01-19T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T21:00:00.000Z",
+          "endAt": "2027-01-19T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T22:00:00.000Z",
+          "endAt": "2027-01-19T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T23:00:00.000Z",
+          "endAt": "2027-01-20T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-20T00:00:00.000Z",
+          "endAt": "2027-01-20T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T11:00:00.000Z",
+          "endAt": "2027-01-25T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T12:00:00.000Z",
+          "endAt": "2027-01-25T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T13:00:00.000Z",
+          "endAt": "2027-01-25T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T14:00:00.000Z",
+          "endAt": "2027-01-25T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T15:00:00.000Z",
+          "endAt": "2027-01-25T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T16:00:00.000Z",
+          "endAt": "2027-01-25T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T17:00:00.000Z",
+          "endAt": "2027-01-25T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T18:00:00.000Z",
+          "endAt": "2027-01-25T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T19:00:00.000Z",
+          "endAt": "2027-01-25T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T20:00:00.000Z",
+          "endAt": "2027-01-25T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T21:00:00.000Z",
+          "endAt": "2027-01-25T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T22:00:00.000Z",
+          "endAt": "2027-01-25T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T23:00:00.000Z",
+          "endAt": "2027-01-26T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T00:00:00.000Z",
+          "endAt": "2027-01-26T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T11:00:00.000Z",
+          "endAt": "2027-01-26T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T12:00:00.000Z",
+          "endAt": "2027-01-26T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T13:00:00.000Z",
+          "endAt": "2027-01-26T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T14:00:00.000Z",
+          "endAt": "2027-01-26T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T15:00:00.000Z",
+          "endAt": "2027-01-26T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T16:00:00.000Z",
+          "endAt": "2027-01-26T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T17:00:00.000Z",
+          "endAt": "2027-01-26T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T18:00:00.000Z",
+          "endAt": "2027-01-26T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T19:00:00.000Z",
+          "endAt": "2027-01-26T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T20:00:00.000Z",
+          "endAt": "2027-01-26T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T21:00:00.000Z",
+          "endAt": "2027-01-26T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T22:00:00.000Z",
+          "endAt": "2027-01-26T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T23:00:00.000Z",
+          "endAt": "2027-01-27T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-27T00:00:00.000Z",
+          "endAt": "2027-01-27T01:00:00.000Z"
+        }
+      ]
+    },
+    "resource-002": {
+      "resourceId": "resource-002",
+      "enabled": true,
+      "timeZone": "America/Santiago",
+      "from": "2026-11-04T03:00:00Z",
+      "to": "2027-02-01T03:00:00Z",
+      "slotDurationSeconds": 1800,
+      "availableWindows": [
+        {
+          "startAt": "2026-11-09T11:00:00.000Z",
+          "endAt": "2026-11-09T13:00:00Z"
+        },
+        {
+          "startAt": "2026-11-09T13:30:00Z",
+          "endAt": "2026-11-10T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T11:00:00.000Z",
+          "endAt": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T11:00:00.000Z",
+          "endAt": "2026-11-17T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T11:00:00.000Z",
+          "endAt": "2026-11-18T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T11:00:00.000Z",
+          "endAt": "2026-11-24T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T11:00:00.000Z",
+          "endAt": "2026-11-25T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T11:00:00.000Z",
+          "endAt": "2026-12-01T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T11:00:00.000Z",
+          "endAt": "2026-12-02T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T11:00:00.000Z",
+          "endAt": "2026-12-08T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T11:00:00.000Z",
+          "endAt": "2026-12-09T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T11:00:00.000Z",
+          "endAt": "2026-12-15T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T11:00:00.000Z",
+          "endAt": "2026-12-16T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T11:00:00.000Z",
+          "endAt": "2026-12-22T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T11:00:00.000Z",
+          "endAt": "2026-12-23T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T11:00:00.000Z",
+          "endAt": "2026-12-29T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T11:00:00.000Z",
+          "endAt": "2026-12-30T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T11:00:00.000Z",
+          "endAt": "2027-01-05T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T11:00:00.000Z",
+          "endAt": "2027-01-06T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T11:00:00.000Z",
+          "endAt": "2027-01-12T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T11:00:00.000Z",
+          "endAt": "2027-01-13T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T11:00:00.000Z",
+          "endAt": "2027-01-19T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T11:00:00.000Z",
+          "endAt": "2027-01-20T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T11:00:00.000Z",
+          "endAt": "2027-01-26T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T11:00:00.000Z",
+          "endAt": "2027-01-27T01:00:00.000Z"
+        }
+      ],
+      "availableSlots": [
+        {
+          "startAt": "2026-11-09T11:00:00.000Z",
+          "endAt": "2026-11-09T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T11:30:00.000Z",
+          "endAt": "2026-11-09T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T12:00:00.000Z",
+          "endAt": "2026-11-09T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T12:30:00.000Z",
+          "endAt": "2026-11-09T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T13:30:00.000Z",
+          "endAt": "2026-11-09T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T14:00:00.000Z",
+          "endAt": "2026-11-09T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T14:30:00.000Z",
+          "endAt": "2026-11-09T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T15:00:00.000Z",
+          "endAt": "2026-11-09T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T15:30:00.000Z",
+          "endAt": "2026-11-09T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T16:00:00.000Z",
+          "endAt": "2026-11-09T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T16:30:00.000Z",
+          "endAt": "2026-11-09T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T17:00:00.000Z",
+          "endAt": "2026-11-09T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T17:30:00.000Z",
+          "endAt": "2026-11-09T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T18:00:00.000Z",
+          "endAt": "2026-11-09T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T18:30:00.000Z",
+          "endAt": "2026-11-09T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T19:00:00.000Z",
+          "endAt": "2026-11-09T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T19:30:00.000Z",
+          "endAt": "2026-11-09T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T20:00:00.000Z",
+          "endAt": "2026-11-09T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T20:30:00.000Z",
+          "endAt": "2026-11-09T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T21:00:00.000Z",
+          "endAt": "2026-11-09T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T21:30:00.000Z",
+          "endAt": "2026-11-09T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T22:00:00.000Z",
+          "endAt": "2026-11-09T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T22:30:00.000Z",
+          "endAt": "2026-11-09T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T23:00:00.000Z",
+          "endAt": "2026-11-09T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-09T23:30:00.000Z",
+          "endAt": "2026-11-10T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T00:00:00.000Z",
+          "endAt": "2026-11-10T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T00:30:00.000Z",
+          "endAt": "2026-11-10T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T11:00:00.000Z",
+          "endAt": "2026-11-10T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T11:30:00.000Z",
+          "endAt": "2026-11-10T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T12:00:00.000Z",
+          "endAt": "2026-11-10T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T12:30:00.000Z",
+          "endAt": "2026-11-10T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T13:00:00.000Z",
+          "endAt": "2026-11-10T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T13:30:00.000Z",
+          "endAt": "2026-11-10T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T14:00:00.000Z",
+          "endAt": "2026-11-10T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T14:30:00.000Z",
+          "endAt": "2026-11-10T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T15:00:00.000Z",
+          "endAt": "2026-11-10T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T15:30:00.000Z",
+          "endAt": "2026-11-10T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T16:00:00.000Z",
+          "endAt": "2026-11-10T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T16:30:00.000Z",
+          "endAt": "2026-11-10T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T17:00:00.000Z",
+          "endAt": "2026-11-10T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T17:30:00.000Z",
+          "endAt": "2026-11-10T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T18:00:00.000Z",
+          "endAt": "2026-11-10T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T18:30:00.000Z",
+          "endAt": "2026-11-10T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T19:00:00.000Z",
+          "endAt": "2026-11-10T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T19:30:00.000Z",
+          "endAt": "2026-11-10T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T20:00:00.000Z",
+          "endAt": "2026-11-10T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T20:30:00.000Z",
+          "endAt": "2026-11-10T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T21:00:00.000Z",
+          "endAt": "2026-11-10T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T21:30:00.000Z",
+          "endAt": "2026-11-10T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T22:00:00.000Z",
+          "endAt": "2026-11-10T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T22:30:00.000Z",
+          "endAt": "2026-11-10T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T23:00:00.000Z",
+          "endAt": "2026-11-10T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-10T23:30:00.000Z",
+          "endAt": "2026-11-11T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-11T00:00:00.000Z",
+          "endAt": "2026-11-11T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-11T00:30:00.000Z",
+          "endAt": "2026-11-11T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T11:00:00.000Z",
+          "endAt": "2026-11-16T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T11:30:00.000Z",
+          "endAt": "2026-11-16T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T12:00:00.000Z",
+          "endAt": "2026-11-16T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T12:30:00.000Z",
+          "endAt": "2026-11-16T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T13:00:00.000Z",
+          "endAt": "2026-11-16T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T13:30:00.000Z",
+          "endAt": "2026-11-16T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T14:00:00.000Z",
+          "endAt": "2026-11-16T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T14:30:00.000Z",
+          "endAt": "2026-11-16T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T15:00:00.000Z",
+          "endAt": "2026-11-16T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T15:30:00.000Z",
+          "endAt": "2026-11-16T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T16:00:00.000Z",
+          "endAt": "2026-11-16T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T16:30:00.000Z",
+          "endAt": "2026-11-16T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T17:00:00.000Z",
+          "endAt": "2026-11-16T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T17:30:00.000Z",
+          "endAt": "2026-11-16T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T18:00:00.000Z",
+          "endAt": "2026-11-16T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T18:30:00.000Z",
+          "endAt": "2026-11-16T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T19:00:00.000Z",
+          "endAt": "2026-11-16T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T19:30:00.000Z",
+          "endAt": "2026-11-16T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T20:00:00.000Z",
+          "endAt": "2026-11-16T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T20:30:00.000Z",
+          "endAt": "2026-11-16T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T21:00:00.000Z",
+          "endAt": "2026-11-16T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T21:30:00.000Z",
+          "endAt": "2026-11-16T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T22:00:00.000Z",
+          "endAt": "2026-11-16T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T22:30:00.000Z",
+          "endAt": "2026-11-16T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T23:00:00.000Z",
+          "endAt": "2026-11-16T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-16T23:30:00.000Z",
+          "endAt": "2026-11-17T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T00:00:00.000Z",
+          "endAt": "2026-11-17T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T00:30:00.000Z",
+          "endAt": "2026-11-17T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T11:00:00.000Z",
+          "endAt": "2026-11-17T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T11:30:00.000Z",
+          "endAt": "2026-11-17T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T12:00:00.000Z",
+          "endAt": "2026-11-17T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T12:30:00.000Z",
+          "endAt": "2026-11-17T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T13:00:00.000Z",
+          "endAt": "2026-11-17T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T13:30:00.000Z",
+          "endAt": "2026-11-17T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T14:00:00.000Z",
+          "endAt": "2026-11-17T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T14:30:00.000Z",
+          "endAt": "2026-11-17T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T15:00:00.000Z",
+          "endAt": "2026-11-17T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T15:30:00.000Z",
+          "endAt": "2026-11-17T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T16:00:00.000Z",
+          "endAt": "2026-11-17T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T16:30:00.000Z",
+          "endAt": "2026-11-17T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T17:00:00.000Z",
+          "endAt": "2026-11-17T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T17:30:00.000Z",
+          "endAt": "2026-11-17T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T18:00:00.000Z",
+          "endAt": "2026-11-17T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T18:30:00.000Z",
+          "endAt": "2026-11-17T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T19:00:00.000Z",
+          "endAt": "2026-11-17T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T19:30:00.000Z",
+          "endAt": "2026-11-17T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T20:00:00.000Z",
+          "endAt": "2026-11-17T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T20:30:00.000Z",
+          "endAt": "2026-11-17T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T21:00:00.000Z",
+          "endAt": "2026-11-17T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T21:30:00.000Z",
+          "endAt": "2026-11-17T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T22:00:00.000Z",
+          "endAt": "2026-11-17T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T22:30:00.000Z",
+          "endAt": "2026-11-17T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T23:00:00.000Z",
+          "endAt": "2026-11-17T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-17T23:30:00.000Z",
+          "endAt": "2026-11-18T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-18T00:00:00.000Z",
+          "endAt": "2026-11-18T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-18T00:30:00.000Z",
+          "endAt": "2026-11-18T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T11:00:00.000Z",
+          "endAt": "2026-11-23T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T11:30:00.000Z",
+          "endAt": "2026-11-23T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T12:00:00.000Z",
+          "endAt": "2026-11-23T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T12:30:00.000Z",
+          "endAt": "2026-11-23T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T13:00:00.000Z",
+          "endAt": "2026-11-23T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T13:30:00.000Z",
+          "endAt": "2026-11-23T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T14:00:00.000Z",
+          "endAt": "2026-11-23T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T14:30:00.000Z",
+          "endAt": "2026-11-23T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T15:00:00.000Z",
+          "endAt": "2026-11-23T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T15:30:00.000Z",
+          "endAt": "2026-11-23T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T16:00:00.000Z",
+          "endAt": "2026-11-23T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T16:30:00.000Z",
+          "endAt": "2026-11-23T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T17:00:00.000Z",
+          "endAt": "2026-11-23T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T17:30:00.000Z",
+          "endAt": "2026-11-23T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T18:00:00.000Z",
+          "endAt": "2026-11-23T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T18:30:00.000Z",
+          "endAt": "2026-11-23T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T19:00:00.000Z",
+          "endAt": "2026-11-23T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T19:30:00.000Z",
+          "endAt": "2026-11-23T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T20:00:00.000Z",
+          "endAt": "2026-11-23T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T20:30:00.000Z",
+          "endAt": "2026-11-23T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T21:00:00.000Z",
+          "endAt": "2026-11-23T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T21:30:00.000Z",
+          "endAt": "2026-11-23T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T22:00:00.000Z",
+          "endAt": "2026-11-23T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T22:30:00.000Z",
+          "endAt": "2026-11-23T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T23:00:00.000Z",
+          "endAt": "2026-11-23T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-23T23:30:00.000Z",
+          "endAt": "2026-11-24T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T00:00:00.000Z",
+          "endAt": "2026-11-24T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T00:30:00.000Z",
+          "endAt": "2026-11-24T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T11:00:00.000Z",
+          "endAt": "2026-11-24T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T11:30:00.000Z",
+          "endAt": "2026-11-24T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T12:00:00.000Z",
+          "endAt": "2026-11-24T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T12:30:00.000Z",
+          "endAt": "2026-11-24T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T13:00:00.000Z",
+          "endAt": "2026-11-24T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T13:30:00.000Z",
+          "endAt": "2026-11-24T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T14:00:00.000Z",
+          "endAt": "2026-11-24T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T14:30:00.000Z",
+          "endAt": "2026-11-24T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T15:00:00.000Z",
+          "endAt": "2026-11-24T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T15:30:00.000Z",
+          "endAt": "2026-11-24T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T16:00:00.000Z",
+          "endAt": "2026-11-24T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T16:30:00.000Z",
+          "endAt": "2026-11-24T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T17:00:00.000Z",
+          "endAt": "2026-11-24T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T17:30:00.000Z",
+          "endAt": "2026-11-24T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T18:00:00.000Z",
+          "endAt": "2026-11-24T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T18:30:00.000Z",
+          "endAt": "2026-11-24T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T19:00:00.000Z",
+          "endAt": "2026-11-24T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T19:30:00.000Z",
+          "endAt": "2026-11-24T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T20:00:00.000Z",
+          "endAt": "2026-11-24T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T20:30:00.000Z",
+          "endAt": "2026-11-24T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T21:00:00.000Z",
+          "endAt": "2026-11-24T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T21:30:00.000Z",
+          "endAt": "2026-11-24T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T22:00:00.000Z",
+          "endAt": "2026-11-24T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T22:30:00.000Z",
+          "endAt": "2026-11-24T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T23:00:00.000Z",
+          "endAt": "2026-11-24T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-24T23:30:00.000Z",
+          "endAt": "2026-11-25T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-25T00:00:00.000Z",
+          "endAt": "2026-11-25T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-25T00:30:00.000Z",
+          "endAt": "2026-11-25T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T11:00:00.000Z",
+          "endAt": "2026-11-30T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T11:30:00.000Z",
+          "endAt": "2026-11-30T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T12:00:00.000Z",
+          "endAt": "2026-11-30T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T12:30:00.000Z",
+          "endAt": "2026-11-30T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T13:00:00.000Z",
+          "endAt": "2026-11-30T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T13:30:00.000Z",
+          "endAt": "2026-11-30T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T14:00:00.000Z",
+          "endAt": "2026-11-30T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T14:30:00.000Z",
+          "endAt": "2026-11-30T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T15:00:00.000Z",
+          "endAt": "2026-11-30T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T15:30:00.000Z",
+          "endAt": "2026-11-30T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T16:00:00.000Z",
+          "endAt": "2026-11-30T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T16:30:00.000Z",
+          "endAt": "2026-11-30T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T17:00:00.000Z",
+          "endAt": "2026-11-30T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T17:30:00.000Z",
+          "endAt": "2026-11-30T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T18:00:00.000Z",
+          "endAt": "2026-11-30T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T18:30:00.000Z",
+          "endAt": "2026-11-30T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T19:00:00.000Z",
+          "endAt": "2026-11-30T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T19:30:00.000Z",
+          "endAt": "2026-11-30T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T20:00:00.000Z",
+          "endAt": "2026-11-30T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T20:30:00.000Z",
+          "endAt": "2026-11-30T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T21:00:00.000Z",
+          "endAt": "2026-11-30T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T21:30:00.000Z",
+          "endAt": "2026-11-30T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T22:00:00.000Z",
+          "endAt": "2026-11-30T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T22:30:00.000Z",
+          "endAt": "2026-11-30T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T23:00:00.000Z",
+          "endAt": "2026-11-30T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-11-30T23:30:00.000Z",
+          "endAt": "2026-12-01T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T00:00:00.000Z",
+          "endAt": "2026-12-01T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T00:30:00.000Z",
+          "endAt": "2026-12-01T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T11:00:00.000Z",
+          "endAt": "2026-12-01T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T11:30:00.000Z",
+          "endAt": "2026-12-01T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T12:00:00.000Z",
+          "endAt": "2026-12-01T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T12:30:00.000Z",
+          "endAt": "2026-12-01T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T13:00:00.000Z",
+          "endAt": "2026-12-01T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T13:30:00.000Z",
+          "endAt": "2026-12-01T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T14:00:00.000Z",
+          "endAt": "2026-12-01T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T14:30:00.000Z",
+          "endAt": "2026-12-01T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T15:00:00.000Z",
+          "endAt": "2026-12-01T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T15:30:00.000Z",
+          "endAt": "2026-12-01T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T16:00:00.000Z",
+          "endAt": "2026-12-01T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T16:30:00.000Z",
+          "endAt": "2026-12-01T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T17:00:00.000Z",
+          "endAt": "2026-12-01T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T17:30:00.000Z",
+          "endAt": "2026-12-01T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T18:00:00.000Z",
+          "endAt": "2026-12-01T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T18:30:00.000Z",
+          "endAt": "2026-12-01T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T19:00:00.000Z",
+          "endAt": "2026-12-01T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T19:30:00.000Z",
+          "endAt": "2026-12-01T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T20:00:00.000Z",
+          "endAt": "2026-12-01T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T20:30:00.000Z",
+          "endAt": "2026-12-01T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T21:00:00.000Z",
+          "endAt": "2026-12-01T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T21:30:00.000Z",
+          "endAt": "2026-12-01T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T22:00:00.000Z",
+          "endAt": "2026-12-01T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T22:30:00.000Z",
+          "endAt": "2026-12-01T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T23:00:00.000Z",
+          "endAt": "2026-12-01T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-01T23:30:00.000Z",
+          "endAt": "2026-12-02T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-02T00:00:00.000Z",
+          "endAt": "2026-12-02T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-02T00:30:00.000Z",
+          "endAt": "2026-12-02T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T11:00:00.000Z",
+          "endAt": "2026-12-07T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T11:30:00.000Z",
+          "endAt": "2026-12-07T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T12:00:00.000Z",
+          "endAt": "2026-12-07T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T12:30:00.000Z",
+          "endAt": "2026-12-07T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T13:00:00.000Z",
+          "endAt": "2026-12-07T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T13:30:00.000Z",
+          "endAt": "2026-12-07T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T14:00:00.000Z",
+          "endAt": "2026-12-07T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T14:30:00.000Z",
+          "endAt": "2026-12-07T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T15:00:00.000Z",
+          "endAt": "2026-12-07T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T15:30:00.000Z",
+          "endAt": "2026-12-07T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T16:00:00.000Z",
+          "endAt": "2026-12-07T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T16:30:00.000Z",
+          "endAt": "2026-12-07T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T17:00:00.000Z",
+          "endAt": "2026-12-07T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T17:30:00.000Z",
+          "endAt": "2026-12-07T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T18:00:00.000Z",
+          "endAt": "2026-12-07T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T18:30:00.000Z",
+          "endAt": "2026-12-07T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T19:00:00.000Z",
+          "endAt": "2026-12-07T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T19:30:00.000Z",
+          "endAt": "2026-12-07T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T20:00:00.000Z",
+          "endAt": "2026-12-07T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T20:30:00.000Z",
+          "endAt": "2026-12-07T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T21:00:00.000Z",
+          "endAt": "2026-12-07T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T21:30:00.000Z",
+          "endAt": "2026-12-07T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T22:00:00.000Z",
+          "endAt": "2026-12-07T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T22:30:00.000Z",
+          "endAt": "2026-12-07T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T23:00:00.000Z",
+          "endAt": "2026-12-07T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-07T23:30:00.000Z",
+          "endAt": "2026-12-08T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T00:00:00.000Z",
+          "endAt": "2026-12-08T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T00:30:00.000Z",
+          "endAt": "2026-12-08T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T11:00:00.000Z",
+          "endAt": "2026-12-08T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T11:30:00.000Z",
+          "endAt": "2026-12-08T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T12:00:00.000Z",
+          "endAt": "2026-12-08T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T12:30:00.000Z",
+          "endAt": "2026-12-08T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T13:00:00.000Z",
+          "endAt": "2026-12-08T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T13:30:00.000Z",
+          "endAt": "2026-12-08T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T14:00:00.000Z",
+          "endAt": "2026-12-08T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T14:30:00.000Z",
+          "endAt": "2026-12-08T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T15:00:00.000Z",
+          "endAt": "2026-12-08T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T15:30:00.000Z",
+          "endAt": "2026-12-08T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T16:00:00.000Z",
+          "endAt": "2026-12-08T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T16:30:00.000Z",
+          "endAt": "2026-12-08T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T17:00:00.000Z",
+          "endAt": "2026-12-08T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T17:30:00.000Z",
+          "endAt": "2026-12-08T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T18:00:00.000Z",
+          "endAt": "2026-12-08T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T18:30:00.000Z",
+          "endAt": "2026-12-08T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T19:00:00.000Z",
+          "endAt": "2026-12-08T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T19:30:00.000Z",
+          "endAt": "2026-12-08T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T20:00:00.000Z",
+          "endAt": "2026-12-08T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T20:30:00.000Z",
+          "endAt": "2026-12-08T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T21:00:00.000Z",
+          "endAt": "2026-12-08T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T21:30:00.000Z",
+          "endAt": "2026-12-08T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T22:00:00.000Z",
+          "endAt": "2026-12-08T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T22:30:00.000Z",
+          "endAt": "2026-12-08T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T23:00:00.000Z",
+          "endAt": "2026-12-08T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-08T23:30:00.000Z",
+          "endAt": "2026-12-09T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-09T00:00:00.000Z",
+          "endAt": "2026-12-09T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-09T00:30:00.000Z",
+          "endAt": "2026-12-09T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T11:00:00.000Z",
+          "endAt": "2026-12-14T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T11:30:00.000Z",
+          "endAt": "2026-12-14T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T12:00:00.000Z",
+          "endAt": "2026-12-14T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T12:30:00.000Z",
+          "endAt": "2026-12-14T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T13:00:00.000Z",
+          "endAt": "2026-12-14T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T13:30:00.000Z",
+          "endAt": "2026-12-14T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T14:00:00.000Z",
+          "endAt": "2026-12-14T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T14:30:00.000Z",
+          "endAt": "2026-12-14T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T15:00:00.000Z",
+          "endAt": "2026-12-14T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T15:30:00.000Z",
+          "endAt": "2026-12-14T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T16:00:00.000Z",
+          "endAt": "2026-12-14T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T16:30:00.000Z",
+          "endAt": "2026-12-14T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T17:00:00.000Z",
+          "endAt": "2026-12-14T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T17:30:00.000Z",
+          "endAt": "2026-12-14T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T18:00:00.000Z",
+          "endAt": "2026-12-14T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T18:30:00.000Z",
+          "endAt": "2026-12-14T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T19:00:00.000Z",
+          "endAt": "2026-12-14T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T19:30:00.000Z",
+          "endAt": "2026-12-14T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T20:00:00.000Z",
+          "endAt": "2026-12-14T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T20:30:00.000Z",
+          "endAt": "2026-12-14T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T21:00:00.000Z",
+          "endAt": "2026-12-14T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T21:30:00.000Z",
+          "endAt": "2026-12-14T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T22:00:00.000Z",
+          "endAt": "2026-12-14T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T22:30:00.000Z",
+          "endAt": "2026-12-14T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T23:00:00.000Z",
+          "endAt": "2026-12-14T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-14T23:30:00.000Z",
+          "endAt": "2026-12-15T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T00:00:00.000Z",
+          "endAt": "2026-12-15T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T00:30:00.000Z",
+          "endAt": "2026-12-15T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T11:00:00.000Z",
+          "endAt": "2026-12-15T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T11:30:00.000Z",
+          "endAt": "2026-12-15T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T12:00:00.000Z",
+          "endAt": "2026-12-15T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T12:30:00.000Z",
+          "endAt": "2026-12-15T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T13:00:00.000Z",
+          "endAt": "2026-12-15T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T13:30:00.000Z",
+          "endAt": "2026-12-15T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T14:00:00.000Z",
+          "endAt": "2026-12-15T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T14:30:00.000Z",
+          "endAt": "2026-12-15T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T15:00:00.000Z",
+          "endAt": "2026-12-15T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T15:30:00.000Z",
+          "endAt": "2026-12-15T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T16:00:00.000Z",
+          "endAt": "2026-12-15T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T16:30:00.000Z",
+          "endAt": "2026-12-15T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T17:00:00.000Z",
+          "endAt": "2026-12-15T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T17:30:00.000Z",
+          "endAt": "2026-12-15T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T18:00:00.000Z",
+          "endAt": "2026-12-15T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T18:30:00.000Z",
+          "endAt": "2026-12-15T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T19:00:00.000Z",
+          "endAt": "2026-12-15T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T19:30:00.000Z",
+          "endAt": "2026-12-15T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T20:00:00.000Z",
+          "endAt": "2026-12-15T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T20:30:00.000Z",
+          "endAt": "2026-12-15T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T21:00:00.000Z",
+          "endAt": "2026-12-15T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T21:30:00.000Z",
+          "endAt": "2026-12-15T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T22:00:00.000Z",
+          "endAt": "2026-12-15T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T22:30:00.000Z",
+          "endAt": "2026-12-15T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T23:00:00.000Z",
+          "endAt": "2026-12-15T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-15T23:30:00.000Z",
+          "endAt": "2026-12-16T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-16T00:00:00.000Z",
+          "endAt": "2026-12-16T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-16T00:30:00.000Z",
+          "endAt": "2026-12-16T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T11:00:00.000Z",
+          "endAt": "2026-12-21T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T11:30:00.000Z",
+          "endAt": "2026-12-21T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T12:00:00.000Z",
+          "endAt": "2026-12-21T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T12:30:00.000Z",
+          "endAt": "2026-12-21T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T13:00:00.000Z",
+          "endAt": "2026-12-21T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T13:30:00.000Z",
+          "endAt": "2026-12-21T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T14:00:00.000Z",
+          "endAt": "2026-12-21T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T14:30:00.000Z",
+          "endAt": "2026-12-21T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T15:00:00.000Z",
+          "endAt": "2026-12-21T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T15:30:00.000Z",
+          "endAt": "2026-12-21T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T16:00:00.000Z",
+          "endAt": "2026-12-21T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T16:30:00.000Z",
+          "endAt": "2026-12-21T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T17:00:00.000Z",
+          "endAt": "2026-12-21T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T17:30:00.000Z",
+          "endAt": "2026-12-21T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T18:00:00.000Z",
+          "endAt": "2026-12-21T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T18:30:00.000Z",
+          "endAt": "2026-12-21T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T19:00:00.000Z",
+          "endAt": "2026-12-21T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T19:30:00.000Z",
+          "endAt": "2026-12-21T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T20:00:00.000Z",
+          "endAt": "2026-12-21T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T20:30:00.000Z",
+          "endAt": "2026-12-21T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T21:00:00.000Z",
+          "endAt": "2026-12-21T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T21:30:00.000Z",
+          "endAt": "2026-12-21T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T22:00:00.000Z",
+          "endAt": "2026-12-21T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T22:30:00.000Z",
+          "endAt": "2026-12-21T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T23:00:00.000Z",
+          "endAt": "2026-12-21T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-21T23:30:00.000Z",
+          "endAt": "2026-12-22T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T00:00:00.000Z",
+          "endAt": "2026-12-22T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T00:30:00.000Z",
+          "endAt": "2026-12-22T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T11:00:00.000Z",
+          "endAt": "2026-12-22T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T11:30:00.000Z",
+          "endAt": "2026-12-22T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T12:00:00.000Z",
+          "endAt": "2026-12-22T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T12:30:00.000Z",
+          "endAt": "2026-12-22T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T13:00:00.000Z",
+          "endAt": "2026-12-22T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T13:30:00.000Z",
+          "endAt": "2026-12-22T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T14:00:00.000Z",
+          "endAt": "2026-12-22T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T14:30:00.000Z",
+          "endAt": "2026-12-22T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T15:00:00.000Z",
+          "endAt": "2026-12-22T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T15:30:00.000Z",
+          "endAt": "2026-12-22T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T16:00:00.000Z",
+          "endAt": "2026-12-22T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T16:30:00.000Z",
+          "endAt": "2026-12-22T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T17:00:00.000Z",
+          "endAt": "2026-12-22T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T17:30:00.000Z",
+          "endAt": "2026-12-22T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T18:00:00.000Z",
+          "endAt": "2026-12-22T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T18:30:00.000Z",
+          "endAt": "2026-12-22T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T19:00:00.000Z",
+          "endAt": "2026-12-22T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T19:30:00.000Z",
+          "endAt": "2026-12-22T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T20:00:00.000Z",
+          "endAt": "2026-12-22T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T20:30:00.000Z",
+          "endAt": "2026-12-22T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T21:00:00.000Z",
+          "endAt": "2026-12-22T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T21:30:00.000Z",
+          "endAt": "2026-12-22T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T22:00:00.000Z",
+          "endAt": "2026-12-22T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T22:30:00.000Z",
+          "endAt": "2026-12-22T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T23:00:00.000Z",
+          "endAt": "2026-12-22T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-22T23:30:00.000Z",
+          "endAt": "2026-12-23T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-23T00:00:00.000Z",
+          "endAt": "2026-12-23T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-23T00:30:00.000Z",
+          "endAt": "2026-12-23T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T11:00:00.000Z",
+          "endAt": "2026-12-28T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T11:30:00.000Z",
+          "endAt": "2026-12-28T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T12:00:00.000Z",
+          "endAt": "2026-12-28T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T12:30:00.000Z",
+          "endAt": "2026-12-28T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T13:00:00.000Z",
+          "endAt": "2026-12-28T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T13:30:00.000Z",
+          "endAt": "2026-12-28T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T14:00:00.000Z",
+          "endAt": "2026-12-28T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T14:30:00.000Z",
+          "endAt": "2026-12-28T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T15:00:00.000Z",
+          "endAt": "2026-12-28T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T15:30:00.000Z",
+          "endAt": "2026-12-28T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T16:00:00.000Z",
+          "endAt": "2026-12-28T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T16:30:00.000Z",
+          "endAt": "2026-12-28T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T17:00:00.000Z",
+          "endAt": "2026-12-28T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T17:30:00.000Z",
+          "endAt": "2026-12-28T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T18:00:00.000Z",
+          "endAt": "2026-12-28T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T18:30:00.000Z",
+          "endAt": "2026-12-28T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T19:00:00.000Z",
+          "endAt": "2026-12-28T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T19:30:00.000Z",
+          "endAt": "2026-12-28T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T20:00:00.000Z",
+          "endAt": "2026-12-28T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T20:30:00.000Z",
+          "endAt": "2026-12-28T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T21:00:00.000Z",
+          "endAt": "2026-12-28T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T21:30:00.000Z",
+          "endAt": "2026-12-28T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T22:00:00.000Z",
+          "endAt": "2026-12-28T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T22:30:00.000Z",
+          "endAt": "2026-12-28T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T23:00:00.000Z",
+          "endAt": "2026-12-28T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-28T23:30:00.000Z",
+          "endAt": "2026-12-29T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T00:00:00.000Z",
+          "endAt": "2026-12-29T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T00:30:00.000Z",
+          "endAt": "2026-12-29T01:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T11:00:00.000Z",
+          "endAt": "2026-12-29T11:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T11:30:00.000Z",
+          "endAt": "2026-12-29T12:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T12:00:00.000Z",
+          "endAt": "2026-12-29T12:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T12:30:00.000Z",
+          "endAt": "2026-12-29T13:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T13:00:00.000Z",
+          "endAt": "2026-12-29T13:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T13:30:00.000Z",
+          "endAt": "2026-12-29T14:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T14:00:00.000Z",
+          "endAt": "2026-12-29T14:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T14:30:00.000Z",
+          "endAt": "2026-12-29T15:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T15:00:00.000Z",
+          "endAt": "2026-12-29T15:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T15:30:00.000Z",
+          "endAt": "2026-12-29T16:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T16:00:00.000Z",
+          "endAt": "2026-12-29T16:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T16:30:00.000Z",
+          "endAt": "2026-12-29T17:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T17:00:00.000Z",
+          "endAt": "2026-12-29T17:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T17:30:00.000Z",
+          "endAt": "2026-12-29T18:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T18:00:00.000Z",
+          "endAt": "2026-12-29T18:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T18:30:00.000Z",
+          "endAt": "2026-12-29T19:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T19:00:00.000Z",
+          "endAt": "2026-12-29T19:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T19:30:00.000Z",
+          "endAt": "2026-12-29T20:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T20:00:00.000Z",
+          "endAt": "2026-12-29T20:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T20:30:00.000Z",
+          "endAt": "2026-12-29T21:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T21:00:00.000Z",
+          "endAt": "2026-12-29T21:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T21:30:00.000Z",
+          "endAt": "2026-12-29T22:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T22:00:00.000Z",
+          "endAt": "2026-12-29T22:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T22:30:00.000Z",
+          "endAt": "2026-12-29T23:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T23:00:00.000Z",
+          "endAt": "2026-12-29T23:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-29T23:30:00.000Z",
+          "endAt": "2026-12-30T00:00:00.000Z"
+        },
+        {
+          "startAt": "2026-12-30T00:00:00.000Z",
+          "endAt": "2026-12-30T00:30:00.000Z"
+        },
+        {
+          "startAt": "2026-12-30T00:30:00.000Z",
+          "endAt": "2026-12-30T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T11:00:00.000Z",
+          "endAt": "2027-01-04T11:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T11:30:00.000Z",
+          "endAt": "2027-01-04T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T12:00:00.000Z",
+          "endAt": "2027-01-04T12:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T12:30:00.000Z",
+          "endAt": "2027-01-04T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T13:00:00.000Z",
+          "endAt": "2027-01-04T13:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T13:30:00.000Z",
+          "endAt": "2027-01-04T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T14:00:00.000Z",
+          "endAt": "2027-01-04T14:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T14:30:00.000Z",
+          "endAt": "2027-01-04T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T15:00:00.000Z",
+          "endAt": "2027-01-04T15:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T15:30:00.000Z",
+          "endAt": "2027-01-04T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T16:00:00.000Z",
+          "endAt": "2027-01-04T16:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T16:30:00.000Z",
+          "endAt": "2027-01-04T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T17:00:00.000Z",
+          "endAt": "2027-01-04T17:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T17:30:00.000Z",
+          "endAt": "2027-01-04T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T18:00:00.000Z",
+          "endAt": "2027-01-04T18:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T18:30:00.000Z",
+          "endAt": "2027-01-04T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T19:00:00.000Z",
+          "endAt": "2027-01-04T19:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T19:30:00.000Z",
+          "endAt": "2027-01-04T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T20:00:00.000Z",
+          "endAt": "2027-01-04T20:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T20:30:00.000Z",
+          "endAt": "2027-01-04T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T21:00:00.000Z",
+          "endAt": "2027-01-04T21:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T21:30:00.000Z",
+          "endAt": "2027-01-04T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T22:00:00.000Z",
+          "endAt": "2027-01-04T22:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T22:30:00.000Z",
+          "endAt": "2027-01-04T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T23:00:00.000Z",
+          "endAt": "2027-01-04T23:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-04T23:30:00.000Z",
+          "endAt": "2027-01-05T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T00:00:00.000Z",
+          "endAt": "2027-01-05T00:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T00:30:00.000Z",
+          "endAt": "2027-01-05T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T11:00:00.000Z",
+          "endAt": "2027-01-05T11:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T11:30:00.000Z",
+          "endAt": "2027-01-05T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T12:00:00.000Z",
+          "endAt": "2027-01-05T12:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T12:30:00.000Z",
+          "endAt": "2027-01-05T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T13:00:00.000Z",
+          "endAt": "2027-01-05T13:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T13:30:00.000Z",
+          "endAt": "2027-01-05T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T14:00:00.000Z",
+          "endAt": "2027-01-05T14:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T14:30:00.000Z",
+          "endAt": "2027-01-05T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T15:00:00.000Z",
+          "endAt": "2027-01-05T15:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T15:30:00.000Z",
+          "endAt": "2027-01-05T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T16:00:00.000Z",
+          "endAt": "2027-01-05T16:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T16:30:00.000Z",
+          "endAt": "2027-01-05T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T17:00:00.000Z",
+          "endAt": "2027-01-05T17:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T17:30:00.000Z",
+          "endAt": "2027-01-05T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T18:00:00.000Z",
+          "endAt": "2027-01-05T18:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T18:30:00.000Z",
+          "endAt": "2027-01-05T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T19:00:00.000Z",
+          "endAt": "2027-01-05T19:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T19:30:00.000Z",
+          "endAt": "2027-01-05T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T20:00:00.000Z",
+          "endAt": "2027-01-05T20:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T20:30:00.000Z",
+          "endAt": "2027-01-05T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T21:00:00.000Z",
+          "endAt": "2027-01-05T21:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T21:30:00.000Z",
+          "endAt": "2027-01-05T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T22:00:00.000Z",
+          "endAt": "2027-01-05T22:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T22:30:00.000Z",
+          "endAt": "2027-01-05T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T23:00:00.000Z",
+          "endAt": "2027-01-05T23:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-05T23:30:00.000Z",
+          "endAt": "2027-01-06T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-06T00:00:00.000Z",
+          "endAt": "2027-01-06T00:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-06T00:30:00.000Z",
+          "endAt": "2027-01-06T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T11:00:00.000Z",
+          "endAt": "2027-01-11T11:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T11:30:00.000Z",
+          "endAt": "2027-01-11T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T12:00:00.000Z",
+          "endAt": "2027-01-11T12:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T12:30:00.000Z",
+          "endAt": "2027-01-11T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T13:00:00.000Z",
+          "endAt": "2027-01-11T13:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T13:30:00.000Z",
+          "endAt": "2027-01-11T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T14:00:00.000Z",
+          "endAt": "2027-01-11T14:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T14:30:00.000Z",
+          "endAt": "2027-01-11T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T15:00:00.000Z",
+          "endAt": "2027-01-11T15:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T15:30:00.000Z",
+          "endAt": "2027-01-11T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T16:00:00.000Z",
+          "endAt": "2027-01-11T16:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T16:30:00.000Z",
+          "endAt": "2027-01-11T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T17:00:00.000Z",
+          "endAt": "2027-01-11T17:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T17:30:00.000Z",
+          "endAt": "2027-01-11T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T18:00:00.000Z",
+          "endAt": "2027-01-11T18:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T18:30:00.000Z",
+          "endAt": "2027-01-11T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T19:00:00.000Z",
+          "endAt": "2027-01-11T19:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T19:30:00.000Z",
+          "endAt": "2027-01-11T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T20:00:00.000Z",
+          "endAt": "2027-01-11T20:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T20:30:00.000Z",
+          "endAt": "2027-01-11T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T21:00:00.000Z",
+          "endAt": "2027-01-11T21:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T21:30:00.000Z",
+          "endAt": "2027-01-11T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T22:00:00.000Z",
+          "endAt": "2027-01-11T22:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T22:30:00.000Z",
+          "endAt": "2027-01-11T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T23:00:00.000Z",
+          "endAt": "2027-01-11T23:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-11T23:30:00.000Z",
+          "endAt": "2027-01-12T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T00:00:00.000Z",
+          "endAt": "2027-01-12T00:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T00:30:00.000Z",
+          "endAt": "2027-01-12T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T11:00:00.000Z",
+          "endAt": "2027-01-12T11:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T11:30:00.000Z",
+          "endAt": "2027-01-12T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T12:00:00.000Z",
+          "endAt": "2027-01-12T12:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T12:30:00.000Z",
+          "endAt": "2027-01-12T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T13:00:00.000Z",
+          "endAt": "2027-01-12T13:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T13:30:00.000Z",
+          "endAt": "2027-01-12T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T14:00:00.000Z",
+          "endAt": "2027-01-12T14:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T14:30:00.000Z",
+          "endAt": "2027-01-12T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T15:00:00.000Z",
+          "endAt": "2027-01-12T15:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T15:30:00.000Z",
+          "endAt": "2027-01-12T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T16:00:00.000Z",
+          "endAt": "2027-01-12T16:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T16:30:00.000Z",
+          "endAt": "2027-01-12T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T17:00:00.000Z",
+          "endAt": "2027-01-12T17:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T17:30:00.000Z",
+          "endAt": "2027-01-12T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T18:00:00.000Z",
+          "endAt": "2027-01-12T18:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T18:30:00.000Z",
+          "endAt": "2027-01-12T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T19:00:00.000Z",
+          "endAt": "2027-01-12T19:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T19:30:00.000Z",
+          "endAt": "2027-01-12T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T20:00:00.000Z",
+          "endAt": "2027-01-12T20:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T20:30:00.000Z",
+          "endAt": "2027-01-12T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T21:00:00.000Z",
+          "endAt": "2027-01-12T21:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T21:30:00.000Z",
+          "endAt": "2027-01-12T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T22:00:00.000Z",
+          "endAt": "2027-01-12T22:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T22:30:00.000Z",
+          "endAt": "2027-01-12T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T23:00:00.000Z",
+          "endAt": "2027-01-12T23:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-12T23:30:00.000Z",
+          "endAt": "2027-01-13T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-13T00:00:00.000Z",
+          "endAt": "2027-01-13T00:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-13T00:30:00.000Z",
+          "endAt": "2027-01-13T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T11:00:00.000Z",
+          "endAt": "2027-01-18T11:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T11:30:00.000Z",
+          "endAt": "2027-01-18T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T12:00:00.000Z",
+          "endAt": "2027-01-18T12:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T12:30:00.000Z",
+          "endAt": "2027-01-18T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T13:00:00.000Z",
+          "endAt": "2027-01-18T13:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T13:30:00.000Z",
+          "endAt": "2027-01-18T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T14:00:00.000Z",
+          "endAt": "2027-01-18T14:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T14:30:00.000Z",
+          "endAt": "2027-01-18T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T15:00:00.000Z",
+          "endAt": "2027-01-18T15:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T15:30:00.000Z",
+          "endAt": "2027-01-18T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T16:00:00.000Z",
+          "endAt": "2027-01-18T16:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T16:30:00.000Z",
+          "endAt": "2027-01-18T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T17:00:00.000Z",
+          "endAt": "2027-01-18T17:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T17:30:00.000Z",
+          "endAt": "2027-01-18T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T18:00:00.000Z",
+          "endAt": "2027-01-18T18:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T18:30:00.000Z",
+          "endAt": "2027-01-18T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T19:00:00.000Z",
+          "endAt": "2027-01-18T19:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T19:30:00.000Z",
+          "endAt": "2027-01-18T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T20:00:00.000Z",
+          "endAt": "2027-01-18T20:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T20:30:00.000Z",
+          "endAt": "2027-01-18T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T21:00:00.000Z",
+          "endAt": "2027-01-18T21:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T21:30:00.000Z",
+          "endAt": "2027-01-18T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T22:00:00.000Z",
+          "endAt": "2027-01-18T22:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T22:30:00.000Z",
+          "endAt": "2027-01-18T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T23:00:00.000Z",
+          "endAt": "2027-01-18T23:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-18T23:30:00.000Z",
+          "endAt": "2027-01-19T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T00:00:00.000Z",
+          "endAt": "2027-01-19T00:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T00:30:00.000Z",
+          "endAt": "2027-01-19T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T11:00:00.000Z",
+          "endAt": "2027-01-19T11:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T11:30:00.000Z",
+          "endAt": "2027-01-19T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T12:00:00.000Z",
+          "endAt": "2027-01-19T12:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T12:30:00.000Z",
+          "endAt": "2027-01-19T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T13:00:00.000Z",
+          "endAt": "2027-01-19T13:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T13:30:00.000Z",
+          "endAt": "2027-01-19T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T14:00:00.000Z",
+          "endAt": "2027-01-19T14:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T14:30:00.000Z",
+          "endAt": "2027-01-19T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T15:00:00.000Z",
+          "endAt": "2027-01-19T15:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T15:30:00.000Z",
+          "endAt": "2027-01-19T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T16:00:00.000Z",
+          "endAt": "2027-01-19T16:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T16:30:00.000Z",
+          "endAt": "2027-01-19T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T17:00:00.000Z",
+          "endAt": "2027-01-19T17:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T17:30:00.000Z",
+          "endAt": "2027-01-19T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T18:00:00.000Z",
+          "endAt": "2027-01-19T18:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T18:30:00.000Z",
+          "endAt": "2027-01-19T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T19:00:00.000Z",
+          "endAt": "2027-01-19T19:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T19:30:00.000Z",
+          "endAt": "2027-01-19T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T20:00:00.000Z",
+          "endAt": "2027-01-19T20:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T20:30:00.000Z",
+          "endAt": "2027-01-19T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T21:00:00.000Z",
+          "endAt": "2027-01-19T21:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T21:30:00.000Z",
+          "endAt": "2027-01-19T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T22:00:00.000Z",
+          "endAt": "2027-01-19T22:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T22:30:00.000Z",
+          "endAt": "2027-01-19T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T23:00:00.000Z",
+          "endAt": "2027-01-19T23:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-19T23:30:00.000Z",
+          "endAt": "2027-01-20T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-20T00:00:00.000Z",
+          "endAt": "2027-01-20T00:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-20T00:30:00.000Z",
+          "endAt": "2027-01-20T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T11:00:00.000Z",
+          "endAt": "2027-01-25T11:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T11:30:00.000Z",
+          "endAt": "2027-01-25T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T12:00:00.000Z",
+          "endAt": "2027-01-25T12:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T12:30:00.000Z",
+          "endAt": "2027-01-25T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T13:00:00.000Z",
+          "endAt": "2027-01-25T13:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T13:30:00.000Z",
+          "endAt": "2027-01-25T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T14:00:00.000Z",
+          "endAt": "2027-01-25T14:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T14:30:00.000Z",
+          "endAt": "2027-01-25T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T15:00:00.000Z",
+          "endAt": "2027-01-25T15:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T15:30:00.000Z",
+          "endAt": "2027-01-25T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T16:00:00.000Z",
+          "endAt": "2027-01-25T16:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T16:30:00.000Z",
+          "endAt": "2027-01-25T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T17:00:00.000Z",
+          "endAt": "2027-01-25T17:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T17:30:00.000Z",
+          "endAt": "2027-01-25T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T18:00:00.000Z",
+          "endAt": "2027-01-25T18:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T18:30:00.000Z",
+          "endAt": "2027-01-25T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T19:00:00.000Z",
+          "endAt": "2027-01-25T19:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T19:30:00.000Z",
+          "endAt": "2027-01-25T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T20:00:00.000Z",
+          "endAt": "2027-01-25T20:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T20:30:00.000Z",
+          "endAt": "2027-01-25T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T21:00:00.000Z",
+          "endAt": "2027-01-25T21:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T21:30:00.000Z",
+          "endAt": "2027-01-25T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T22:00:00.000Z",
+          "endAt": "2027-01-25T22:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T22:30:00.000Z",
+          "endAt": "2027-01-25T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T23:00:00.000Z",
+          "endAt": "2027-01-25T23:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-25T23:30:00.000Z",
+          "endAt": "2027-01-26T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T00:00:00.000Z",
+          "endAt": "2027-01-26T00:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T00:30:00.000Z",
+          "endAt": "2027-01-26T01:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T11:00:00.000Z",
+          "endAt": "2027-01-26T11:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T11:30:00.000Z",
+          "endAt": "2027-01-26T12:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T12:00:00.000Z",
+          "endAt": "2027-01-26T12:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T12:30:00.000Z",
+          "endAt": "2027-01-26T13:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T13:00:00.000Z",
+          "endAt": "2027-01-26T13:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T13:30:00.000Z",
+          "endAt": "2027-01-26T14:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T14:00:00.000Z",
+          "endAt": "2027-01-26T14:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T14:30:00.000Z",
+          "endAt": "2027-01-26T15:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T15:00:00.000Z",
+          "endAt": "2027-01-26T15:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T15:30:00.000Z",
+          "endAt": "2027-01-26T16:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T16:00:00.000Z",
+          "endAt": "2027-01-26T16:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T16:30:00.000Z",
+          "endAt": "2027-01-26T17:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T17:00:00.000Z",
+          "endAt": "2027-01-26T17:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T17:30:00.000Z",
+          "endAt": "2027-01-26T18:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T18:00:00.000Z",
+          "endAt": "2027-01-26T18:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T18:30:00.000Z",
+          "endAt": "2027-01-26T19:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T19:00:00.000Z",
+          "endAt": "2027-01-26T19:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T19:30:00.000Z",
+          "endAt": "2027-01-26T20:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T20:00:00.000Z",
+          "endAt": "2027-01-26T20:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T20:30:00.000Z",
+          "endAt": "2027-01-26T21:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T21:00:00.000Z",
+          "endAt": "2027-01-26T21:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T21:30:00.000Z",
+          "endAt": "2027-01-26T22:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T22:00:00.000Z",
+          "endAt": "2027-01-26T22:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T22:30:00.000Z",
+          "endAt": "2027-01-26T23:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T23:00:00.000Z",
+          "endAt": "2027-01-26T23:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-26T23:30:00.000Z",
+          "endAt": "2027-01-27T00:00:00.000Z"
+        },
+        {
+          "startAt": "2027-01-27T00:00:00.000Z",
+          "endAt": "2027-01-27T00:30:00.000Z"
+        },
+        {
+          "startAt": "2027-01-27T00:30:00.000Z",
+          "endAt": "2027-01-27T01:00:00.000Z"
+        }
+      ]
+    },
+    "resource-003": {
+      "resourceId": "resource-003",
+      "enabled": false,
+      "timeZone": "America/Santiago",
+      "from": "2026-11-04T03:00:00Z",
+      "to": "2027-02-01T03:00:00Z",
+      "slotDurationSeconds": 3600,
+      "availableWindows": [],
+      "availableSlots": []
+    }
+  }
+}

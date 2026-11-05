@@ -1,6 +1,6 @@
 # Backend de reservas
 
-Servicio de reservas en Go con arquitectura por capas: `model`, `service` y `handler`. Actualmente contiene los modelos iniciales del dominio; todavía no tiene servidor ejecutable ni casos de uso implementados.
+Servicio de reservas en Go con arquitectura por capas: `model`, `service` y `handler`. El backend productivo contiene los modelos iniciales, sin casos de uso reales. Para el **Hito 1** existe un servidor ejecutable separado en `cmd/mock-api` e `internal/mockapi`, con las 14 operaciones HTTP y respuestas prefijadas, sin persistencia. Iniciar con `go run ./cmd/mock-api`; escucha en `127.0.0.1:4010` por defecto. `MOCK_ADDR` permite otra dirección explícita. Ver [entrega, arquitectura y demostración](../docs/hito-1.md).
 
 Stack acordado: Go para backend, Vue para frontend, MongoDB para persistencia y OpenAPI para contratos HTTP. SonarQube y Trivy tienen configuración local mediante Docker y scripts; la integración con una plataforma de integración continua sigue pendiente.
 
@@ -76,10 +76,10 @@ No se modelan todavía horarios recurrentes, excepciones, selección de polític
 
 Desde `Backend`, ejecutar `go test ./...` y `go vet ./...`. Por ahora verifican compilación y análisis estático; no existen pruebas de comportamiento ni garantías de concurrencia implementadas.
 
-El módulo local se llama `bookingms` y utiliza únicamente la biblioteca estándar. Su ruta podrá ajustarse cuando se defina el repositorio remoto. El código de arranque, las dependencias externas, los contratos HTTP y las migraciones se definirán en sus etapas correspondientes.
+El módulo local se llama `bookingms` y utiliza únicamente la biblioteca estándar. El mock tiene su propio arranque HTTP y fixtures. El arranque productivo, las dependencias externas y las migraciones se definirán en el Hito 2.
 
 ## Contratos y calidad continua
 
-El directorio compartido [contracts/openapi](../contracts/openapi/README.md) contiene el contrato OpenAPI 3.0.3 entre Go y Vue, con siete operaciones y ejemplos validables. Los modelos del dominio no sustituyen los esquemas de solicitudes y respuestas. Esta fase se limita a contrato y visualización con mocks prefijados; los servicios reales Go y la persistencia MongoDB corresponden al siguiente hito. Swagger UI está publicado en `http://localhost:8080/docs/`; los endpoints mock todavía no están levantados.
+El directorio compartido [contracts/openapi](../contracts/openapi/README.md) contiene el contrato OpenAPI 3.0.3 entre Go y Vue, con catorce operaciones y ejemplos validables. Los modelos del dominio no sustituyen los esquemas de solicitudes y respuestas. Esta fase se limita a contrato y visualización con mocks prefijados; los servicios reales Go y la persistencia MongoDB corresponden al siguiente hito. Swagger UI está publicado en `http://localhost:8080/docs/`; los endpoints mock están implementados en `cmd/mock-api` y pueden iniciarse con `./scripts/demo.ps1 Start` desde la raíz.
 
 La [guía de calidad y seguridad](../docs/calidad-seguridad.md) describe el servidor local SonarQube, Trivy, generación de cobertura y condiciones de fallo. Desde la raíz, `./scripts/quality.ps1 Check` ejecuta ambas verificaciones una vez iniciada y preparada la instalación local. No existe todavía un pipeline porque su plataforma no está definida. Generar cobertura en esta etapa de modelos no equivale a contar con pruebas funcionales.

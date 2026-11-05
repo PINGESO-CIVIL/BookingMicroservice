@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('Init', 'Validate', 'Start', 'Setup', 'Coverage', 'Sonar', 'Trivy', 'Check', 'Status', 'Stop')]
+    [ValidateSet('Init', 'Validate', 'Start', 'Setup', 'Coverage', 'Sonar', 'Trivy', 'TrivyImages', 'Check', 'Status', 'Stop')]
     [string]$Action = 'Status'
 )
 
@@ -55,12 +55,13 @@ function Assert-DockerEngine {
     if ($LASTEXITCODE -ne 0) { throw 'Inicia Docker Desktop con contenedores Linux y vuelve a ejecutar.' }
 }
 
-function Write-CoverageReports {
+function Write-GoCoverageReports {
     if (-not (Get-Command go -ErrorAction SilentlyContinue)) { throw 'Go no esta instalado.' }
     $coveragePath = Join-Path $reportDirectory 'coverage.out'
     $testPath = Join-Path $reportDirectory 'go-tests.json'
+    $executionPath = Join-Path $reportDirectory 'go-tests.xml'
     # Never let a failed run leave old reports available to the scanner.
-    foreach ($path in @($coveragePath, $testPath)) {
+    foreach ($path in @($coveragePath, $testPath, $executionPath)) {
         if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path }
     }
     Push-Location (Join-Path $projectRoot 'Backend')
@@ -83,10 +84,59 @@ function Write-CoverageReports {
         }
         [System.IO.File]::WriteAllLines($coveragePath, [string[]]$coverageLines, $utf8)
         $events = @($testOutput | ForEach-Object { $_ | ConvertFrom-Json })
+        & (Join-Path $PSScriptRoot 'go-test-report.ps1') -ProjectRoot $projectRoot -ModuleName $moduleName.Trim() -InputPath $testPath -OutputPath $executionPath
         $testCount = @($events | Where-Object { $_.Action -eq 'run' -and $_.Test }).Count
         Write-Host "Pruebas ejecutadas: $testCount. Reportes generados en reports/."
         if ($testCount -eq 0) { Write-Host 'Todavia no hay pruebas de comportamiento; el reporte no acredita cobertura funcional.' }
     } finally { Pop-Location }
+}
+
+function Write-FrontendCoverageReports {
+    if (-not (Get-Command node -ErrorAction SilentlyContinue) -or -not (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
+        throw 'Instala Node.js y npm para generar cobertura del frontend.'
+    }
+    $frontendRoot = Join-Path $projectRoot 'Frontend'
+    $lcovPath = Join-Path $reportDirectory 'frontend/lcov.info'
+    if (Test-Path -LiteralPath $lcovPath) { Remove-Item -LiteralPath $lcovPath }
+    if (-not (Test-Path -LiteralPath (Join-Path $frontendRoot 'node_modules/@vitest/coverage-v8'))) {
+        throw 'Faltan dependencias del frontend. Ejecuta npm ci desde Frontend y vuelve a ejecutar.'
+    }
+    Push-Location $frontendRoot
+    try {
+        & npm.cmd run build
+        if ($LASTEXITCODE -ne 0) { throw 'La compilacion del frontend fallo; no se enviara cobertura.' }
+        & npm.cmd run test:coverage
+        if ($LASTEXITCODE -ne 0) {
+            if (Test-Path -LiteralPath $lcovPath) { Remove-Item -LiteralPath $lcovPath }
+            throw 'Las pruebas Vue/TypeScript fallaron; no se enviara cobertura a SonarQube.'
+        }
+        if (-not (Test-Path -LiteralPath $lcovPath)) { throw 'Vitest no genero reports/frontend/lcov.info.' }
+        # LCOV is produced from Frontend; SonarScanner resolves paths from the repo root.
+        $frontendPrefix = [IO.Path]::GetFullPath($frontendRoot).TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+        $normalized = foreach ($line in [IO.File]::ReadAllLines($lcovPath)) {
+            if ($line.StartsWith('SF:')) {
+                $source = $line.Substring(3)
+                if ([IO.Path]::IsPathRooted($source)) {
+                    $absoluteSource = [IO.Path]::GetFullPath($source)
+                } elseif ($source.Replace('\', '/').StartsWith('Frontend/')) {
+                    $absoluteSource = [IO.Path]::GetFullPath((Join-Path $projectRoot $source))
+                } else {
+                    $absoluteSource = [IO.Path]::GetFullPath((Join-Path $frontendRoot $source))
+                }
+                if (-not $absoluteSource.StartsWith($frontendPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+                    throw 'LCOV contiene una ruta ajena al frontend; no se enviara ese reporte.'
+                }
+                'SF:' + $absoluteSource.Substring($projectRoot.Length + 1).Replace('\', '/')
+            } else { $line }
+        }
+        [IO.File]::WriteAllLines($lcovPath, [string[]]$normalized, $utf8)
+        Write-Host 'Cobertura Vue/TypeScript preparada en reports/frontend/lcov.info.'
+    } finally { Pop-Location }
+}
+
+function Write-CoverageReports {
+    Write-GoCoverageReports
+    Write-FrontendCoverageReports
 }
 
 function Connect-LocalSonar {
@@ -121,7 +171,7 @@ function Connect-LocalSonar {
     }
     if (-not $projectExists) {
         Invoke-RestMethod -Method Post -Uri "$baseUrl/api/projects/create" -Headers $adminHeader -Body @{
-            project = 'bookingms-backend'; name = 'BookingMS Backend'; visibility = 'private'
+            project = 'bookingms-backend'; name = 'BookingMS Go y Vue'; visibility = 'private'
         } -TimeoutSec 20 | Out-Null
     }
 
@@ -166,6 +216,11 @@ function Invoke-TrivyAnalysis {
     Invoke-Compose -DockerArguments @('run', '--rm', '--no-deps', 'trivy', 'fs', '--config', '/workspace/trivy.yaml',
         '--exit-code', '0', '--severity', 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL',
         '--ignorefile=', '--secret-config=', '--output', '/workspace/reports/trivy.json', '/workspace')
+    Assert-TrivyReport -ReportPath $reportPath
+}
+
+function Assert-TrivyReport {
+    param([string]$ReportPath)
     if (-not (Test-Path -LiteralPath $reportPath)) { throw 'Trivy no genero el reporte esperado.' }
     $report = Get-Content -LiteralPath $reportPath -Raw | ConvertFrom-Json
     if (-not $report.SchemaVersion) { throw 'El reporte Trivy no tiene un formato valido.' }
@@ -181,8 +236,43 @@ function Invoke-TrivyAnalysis {
             }
         }
     }
-    Write-Host "Trivy: $findingCount hallazgos; $blockingCount bloqueantes. Reporte: reports/trivy.json"
+    Write-Host "Trivy: $findingCount hallazgos; $blockingCount bloqueantes. Reporte: $ReportPath"
     if ($blockingCount -gt 0) { throw 'Trivy detecto hallazgos bloqueantes. Revisa el reporte; no se aplicaron exclusiones.' }
+}
+
+function Invoke-TrivyImageAnalysis {
+    Assert-DockerEngine
+    $imageReports = Join-Path $reportDirectory 'images'
+    New-Item -ItemType Directory -Force $imageReports | Out-Null
+    $targets = @(
+        @{ Name = 'bookingms/mock-api:demo'; File = 'mock-api' },
+        @{ Name = 'bookingms/frontend:demo'; File = 'frontend' },
+        @{ Name = 'bookingms/swagger-ui:demo'; File = 'swagger-ui' }
+    )
+    $failed = @()
+    foreach ($target in $targets) {
+        $archivePath = Join-Path $imageReports ($target.File + '.tar')
+        $reportPath = Join-Path $imageReports ($target.File + '.json')
+        if (Test-Path -LiteralPath $reportPath) { Remove-Item -LiteralPath $reportPath }
+        try {
+            & docker image inspect $target.Name --format '{{.Id}}' | Out-Null
+            if ($LASTEXITCODE) { throw 'La imagen no existe. Ejecuta primero docker compose up --build -d --wait.' }
+            & docker image save --output $archivePath $target.Name
+            if ($LASTEXITCODE) { throw 'No se pudo exportar la imagen para Trivy.' }
+            # Use an archive instead of mounting the Docker socket in the scanner.
+            Invoke-Compose -DockerArguments @('run', '--rm', '--no-deps', 'trivy', 'image',
+                '--config', '/workspace/trivy.yaml', '--input', ('/workspace/reports/images/' + $target.File + '.tar'),
+                '--scanners', 'vuln,secret', '--exit-code', '0', '--severity', 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL',
+                '--ignorefile=', '--secret-config=', '--output', ('/workspace/reports/images/' + $target.File + '.json'))
+            Assert-TrivyReport -ReportPath $reportPath
+        } catch {
+            $failed += $target.Name
+            Write-Warning ($target.Name + ': ' + $_.Exception.Message)
+        } finally {
+            if (Test-Path -LiteralPath $archivePath) { Remove-Item -LiteralPath $archivePath }
+        }
+    }
+    if ($failed.Count) { throw ('Verificacion de imagenes fallida: ' + ($failed -join ', ')) }
 }
 
 Push-Location $projectRoot
@@ -199,6 +289,7 @@ try {
         'Coverage' { Write-CoverageReports }
         'Sonar' { Invoke-SonarAnalysis }
         'Trivy' { Invoke-TrivyAnalysis }
+        'TrivyImages' { Invoke-TrivyImageAnalysis }
         'Check' {
             # Run both analyzers even if one fails, but never return success on failure.
             $failures = @()

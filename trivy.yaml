@@ -22,5 +22,9 @@ scan:
     - reports
     - .scannerwork
     - node_modules
+    - Backend/bin
+    - Frontend/dist
+    - Frontend/test-results
+    - Frontend/playwright-report
 vulnerability:
   ignore-unfixed: false

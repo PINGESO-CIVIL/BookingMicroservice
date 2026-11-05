@@ -1,8 +1,45 @@
 name: bookingms-demo
 
 services:
+  mock-api:
+    image: bookingms/mock-api:demo
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    environment:
+      MOCK_ADDR: 0.0.0.0:4010
+    ports:
+      - "127.0.0.1:4010:4010"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+
+  frontend:
+    image: bookingms/frontend:demo
+    build:
+      context: .
+      dockerfile: Frontend/Dockerfile
+    depends_on:
+      mock-api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:5173:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+
   swagger-ui:
-    image: swaggerapi/swagger-ui:v5.32.14@sha256:3d93169968848d371a6a56ca1ab18b47a8906ba461b8eba0688866354f5431d5
+    image: bookingms/swagger-ui:demo
+    build:
+      context: .
+      dockerfile: infra/swagger/Dockerfile
+    depends_on:
+      mock-api:
+        condition: service_healthy
     ports:
       - "127.0.0.1:8080:8080"
     environment:
@@ -11,8 +48,10 @@ services:
       VALIDATOR_URL: none
       DOC_EXPANSION: list
       DISPLAY_REQUEST_DURATION: "true"
-      # Solo documentación hasta publicar el servidor de mocks.
-      SUPPORTED_SUBMIT_METHODS: "[]"
+      # Tokens de demostración: demo-user o demo-admin. No es autenticación real.
+      SUPPORTED_SUBMIT_METHODS: '["get", "post", "patch", "put", "delete"]'
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
     volumes:
       - ./contracts/openapi/openapi.yaml:/contracts/openapi.yaml:ro
     healthcheck:

@@ -8,6 +8,8 @@ Estado: definición funcional aprobada por el usuario el 2026-11-04, incluyendo 
 
 Crear una reserva confirmada de un único recurso para el usuario autenticado. La ruta se mantiene entre contextos; cambian los recursos, las políticas y los esquemas de atributos específicos.
 
+Actualización de selección confirmada por el usuario: el intervalo se elige de los bloques de duración fija del recurso (`policy.slotDurationSeconds`), publicados como `availableSlots` en disponibilidad. El formulario no solicita escribir horas. La futura escritura debe revalidar duración, alineación con la apertura, horarios, cierres y ocupación; consultar un bloque no lo retiene.
+
 ## Identidad: decisión confirmada
 
 - El responsable siempre es el usuario autenticado que crea la reserva.

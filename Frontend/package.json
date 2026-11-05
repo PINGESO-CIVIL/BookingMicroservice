@@ -1,0 +1,39 @@
+{
+  "name": "bookingms-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "contracts": "openapi-typescript ../contracts/openapi/openapi.yaml -o src/api/schema.d.ts && node scripts/fixtures.mjs && node scripts/mock-fixtures.mjs",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "verify:http": "node scripts/verify-http.mjs",
+    "verify:swagger": "node scripts/verify-swagger.mjs"
+  },
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "dependencies": {
+    "vue": "^3.5.22",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitest/coverage-v8": "5.0.3",
+    "@vue/test-utils": "2.5.1",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "jsdom": "27.4.0",
+    "openapi-typescript": "^7.10.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.2",
+    "vitest": "5.0.3",
+    "vue-tsc": "^3.1.4",
+    "yaml": "^2.8.1"
+  }
+}

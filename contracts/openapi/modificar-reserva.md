@@ -8,6 +8,8 @@ Estado: definición funcional aprobada por el usuario el 2026-11-04, incluyendo 
 
 Modificar parcialmente una reserva confirmada. Los campos omitidos conservan sus valores. Los cambios se aplican todos juntos o se rechaza toda la solicitud, conservando la reserva original.
 
+La interfaz conserva el intervalo original por separado y permite elegir otro bloque de duración fija de `availableSlots` del recurso. No ofrece ingreso manual de horas ni expone reservas ajenas. La consulta pública sigue incluyendo la ocupación propia; conservar el intervalo original no lo convierte en disponible para otros usuarios. La escritura futura revalida el nuevo bloque excluyendo solo su propia ocupación.
+
 El actor debe estar autenticado y autorizado sobre la reserva, su ámbito y el recurso resultante. El usuario confirmó que esta primera versión solo permite modificar reservas propias dentro de su ámbito. El contrato no permite cambiar responsable ni ámbito y no incorpora permisos administrativos. Una reserva ajena o inexistente devuelve `404`.
 
 ## Solicitud propuesta

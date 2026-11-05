@@ -1,6 +1,8 @@
 # Contrato HTTP de reservas
 
-Este directorio contiene el [contrato OpenAPI 3.0.3](openapi.yaml) compartido por el futuro backend Go y el frontend Vue. Incluye las siete operaciones y ejemplos prefijados de solicitudes y respuestas. Se valida con Redocly CLI, incluida la compatibilidad de los ejemplos con sus esquemas. Swagger UI está publicado localmente; todavía no hay servidor mock ni lógica de negocio implementados.
+Actualización 0.3.0: el usuario confirmó bloques de duración fija configurables por recurso. `ResourcePolicy` incluye `slotDurationSeconds` (minutos enteros expresados en segundos); disponibilidad incluye esa duración y `availableSlots`, manteniendo `availableWindows` como ventanas continuas. La interfaz selecciona bloques completos y no solicita escribir horas. El frontend calcula los bloques sobre configuración y ocupación de ejemplo, sin persistencia; el backend real sigue pendiente.
+
+Este directorio contiene el [contrato OpenAPI 3.0.3](openapi.yaml) compartido por el futuro backend Go y el frontend Vue. Incluye las catorce operaciones y ejemplos prefijados de solicitudes y respuestas. Se valida con Redocly CLI, incluida la compatibilidad de los ejemplos con sus esquemas. Swagger UI está publicado localmente; el servidor HTTP mock Go está implementado para el Hito 1, sin lógica de negocio productiva. Ver [la entrega y demostración](../../docs/hito-1.md).
 
 La [definición funcional de creación](crear-reserva.md) fue aprobada por el usuario el 2026-11-04, incluyendo `attributes` y creación personal. Los detalles de lógica real identificados como pendientes se mantienen para el siguiente hito.
 
@@ -10,6 +12,7 @@ La [definición funcional de modificación](modificar-reserva.md) fue aprobada p
 
 | Operación | Método y ruta | Documento | Estado funcional |
 |---|---|---|---|
+| Listar reservas del ámbito (Admin) | `GET /api/v1/admin/reservations` | [Consulta administrativa](listar-reservas-admin.md) | Solicitado por el usuario para Hito 1 (Mock) |
 | Crear reserva | `POST /api/v1/reservations` | [Creación](crear-reserva.md) | Aprobado; detalles técnicos pendientes señalados |
 | Modificar reserva | `PATCH /api/v1/reservations/{id}` | [Modificación](modificar-reserva.md) | Aprobado; detalles técnicos pendientes señalados |
 | Cancelar reserva | `POST /api/v1/reservations/{id}/cancel` | [Cancelación](cancelar-reserva.md) | Para revisión |
@@ -17,10 +20,16 @@ La [definición funcional de modificación](modificar-reserva.md) fue aprobada p
 | Consultar reserva propia | `GET /api/v1/reservations/{id}` | [Detalle](consultar-reserva.md) | Para revisión |
 | Listar recursos visibles | `GET /api/v1/resources` | [Recursos](listar-recursos.md) | Para revisión |
 | Consultar disponibilidad | `GET /api/v1/resources/{id}/availability` | [Disponibilidad](consultar-disponibilidad.md) | Para revisión |
+| Crear recurso (Admin) | `POST /api/v1/resources` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Consultar detalle de recurso (Admin) | `GET /api/v1/resources/{id}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Modificar recurso / política (Admin) | `PATCH /api/v1/resources/{id}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Configurar horario recurrente (Admin) | `PUT /api/v1/resources/{id}/schedule` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Registrar bloqueo temporal (Admin) | `POST /api/v1/resources/{id}/closures` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Eliminar bloqueo temporal (Admin) | `DELETE /api/v1/resources/{id}/closures/{closureId}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
 
 Las [convenciones comunes](convenciones.md) consolidan identidad, respuestas, fechas, errores y paginación. El usuario confirmó que todas las operaciones de reservas se limitan a sus propias reservas dentro de su ámbito. El 2026-11-04 aprobó los límites de página (20 por defecto, 100 máximo) y disponibilidad (31 días por consulta). Estos límites controlan la carga de datos por solicitud, no la cantidad de reservas ni la anticipación permitida para reservar.
 
-Los documentos Markdown explican el comportamiento esperado; `openapi.yaml` formaliza las formas públicas y los ejemplos para la demostración. No se adelantan servicios, handlers ni repositorios Go. El servidor de mocks responderá con escenarios prefijados: las escrituras no persistirán ni modificarán las consultas posteriores. Los contratos de administración de recursos y bloqueos quedan para una etapa separada.
+Los documentos Markdown explican el comportamiento esperado; `openapi.yaml` formaliza las formas públicas y los ejemplos para la demostración. No se adelantan servicios, handlers ni repositorios Go. El servidor de mocks responderá con escenarios prefijados: las escrituras no persistirán ni modificarán las consultas posteriores. Las operaciones administrativas también están incluidas como respuestas simuladas del Hito 1.
 
 ## Validación reproducible
 
@@ -34,14 +43,14 @@ npm run validate
 
 Requisitos: Node >= 22.12.0 y npm >= 10. Redocly CLI está fijado en `package.json` y `package-lock.json`. Se validan estructura OpenAPI, referencias, identificadores únicos de operaciones y ejemplos de cuerpos y parámetros. El archivo de configuración únicamente exceptúa el aviso de servidor localhost por ser una demostración local y la licencia, que aún no se ha definido; no se silencian errores de esquemas ni ejemplos.
 
-Validar el contrato no ejecuta comparaciones temporales ni demuestra idempotencia, autorización, colisiones o persistencia. La documentación se publica como se indica abajo; la siguiente entrega será el servidor de mocks.
+Validar el contrato no ejecuta comparaciones temporales ni demuestra idempotencia, autorización, colisiones o persistencia. La documentación se publica como se indica abajo; el servidor de mocks se inicia con `./scripts/demo.ps1 Start` desde la raíz.
 
 ## Swagger UI local
 
 - Documentación: [http://localhost:8080/docs/](http://localhost:8080/docs/).
 - Contrato servido: [http://localhost:8080/docs/openapi.yaml](http://localhost:8080/docs/openapi.yaml).
-- Contiene las siete operaciones, parámetros, cuerpos, ejemplos, códigos de respuesta y esquemas.
-- Las llamadas de **Try it out** están desactivadas hasta levantar el servidor de mocks previsto en `localhost:4010`. Consultar ejemplos no ejecuta ni guarda reservas.
+- Contiene las catorce operaciones, parámetros, cuerpos, ejemplos, códigos de respuesta y esquemas.
+- **Try it out** está habilitado contra `localhost:4010`. En **Authorize**, usar `demo-user` o `demo-admin`; son valores de demostración. `X-Mock-Scenario` selecciona ejemplos de éxito/error. Las escrituras no guardan cambios.
 
 Desde la raíz del repositorio:
 
@@ -50,11 +59,11 @@ docker compose up -d --wait
 docker compose ps
 ```
 
-El `compose.yaml` de la raíz publica solamente Swagger UI en localhost y utiliza una imagen fijada por versión y digest. No inicia backend, MongoDB ni frontend Vue. La instalación de calidad mantiene su Compose y sus datos independientes.
+El `compose.yaml` de la raíz construye e inicia Vue/Nginx, la API mock Go y Swagger. Usar `docker compose up --build -d --wait`. No inicia MongoDB. La instalación de calidad mantiene su Compose y sus datos independientes; sus auditorías se ejecutan explícitamente mediante `scripts/quality.ps1`.
 
 El contrato se monta como solo lectura y la imagen de Swagger lo copia al directorio público al iniciar. Después de editar y validar el YAML, ejecutar `docker compose restart swagger-ui` y recargar el navegador. Para detener la documentación, `docker compose stop swagger-ui`.
 
-La validación se realiza localmente con Redocly; Swagger UI no envía el contrato al validador público de swagger.io. La dirección local servida fue verificada contra el archivo original y sus siete operaciones se comprobaron en el navegador.
+La validación se realiza localmente con Redocly; Swagger UI no envía el contrato al validador público de swagger.io. La dirección local servida fue verificada contra el archivo original y sus catorce operaciones se comprobaron en el navegador.
 
 ## Criterios acordados
 
@@ -68,6 +77,6 @@ La validación se realiza localmente con Redocly; Swagger UI no envía el contra
 - Mantener el contrato versionado y comprobar su validez y compatibilidad en integración continua.
 - Mapear los tipos de transporte a los modelos internos; los documentos MongoDB pertenecen al repositorio.
 
-Se ha seleccionado OpenAPI 3.0.3 y Redocly CLI 2.75.0 para esta entrega. La generación de clientes y tipos, el servidor de mocks y su publicación se definirán en las siguientes entregas, sin cambiar el alcance a lógica real.
+Se ha seleccionado OpenAPI 3.0.3 y Redocly CLI 2.75.0 para esta entrega. Los tipos TypeScript se generan desde OpenAPI y Vue consume el mock HTTP Go. La publicación es local; un despliegue remoto debe acordarse. La lógica real corresponde al Hito 2.
 
 Referencia: [especificación oficial OpenAPI](https://spec.openapis.org/oas/latest.html).

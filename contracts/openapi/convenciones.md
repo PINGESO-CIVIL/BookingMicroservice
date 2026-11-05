@@ -4,6 +4,8 @@ Estado: complemento funcional del contrato `openapi.yaml`. Este Markdown no es c
 
 ## Alcance e identidad confirmados
 
+Ampliación posterior del usuario: `GET /api/v1/admin/reservations` permite al administrador consultar reservas de todos los responsables de su ámbito. Es una operación separada de lectura; los endpoints personales siguen limitados a reservas propias. No se agregan escrituras administrativas sobre reservas ajenas.
+
 - El usuario crea, lista, consulta, modifica y cancela únicamente sus propias reservas dentro de su ámbito autorizado.
 - La identidad y el ámbito efectivos proceden del contexto autenticado; no se aceptan `responsible` ni `scopeId` como filtros o valores enviados para ampliar el acceso.
 - Un identificador de reserva ajena o de otro ámbito responde `404`, igual que uno inexistente. La autorización se verifica antes de devolver estado, versión o datos de la reserva.
@@ -82,6 +84,6 @@ La precedencia entre validaciones se formalizará en OpenAPI y en los mocks; las
 
 ## Estado de publicación
 
-El archivo `openapi.yaml` formaliza las siete operaciones con OpenAPI 3.0.3 y se valida mediante Redocly CLI 2.75.0. Define formas, respuestas y ejemplos; no ejecuta reglas entre solicitudes. La autenticación Bearer describe el contrato sin presuponer JWT ni un proveedor real. En el contexto genérico `attributes` admite `{}`; las adaptaciones futuras deberán definir sus propios esquemas explícitos.
+El archivo `openapi.yaml` formaliza las catorce operaciones con OpenAPI 3.0.3 y se valida mediante Redocly CLI 2.75.0. Define formas, respuestas y ejemplos; no ejecuta reglas entre solicitudes. La autenticación Bearer describe el contrato sin presuponer JWT ni un proveedor real. En el contexto genérico `attributes` admite `{}`; las adaptaciones futuras deberán definir sus propios esquemas explícitos.
 
-Swagger UI está expuesto en `http://localhost:8080/docs/`, solo para explorar documentación y ejemplos. El contrato descargable está en `/docs/openapi.yaml`. Falta el servidor de respuestas prefijadas; Try it out permanece desactivado. La fase actual no implementa lógica, persistencia ni estado compartido de reservas; esas capacidades corresponden al siguiente hito. Ver instrucciones de validación y arranque en [README](README.md).
+Swagger UI está expuesto en `http://localhost:8080/docs/` con Try it out habilitado contra el mock HTTP Go de `localhost:4010`. El contrato descargable está en `/docs/openapi.yaml`. Se usan valores Bearer sintéticos `demo-user` y `demo-admin`; la cabecera `X-Mock-Scenario` selecciona respuestas de ejemplo. La fase actual no implementa lógica productiva, persistencia ni estado compartido de reservas; esas capacidades corresponden al Hito 2. Ver instrucciones de validación y arranque en [README](README.md) y [entrega del Hito 1](../../docs/hito-1.md).

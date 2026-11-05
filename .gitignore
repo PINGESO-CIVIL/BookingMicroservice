@@ -7,6 +7,7 @@
 .env.local
 .env.*.local
 /spec
+/docs
 
 # Build outputs and future frontend dependencies.
 Backend/bin/
