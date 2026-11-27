@@ -1,4 +1,4 @@
-package model
+package domain
 
 // IdentityReference identifies a user in an external identity system.
 // Issuer and Subject together distinguish identities from different providers.

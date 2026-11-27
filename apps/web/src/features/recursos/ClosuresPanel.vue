@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import type { Closure, ResourceDetail } from '../api/types'
-import { api } from '../api/client'
-import { writeScenario } from '../demo'
-import { formatDateTime, toInstant } from '../dates'
-import Btn from './Btn.vue'
-import Field from './Field.vue'
-import Alert from './Alert.vue'
-import Modal from './Modal.vue'
+import type { Closure, ResourceDetail } from '../../api/types'
+import { api } from '../../api/client'
+import { writeScenario } from '../../demo'
+import { formatDateTime, toInstant } from '../../dates'
+import Btn from '../../components/Btn.vue'
+import Field from '../../components/Field.vue'
+import Alert from '../../components/Alert.vue'
+import Modal from '../../components/Modal.vue'
 const props = defineProps<{ resource: ResourceDetail }>()
 const showForm = ref(false), removing = ref<Closure>(), processing = ref(false), error = ref(''), notice = ref(''), receipt = ref<Closure>()
 const form = reactive({ start: '2026-11-12T12:00', end: '2026-11-12T15:00', reason: '' })

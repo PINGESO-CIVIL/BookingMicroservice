@@ -3,6 +3,7 @@ package main
 import (
 	"go/parser"
 	"go/token"
+	"os"
 	"path/filepath"
 	"slices"
 	"strconv"
@@ -10,15 +11,33 @@ import (
 	"testing"
 )
 
+func TestInternalLayout(t *testing.T) {
+	const root = "../../internal"
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var directories []string
+	for _, entry := range entries {
+		if entry.IsDir() {
+			directories = append(directories, entry.Name())
+		}
+	}
+	want := []string{"api", "repository", "service", "store"}
+	if !slices.Equal(directories, want) {
+		t.Fatalf("directorios de internal: %v; plantilla: %v", directories, want)
+	}
+}
+
 func TestLayerImports(t *testing.T) {
 	for _, layer := range []struct {
 		path             string
 		allowedInternal  []string
 		forbiddenImports []string
 	}{
-		{"api", []string{"model", "service"}, []string{"database/sql", "github.com/jackc/pgx"}},
-		{"service", []string{"model"}, []string{"net/http", "net/url", "database/sql", "github.com/jackc/pgx"}},
-		{"store", []string{"model"}, []string{"net/http"}},
+		{"api", []string{"service", "service/demo"}, []string{"database/sql", "github.com/jackc/pgx"}},
+		{"service", []string{"service/demo", "service/domain"}, []string{"net/http", "net/url", "database/sql", "github.com/jackc/pgx"}},
+		{"store", []string{"service/demo", "service/domain"}, []string{"net/http"}},
 	} {
 		t.Run(layer.path, func(t *testing.T) {
 			files, err := filepath.Glob(filepath.Join("..", "..", "internal", layer.path, "*.go"))
@@ -39,8 +58,7 @@ func TestLayerImports(t *testing.T) {
 						t.Fatal(err)
 					}
 					if internal, ok := strings.CutPrefix(path, "bookingms/internal/"); ok {
-						pkg, _, _ := strings.Cut(internal, "/")
-						if !slices.Contains(layer.allowedInternal, pkg) {
+						if !slices.Contains(layer.allowedInternal, internal) {
 							t.Errorf("%s importa una capa no permitida: %s", name, path)
 						}
 					}

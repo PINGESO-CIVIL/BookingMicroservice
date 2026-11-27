@@ -7,7 +7,7 @@ import (
 	"slices"
 	"time"
 
-	"bookingms/internal/model/demo"
+	"bookingms/internal/service/demo"
 )
 
 type FixtureStore interface {

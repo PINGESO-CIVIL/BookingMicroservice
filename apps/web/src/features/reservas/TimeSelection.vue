@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
-import { api } from '../api/client'
-import type { Availability, Reservation } from '../api/types'
-import { availabilityScenario, DEMO_NOW, refreshKey } from '../demo'
-import { duration, formatDate, localParts, toInstant } from '../dates'
-import Field from './Field.vue'
-import Alert from './Alert.vue'
-import LoadState from './LoadState.vue'
+import { api } from '../../api/client'
+import type { Availability, Reservation } from '../../api/types'
+import { availabilityScenario, DEMO_NOW, refreshKey } from '../../demo'
+import { duration, formatDate, localParts, toInstant } from '../../dates'
+import Field from '../../components/Field.vue'
+import Alert from '../../components/Alert.vue'
+import LoadState from '../../components/LoadState.vue'
 const props = defineProps<{ resourceId: string; zone: string; original?: Reservation }>()
 const date = defineModel<string>('date', { required: true }), start = defineModel<string>('start', { required: true }), end = defineModel<string>('end', { required: true })
 const emit = defineEmits<{ availability: [value: Availability | undefined]; changeResource: [] }>()

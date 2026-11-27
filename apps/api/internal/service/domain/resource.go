@@ -1,4 +1,4 @@
-package model
+package domain
 
 import "time"
 
@@ -18,7 +18,7 @@ type Resource struct {
 	Enabled           bool
 	TimeZone          string // IANA location name, not the server's local zone.
 	ExternalReference *ExternalReference
-	Attributes        map[string]any // Arbitrary JSON-data dependes on the resource type and the context. 
+	Attributes        map[string]any // Arbitrary JSON-data dependes on the resource type and the context.
 	Version           int64
 	CreatedAt         time.Time
 	UpdatedAt         time.Time

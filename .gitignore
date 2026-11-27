@@ -4,8 +4,8 @@
 /.scannerwork/
 **/.scannerwork/
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 /spec
 /docs/*
 !/docs/modos-de-falla.md

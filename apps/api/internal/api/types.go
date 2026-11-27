@@ -1,7 +1,7 @@
 // Package api defines the public JSON transport of the BookingMS mock.
 package api
 
-import "bookingms/internal/model/demo"
+import "bookingms/internal/service/demo"
 
 type Attributes = demo.Attributes
 type ExternalReference = demo.ExternalReference

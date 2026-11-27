@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { api } from '../api/client'
-import type { Resource } from '../api/types'
-import { readScenario, refreshKey } from '../demo'
-import Btn from '../components/Btn.vue'
-import Badge from '../components/Badge.vue'
-import LoadState from '../components/LoadState.vue'
+import { api } from '../../api/client'
+import type { Resource } from '../../api/types'
+import { readScenario, refreshKey } from '../../demo'
+import Btn from '../../components/Btn.vue'
+import Badge from '../../components/Badge.vue'
+import LoadState from '../../components/LoadState.vue'
 const router = useRouter(), enabled = ref(true), items = ref<Resource[]>([]), loading = ref(false), moreLoading = ref(false), error = ref(''), nextCursor = ref<string | null>(null)
 let request = 0
 async function load(more = false) {

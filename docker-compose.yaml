@@ -1,7 +1,7 @@
 name: bookingms-demo
 
 x-database-client: &database-client
-  DATABASE_URL: postgres://bookingms@postgres:5432/bookingms?sslmode=disable
+  DATABASE_URL: &bookingms-dsn postgres://bookingms@postgres:5432/bookingms?sslmode=disable
   PGPASSWORD: ${BOOKING_DB_PASSWORD:-bookingms-local-demo}
 
 services:
@@ -25,7 +25,10 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile.migrate
-    environment: *database-client
+    environment:
+      GOOSE_DRIVER: postgres
+      GOOSE_DBSTRING: *bookingms-dsn
+      PGPASSWORD: ${BOOKING_DB_PASSWORD:-bookingms-local-demo}
     depends_on:
       postgres:
         condition: service_healthy

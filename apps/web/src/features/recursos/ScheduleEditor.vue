@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ScheduleRule } from '../api/types'
-import Icon from './Icon.vue'
+import type { ScheduleRule } from '../../api/types'
+import Icon from '../../components/Icon.vue'
 const rules = defineModel<ScheduleRule[]>({ required: true })
 const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
 function add(day: number) { rules.value = [...rules.value, { dayOfWeek: day, startLocalTime: '08:00', endLocalTime: '18:00' }] }

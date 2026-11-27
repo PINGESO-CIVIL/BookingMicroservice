@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Reservation } from '../api/types'
-import { api } from '../api/client'
-import { duration, formatDate, formatDateTime, localParts } from '../dates'
+import type { Reservation } from '../../api/types'
+import { api } from '../../api/client'
+import { duration, formatDate, formatDateTime, localParts } from '../../dates'
 defineProps<{ reservation: Reservation }>()
 </script>
 <template><div class="resource-banner"><div class="resource-symbol">▦</div><div><span>Recurso</span><strong>{{ api.resourceName(reservation.resourceId) }}</strong><small>{{ api.resourceZone(reservation.resourceId) }}</small></div></div><dl class="detail-grid">

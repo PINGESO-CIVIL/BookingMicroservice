@@ -1,5 +1,7 @@
 # Frontend BookingMS
 
+Las vistas y los componentes propios de cada flujo viven en `src/features/reservas/` y `src/features/recursos/`. Los componentes visuales reutilizables viven en `src/components/`.
+
 Migración a **Vue 3 + TypeScript + Vite** del mockup React descargado de Figma Make, conservando la barra lateral, colores, formularios, tarjetas, tablas y adaptación móvil. No se utilizan React, React DOM ni JSX. El CSS original se adaptó para funcionar sin Tailwind y sin descargar fuentes externas.
 
 ## Iniciar

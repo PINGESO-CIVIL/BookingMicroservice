@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { api } from '../api/client'
-import type { Reservation } from '../api/types'
-import { DEMO_NOW, readScenario, refreshKey } from '../demo'
-import { duration, formatDate, localParts, toInstant } from '../dates'
-import Btn from '../components/Btn.vue'
-import Field from '../components/Field.vue'
-import Badge from '../components/Badge.vue'
-import Alert from '../components/Alert.vue'
-import LoadState from '../components/LoadState.vue'
-import Modal from '../components/Modal.vue'
-import ReservationInfo from '../components/ReservationInfo.vue'
+import { api } from '../../api/client'
+import type { Reservation } from '../../api/types'
+import { DEMO_NOW, readScenario, refreshKey } from '../../demo'
+import { duration, formatDate, localParts, toInstant } from '../../dates'
+import Btn from '../../components/Btn.vue'
+import Field from '../../components/Field.vue'
+import Badge from '../../components/Badge.vue'
+import Alert from '../../components/Alert.vue'
+import LoadState from '../../components/LoadState.vue'
+import Modal from '../../components/Modal.vue'
+import ReservationInfo from './ReservationInfo.vue'
 const props = defineProps<{ admin?: boolean }>()
 const router = useRouter()
 const selected = ref<Reservation>()

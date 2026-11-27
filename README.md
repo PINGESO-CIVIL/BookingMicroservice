@@ -20,6 +20,8 @@ Compose inicia `postgres`, ejecuta `migrate` una vez y espera su salida con cód
 
 El backend sirve Swagger con `API_ENV=dev`, el valor predeterminado de Compose. Con `API_ENV=prod`, las rutas de documentación responden 404. `BOOKING_DB_PASSWORD` permite definir la contraseña al inicializar el volumen. El valor predeterminado es para esta demo local.
 
+Para personalizar el entorno, copiar `.env.example` a `.env` y asignar la contraseña local antes de crear el volumen.
+
 Para detener la demo, ejecutar `docker compose stop`. `scripts/demo.ps1 Start|Status|Stop` usa el mismo Compose.
 
 ### Verificación del contrato
@@ -63,6 +65,8 @@ Los archivos estáticos de Swagger se copian desde la versión fijada al constru
 En Swagger, autorizar con `demo-user` o `demo-admin`. Son valores de demostración. Las escrituras devuelven ejemplos y no persisten cambios.
 
 El backend separa HTTP, casos de uso y acceso a datos en `apps/api`. La app Vue de transición vive en `apps/web`. La revisión formal de arquitectura corresponde al evaluador.
+
+La configuración de hooks vive en `lefthook.yml`. Para activarla, instalar las dependencias de la raíz con `pnpm install --frozen-lockfile --ignore-scripts`, instalar Gitleaks y ejecutar `pnpm exec lefthook install`. El workflow de GitHub usa los secretos del curso para Gitleaks y SonarQube.
 
 ## Documentación
 

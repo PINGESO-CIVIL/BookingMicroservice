@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { api, ApiError, canChange } from '../api/client'
-import type { Availability, Reservation, Resource, Schemas } from '../api/types'
-import { DEMO_NOW, detailScenario, readScenario, refreshKey, writeScenario } from '../demo'
-import { duration, formatDate, localParts, toInstant } from '../dates'
-import Btn from '../components/Btn.vue'
-import Alert from '../components/Alert.vue'
-import LoadState from '../components/LoadState.vue'
-import Icon from '../components/Icon.vue'
-import ReservationInfo from '../components/ReservationInfo.vue'
-import TimeSelection from '../components/TimeSelection.vue'
+import { api, ApiError, canChange } from '../../api/client'
+import type { Availability, Reservation, Resource, Schemas } from '../../api/types'
+import { DEMO_NOW, detailScenario, readScenario, refreshKey, writeScenario } from '../../demo'
+import { duration, formatDate, localParts, toInstant } from '../../dates'
+import Btn from '../../components/Btn.vue'
+import Alert from '../../components/Alert.vue'
+import LoadState from '../../components/LoadState.vue'
+import Icon from '../../components/Icon.vue'
+import ReservationInfo from './ReservationInfo.vue'
+import TimeSelection from './TimeSelection.vue'
 const route = useRoute(), router = useRouter(), editing = !!route.params.id
 const step = ref(editing ? 2 : 1), selected = ref(''), search = ref(''), date = ref('2026-11-10'), start = ref(''), end = ref('')
 const resources = ref<Resource[]>([]), original = ref<Reservation>(), availability = ref<Availability>(), receipt = ref<Reservation>(), loading = ref(false), processing = ref(false), error = ref(''), actionError = ref(''), errorCode = ref(''), nextCursor = ref<string | null>(null), moreLoading = ref(false)

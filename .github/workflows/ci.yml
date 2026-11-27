@@ -1,0 +1,123 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  TRIVY_VERSION: v0.76.1
+  OASDIFF_VERSION: v1.35.0
+
+jobs:
+  calidad:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.22.2'
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: '10.13.1'
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: apps/api/go.mod
+          cache-dependency-path: apps/api/go.sum
+      - name: Instalar dependencias y validar OpenAPI
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          npm ci --prefix apps/web
+          npm ci --prefix contracts
+          npm run validate --prefix contracts
+          pnpm codegen
+          git diff --exit-code
+      - name: Probar la API y Vue
+        run: |
+          mkdir -p reports/sonar
+          cd apps/api
+          go mod verify
+          go vet ./...
+          go test -json -covermode=atomic -coverprofile=../../reports/coverage.out ./... > ../../reports/go-tests.json
+          cd ../..
+          sed -i 's|^bookingms/|apps/api/|' reports/coverage.out
+          pwsh -File scripts/go-test-report.ps1 -ProjectRoot "$PWD" -ModuleName bookingms -InputPath reports/go-tests.json -OutputPath reports/go-tests.xml
+          npm run build --prefix apps/web
+          npm run test:coverage --prefix apps/web
+          sed -i 's|^SF:src/|SF:apps/web/src/|' reports/frontend/lcov.info
+      - name: Probar el entorno Compose
+        run: |
+          docker compose up -d --build --wait
+          npm run verify:http --prefix apps/web
+          BOOKING_E2E_API_URL=http://127.0.0.1:5191 go -C apps/api test -count=1 ./e2e
+      - name: Detener Compose
+        if: always()
+        run: docker compose down --volumes
+      - name: Verificar compatibilidad del contrato
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          base="$RUNNER_TEMP/base-openapi.yaml"
+          if ! git show "${BASE_SHA}:contracts/openapi.yaml" > "$base"; then
+            git show "${BASE_SHA}:contracts/openapi/openapi.yaml" > "$base"
+          fi
+          go run "github.com/oasdiff/oasdiff@${OASDIFF_VERSION}" breaking "$base" contracts/openapi.yaml --fail-on ERR
+      - uses: SonarSource/sonarqube-scan-action@4d1dc0c91ee400dcf8a6dddf2f705ac36542e304 # v8.4.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.working.directory=.scannerwork
+            -Dsonar.scanner.metadataFilePath=reports/sonar/report-task.txt
+
+  seguridad:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITLEAKS_VERSION: 8.30.1
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          version: ${{ env.TRIVY_VERSION }}
+          scan-type: fs
+          scanners: vuln,misconfig,secret
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'
+
+  imagen:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        include:
+          - servicio: backend
+            imagen: bookingms/api:demo
+          - servicio: migrate
+            imagen: bookingms/migrate:demo
+          - servicio: frontend
+            imagen: bookingms/frontend:demo
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Construir imagen
+        env:
+          SERVICIO: ${{ matrix.servicio }}
+        run: docker compose build "$SERVICIO"
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          version: ${{ env.TRIVY_VERSION }}
+          image-ref: ${{ matrix.imagen }}
+          scanners: vuln,secret
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'

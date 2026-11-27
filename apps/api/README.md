@@ -1,6 +1,6 @@
 # Backend de reservas
 
-BookingMS expone las 14 operaciones del Hito 1 con datos simulados. El ejecutable Go vive en `cmd/api` y el proceso Goose en `cmd/migrate`.
+BookingMS expone las 14 operaciones del Hito 1 con datos simulados. El ejecutable Go vive en `cmd/api`. El contenedor definido en `Dockerfile.migrate` ejecuta Goose directamente.
 
 ## Capas
 
@@ -19,7 +19,7 @@ flowchart LR
 - **Handler:** enruta, valida la entrada HTTP y traduce resultados y fallas a OpenAPI.
 - **Service:** decide escenarios, filtra, pagina y recorta disponibilidades. Declara las interfaces para leer datos y consultar disponibilidad de la base.
 - **Store:** carga fixtures y los ofrece por interfaces de solo lectura. Su adaptador PostgreSQL comprueba la conexión de `/readyz`.
-- **Model:** contiene el modelo del dominio y los tipos de lectura de la demostración. Los paquetes internos de servicio y store importan esos tipos compartidos. El punto de entrada inyecta los adaptadores.
+- **Tipos:** `internal/service/domain` contiene el modelo del dominio. `internal/service/demo` reúne los datos de lectura compartidos con el store y el transporte. El punto de entrada inyecta los adaptadores.
 
 ## Propiedad de datos y dependencias
 
@@ -60,3 +60,5 @@ En Compose, la API escucha en 8080 dentro del contenedor y se publica en [5191](
 
 - [Contrato OpenAPI](../../contracts/openapi.yaml)
 - [Modos de falla y verificaciones](../../docs/modos-de-falla.md)
+
+Con Compose saludable, ejecutar `go test -count=1 ./e2e` con `BOOKING_E2E_API_URL=http://127.0.0.1:5191`. La prueba compara la secuencia de reserva simulada con el golden de `e2e/testdata/`.

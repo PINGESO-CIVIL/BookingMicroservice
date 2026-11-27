@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Policy } from '../api/types'
-import Field from './Field.vue'
+import type { Policy } from '../../api/types'
+import Field from '../../components/Field.vue'
 const policy = defineModel<Policy>({ required: true })
 function set(key: keyof Policy, value: string) {
   const seconds = value === '' ? Number.NaN : Number(value) * 60

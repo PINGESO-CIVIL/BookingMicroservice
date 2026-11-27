@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { api, ApiError, canChange } from '../api/client'
-import type { Reservation } from '../api/types'
-import { DEMO_NOW, detailScenario, readScenario, refreshKey, writeScenario } from '../demo'
-import { formatDateTime } from '../dates'
-import Btn from '../components/Btn.vue'
-import Badge from '../components/Badge.vue'
-import Alert from '../components/Alert.vue'
-import LoadState from '../components/LoadState.vue'
-import Modal from '../components/Modal.vue'
-import ReservationInfo from '../components/ReservationInfo.vue'
+import { api, ApiError, canChange } from '../../api/client'
+import type { Reservation } from '../../api/types'
+import { DEMO_NOW, detailScenario, readScenario, refreshKey, writeScenario } from '../../demo'
+import { formatDateTime } from '../../dates'
+import Btn from '../../components/Btn.vue'
+import Badge from '../../components/Badge.vue'
+import Alert from '../../components/Alert.vue'
+import LoadState from '../../components/LoadState.vue'
+import Modal from '../../components/Modal.vue'
+import ReservationInfo from './ReservationInfo.vue'
 const route = useRoute(), router = useRouter()
 const reservation = ref<Reservation>(), loading = ref(false), error = ref(''), actionError = ref(''), errorCode = ref(''), processing = ref(false), dialog = ref(false), cancelled = ref(false)
 const editable = computed(() => !!reservation.value && canChange(reservation.value))

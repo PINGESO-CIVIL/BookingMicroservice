@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"slices"
 
-	"bookingms/internal/model/demo"
+	"bookingms/internal/service/demo"
 )
 
 //go:embed fixtures.json

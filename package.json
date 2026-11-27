@@ -3,5 +3,8 @@
   "private": true,
   "scripts": {
     "codegen": "npm --prefix apps/web run contracts"
+  },
+  "devDependencies": {
+    "lefthook": "2.1.10"
   }
 }

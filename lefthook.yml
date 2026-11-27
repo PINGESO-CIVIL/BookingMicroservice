@@ -1,0 +1,19 @@
+pre-commit:
+  parallel: true
+  commands:
+    formato-go:
+      glob: "apps/api/**/*.go"
+      run: gofmt -l -w {staged_files}
+      stage_fixed: true
+    secretos:
+      run: gitleaks git --staged --redact --no-banner
+
+pre-push:
+  parallel: true
+  commands:
+    api:
+      root: apps/api/
+      run: go vet ./... && go test ./...
+    web:
+      root: apps/web/
+      run: npm run build && npm test

@@ -8,7 +8,7 @@ import (
 	"sort"
 	"time"
 
-	"bookingms/internal/model/demo"
+	"bookingms/internal/service/demo"
 )
 
 func (s *Service) listResources(input Input) (any, *Fault) {

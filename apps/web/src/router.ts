@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Reservations from './views/Reservations.vue'
-import BookingForm from './views/BookingForm.vue'
-import BookingDetail from './views/BookingDetail.vue'
-import Resources from './views/Resources.vue'
-import ResourceEditor from './views/ResourceEditor.vue'
+import Reservations from './features/reservas/Reservations.vue'
+import BookingForm from './features/reservas/BookingForm.vue'
+import BookingDetail from './features/reservas/BookingDetail.vue'
+import Resources from './features/recursos/Resources.vue'
+import ResourceEditor from './features/recursos/ResourceEditor.vue'
 
 export const router = createRouter({
   history: createWebHashHistory(),
