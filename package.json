@@ -1,0 +1,19 @@
+{
+  "name": "booking-microservice",
+  "private": true,
+  "packageManager": "pnpm@10.13.1",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "oxlint --deny-warnings",
+    "verify": "pnpm format:check && pnpm lint",
+    "test": "pnpm --filter web test",
+    "typecheck": "pnpm --filter web typecheck"
+  },
+  "devDependencies": {
+    "lefthook": "2.1.10",
+    "oxlint": "1.75.0",
+    "prettier": "3.9.6",
+    "prettier-plugin-tailwindcss": "0.8.1"
+  }
+}
