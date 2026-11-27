@@ -4,7 +4,7 @@ Estado: preparado para revisión. Consulta de apoyo al formulario; no añade adm
 
 ## Operación
 
-`GET /api/v1/resources`
+`GET /api/v1/recursos`
 
 Devuelve los recursos que el usuario puede consultar en su ámbito. Listar un recurso no garantiza que esté libre en un horario; para ello se consulta disponibilidad y se vuelve a validar al reservar.
 

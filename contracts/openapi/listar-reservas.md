@@ -4,7 +4,7 @@ Estado: preparado para revisión. Sin implementación ni OpenAPI validado. El ac
 
 ## Operación
 
-`GET /api/v1/reservations`
+`GET /api/v1/reservas`
 
 Lista únicamente reservas del usuario autenticado dentro de su ámbito autorizado, tanto confirmadas como canceladas salvo filtro de estado. No recibe cuerpo ni filtros para consultar otro responsable o ámbito.
 

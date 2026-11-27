@@ -1,0 +1,7 @@
+{
+  "name": "bookingms",
+  "private": true,
+  "scripts": {
+    "codegen": "npm --prefix Frontend run contracts"
+  }
+}

@@ -3,7 +3,7 @@ WORKDIR /app/Frontend
 COPY Frontend/package.json Frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY Frontend/ ./
-COPY contracts/openapi/ /app/contracts/openapi/
+COPY contracts/openapi.yaml /app/contracts/openapi.yaml
 # Regenerate types/examples from the contract inside the build, never on the host.
 RUN npm run contracts && npm run build
 

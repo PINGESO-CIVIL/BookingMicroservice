@@ -4,13 +4,13 @@ Estado: preparado para revisión. Sin implementación ni OpenAPI validado. El ac
 
 ## Operación
 
-`GET /api/v1/reservations/{id}`
+`GET /api/v1/reservas/{id}`
 
 Obtiene el detalle vigente de una reserva propia del ámbito autenticado, confirmada o cancelada. No recibe cuerpo ni produce cambios.
 
 ## Entrada y respuesta
 
-- `id`: identificador opaco no vacío de la reserva.
+- `id`: UUID de la reserva.
 - `200 OK`: [representación común de reserva](convenciones.md), incluyendo `attributes`, responsable, estado, intervalo, versión y condiciones originales de cancelación.
 - `version` permite construir la siguiente solicitud de modificación o cancelación con `expectedVersion`.
 - El plazo de cancelación visible no sustituye validar nuevamente el estado, el tiempo y la versión en una escritura posterior.
@@ -19,7 +19,7 @@ Ejemplo ilustrativo de una reserva confirmada:
 
 ```json
 {
-  "id": "reservation-001",
+  "id": "00000000-0000-4000-8000-200000000001",
   "resourceId": "cancha-futbol-001",
   "responsible": {
     "issuer": "identidad-demo",

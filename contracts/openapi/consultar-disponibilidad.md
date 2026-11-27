@@ -4,7 +4,7 @@ Estado: preparado para revisión. Sin implementación ni OpenAPI validado. Esta 
 
 ## Operación
 
-`GET /api/v1/resources/{id}/availability`
+`GET /api/v1/recursos/{id}/disponibilidades`
 
 ## Entrada
 

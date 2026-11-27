@@ -26,33 +26,34 @@ async function request<T>(path: string, options: { method?: string; body?: unkno
 function remember<T extends Resource>(resource: T): T { catalog.set(resource.id, resource); return resource }
 let catalogLoad: Promise<void> | undefined
 async function loadCatalog() {
-  catalogLoad ??= Promise.all([true, false].map(async enabled => { const p = await request<Page<Resource>>('/resources', { query: { enabled } }); p.items.forEach(remember) })).then(() => undefined).catch(e => { catalogLoad = undefined; throw e })
+  catalogLoad ??= Promise.all([true, false].map(async enabled => { const p = await request<Page<Resource>>('/recursos', { query: { enabled } }); p.items.forEach(remember) })).then(() => undefined).catch(e => { catalogLoad = undefined; throw e })
   return catalogLoad
 }
 export function canChange(r: Reservation, now = DEMO_NOW) { return r.status === 'confirmed' && Date.parse(now) < Date.parse(r.startAt) && Date.parse(now) <= Date.parse(r.cancellationDeadline) }
 export const api = {
   async listAdminReservations(query: { resourceId?: string; status?: string; from?: string; to?: string; cursor?: string; limit?: number } = {}, scenario = 'normal') {
-    const [page] = await Promise.all([request<Page<Reservation>>('/admin/reservations', { query, scenario, admin: true }), loadCatalog()]); return page
+    const [page] = await Promise.all([request<Page<Reservation>>('/admin/reservas', { query, scenario, admin: true }), loadCatalog()]); return page
   },
   async listReservations(query: { resourceId?: string; status?: string; from?: string; to?: string; cursor?: string; limit?: number } = {}, scenario = 'normal') {
-    const [page] = await Promise.all([request<Page<Reservation>>('/reservations', { query, scenario }), loadCatalog()]); return page
+    const [page] = await Promise.all([request<Page<Reservation>>('/reservas', { query, scenario }), loadCatalog()]); return page
   },
   async listResources(query: { enabled?: boolean; cursor?: string; limit?: number } = {}, scenario = 'normal') {
-    const page = await request<Page<Resource>>('/resources', { query, scenario }); page.items.forEach(remember); return page
+    const page = await request<Page<Resource>>('/recursos', { query, scenario }); page.items.forEach(remember); return page
   },
   async getReservation(id: string, scenario = 'normal') {
-    const [reservation] = await Promise.all([request<Reservation>(`/reservations/${encodeURIComponent(id)}`, { scenario }), loadCatalog()]); return reservation
+    const [reservation] = await Promise.all([request<Reservation>(`/reservas/${encodeURIComponent(id)}`, { scenario }), loadCatalog()]); return reservation
   },
-  async getResource(id: string, scenario = 'normal') { return remember(await request<ResourceDetail>(`/resources/${encodeURIComponent(id)}`, { admin: true, scenario })) },
+  async getResource(id: string, scenario = 'normal') { return remember(await request<ResourceDetail>(`/recursos/${encodeURIComponent(id)}`, { admin: true, scenario })) },
   resourceName(id: string) { return catalog.get(id)?.name ?? id },
+  resourceOptions() { return [...catalog.values()] },
   resourceZone(id: string) { return catalog.get(id)?.timeZone ?? 'America/Santiago' },
-  availability(id: string, from: string, to: string, scenario = 'normal') { return request<Availability>(`/resources/${encodeURIComponent(id)}/availability`, { query: { from, to }, scenario }) },
-  createReservation(body: Schemas['CreateReservationRequest'], key: string, scenario = 'success') { return request<Reservation>('/reservations', { method: 'POST', body, key, scenario }) },
-  updateReservation(id: string, body: Schemas['UpdateReservationRequest'], scenario = 'success') { return request<Reservation>(`/reservations/${encodeURIComponent(id)}`, { method: 'PATCH', body, scenario }) },
-  cancelReservation(id: string, body: Schemas['CancelReservationRequest'], scenario = 'success') { return request<Reservation>(`/reservations/${encodeURIComponent(id)}/cancel`, { method: 'POST', body, scenario }) },
-  createResource(body: Schemas['CreateResourceRequest'], scenario = 'success') { return request<ResourceDetail>('/resources', { method: 'POST', body, scenario, admin: true }) },
-  updateResource(id: string, body: Schemas['UpdateResourceRequest'], scenario = 'success') { return request<ResourceDetail>(`/resources/${encodeURIComponent(id)}`, { method: 'PATCH', body, scenario, admin: true }) },
-  updateSchedule(id: string, body: Schemas['UpdateResourceScheduleRequest'], scenario = 'success') { return request<ResourceDetail>(`/resources/${encodeURIComponent(id)}/schedule`, { method: 'PUT', body, scenario, admin: true }) },
-  createClosure(id: string, body: Schemas['CreateResourceClosureRequest'], scenario = 'success') { return request<Closure>(`/resources/${encodeURIComponent(id)}/closures`, { method: 'POST', body, scenario, admin: true }) },
-  deleteClosure(id: string, closureId: string, scenario = 'success') { return request<void>(`/resources/${encodeURIComponent(id)}/closures/${encodeURIComponent(closureId)}`, { method: 'DELETE', scenario, admin: true }) },
+  availability(id: string, from: string, to: string, scenario = 'normal') { return request<Availability>(`/recursos/${encodeURIComponent(id)}/disponibilidades`, { query: { from, to }, scenario }) },
+  createReservation(body: Schemas['CreateReservationRequest'], key: string, scenario = 'success') { return request<Reservation>('/reservas', { method: 'POST', body, key, scenario }) },
+  updateReservation(id: string, body: Schemas['UpdateReservationRequest'], scenario = 'success') { return request<Reservation>(`/reservas/${encodeURIComponent(id)}`, { method: 'PATCH', body, scenario }) },
+  cancelReservation(id: string, body: Schemas['CancelReservationRequest'], scenario = 'success') { return request<Reservation>(`/reservas/${encodeURIComponent(id)}/cancelaciones`, { method: 'POST', body, scenario }) },
+  createResource(body: Schemas['CreateResourceRequest'], scenario = 'success') { return request<ResourceDetail>('/recursos', { method: 'POST', body, scenario, admin: true }) },
+  updateResource(id: string, body: Schemas['UpdateResourceRequest'], scenario = 'success') { return request<ResourceDetail>(`/recursos/${encodeURIComponent(id)}`, { method: 'PATCH', body, scenario, admin: true }) },
+  updateSchedule(id: string, body: Schemas['UpdateResourceScheduleRequest'], scenario = 'success') { return request<ResourceDetail>(`/recursos/${encodeURIComponent(id)}/horarios`, { method: 'PUT', body, scenario, admin: true }) },
+  createClosure(id: string, body: Schemas['CreateResourceClosureRequest'], scenario = 'success') { return request<Closure>(`/recursos/${encodeURIComponent(id)}/bloqueos`, { method: 'POST', body, scenario, admin: true }) },
+  deleteClosure(id: string, closureId: string, scenario = 'success') { return request<void>(`/recursos/${encodeURIComponent(id)}/bloqueos/${encodeURIComponent(closureId)}`, { method: 'DELETE', scenario, admin: true }) },
 }

@@ -4,7 +4,7 @@ Estado: definición funcional aprobada por el usuario el 2026-11-04, incluyendo 
 
 ## Operación propuesta
 
-`POST /api/v1/reservations`
+`POST /api/v1/reservas`
 
 Crear una reserva confirmada de un único recurso para el usuario autenticado. La ruta se mantiene entre contextos; cambian los recursos, las políticas y los esquemas de atributos específicos.
 

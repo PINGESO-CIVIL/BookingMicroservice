@@ -80,6 +80,6 @@ El módulo local se llama `bookingms` y utiliza únicamente la biblioteca están
 
 ## Contratos y calidad continua
 
-El directorio compartido [contracts/openapi](../contracts/openapi/README.md) contiene el contrato OpenAPI 3.0.3 entre Go y Vue, con catorce operaciones y ejemplos validables. Los modelos del dominio no sustituyen los esquemas de solicitudes y respuestas. Esta fase se limita a contrato y visualización con mocks prefijados; los servicios reales Go y la persistencia MongoDB corresponden al siguiente hito. Swagger UI está publicado en `http://localhost:8080/docs/`; los endpoints mock están implementados en `cmd/mock-api` y pueden iniciarse con `./scripts/demo.ps1 Start` desde la raíz.
+El [contrato OpenAPI 3.1](../contracts/openapi.yaml) define las catorce operaciones y sus ejemplos. Los structs de transporte están en `internal/api/` y el mock usa esos tipos para validar las solicitudes y serializar las respuestas simuladas. Swagger UI se sirve en `http://localhost:8080/docs/`. Desde la raíz, `./scripts/demo.ps1 Start` inicia la demo.
 
 La [guía de calidad y seguridad](../docs/calidad-seguridad.md) describe el servidor local SonarQube, Trivy, generación de cobertura y condiciones de fallo. Desde la raíz, `./scripts/quality.ps1 Check` ejecuta ambas verificaciones una vez iniciada y preparada la instalación local. No existe todavía un pipeline porque su plataforma no está definida. Generar cobertura en esta etapa de modelos no equivale a contar con pruebas funcionales.

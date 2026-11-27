@@ -2,12 +2,12 @@ import { afterEach, expect, it, vi } from 'vitest'
 import { api, ApiError } from '../src/api/client'
 afterEach(() => vi.unstubAllGlobals())
 it('envía creación por HTTP con clave de idempotencia y sin responsable editable', async () => {
-  const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ id: 'reservation-001' }), { status: 201 }))
+  const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ id: '00000000-0000-4000-8000-200000000001' }), { status: 201 }))
   vi.stubGlobal('fetch', fetchMock)
-  const body = { resourceId: 'resource-001', startAt: '2026-11-10T21:00:00Z', endAt: '2026-11-10T22:00:00Z', attributes: {} }
+  const body = { resourceId: '00000000-0000-4000-8000-100000000001', startAt: '2026-11-10T21:00:00Z', endAt: '2026-11-10T22:00:00Z', attributes: {} }
   await api.createReservation(body, 'same-request-key', 'success')
   const [path, options] = fetchMock.mock.calls[0]!
-  expect(path).toBe('/api/v1/reservations')
+  expect(path).toBe('/api/v1/reservas')
   expect(options.method).toBe('POST')
   expect(options.headers['Idempotency-Key']).toBe('same-request-key')
   expect(options.headers.Authorization).toBe('Bearer demo-user')
@@ -15,11 +15,11 @@ it('envía creación por HTTP con clave de idempotencia y sin responsable editab
 })
 it('conserva códigos de error HTTP para recuperar conflictos', async () => {
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { code: 'RESERVATION_VERSION_CONFLICT', message: 'Recarga la reserva.', requestId: 'request-1' } }), { status: 409 })))
-  await expect(api.cancelReservation('reservation-001', { expectedVersion: 1 }, 'version')).rejects.toMatchObject({ code: 'RESERVATION_VERSION_CONFLICT', requestId: 'request-1' })
+  await expect(api.cancelReservation('00000000-0000-4000-8000-200000000001', { expectedVersion: 1 }, 'version')).rejects.toMatchObject({ code: 'RESERVATION_VERSION_CONFLICT', requestId: 'request-1' })
 })
 it('maneja DELETE 204 sin intentar leer un cuerpo JSON', async () => {
   const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 })); vi.stubGlobal('fetch', fetchMock)
-  await expect(api.deleteClosure('resource-001', 'closure-001')).resolves.toBeUndefined()
+  await expect(api.deleteClosure('00000000-0000-4000-8000-100000000001', '00000000-0000-4000-8000-300000000001')).resolves.toBeUndefined()
   expect(fetchMock.mock.calls[0]![1].headers.Authorization).toBe('Bearer demo-admin')
 })
 it('un fallo de red se muestra como indisponibilidad y nunca vuelve a datos locales', async () => {

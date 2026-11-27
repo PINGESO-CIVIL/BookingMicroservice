@@ -53,7 +53,7 @@ services:
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     volumes:
-      - ./contracts/openapi/openapi.yaml:/contracts/openapi.yaml:ro
+      - ./contracts/openapi.yaml:/contracts/openapi.yaml:ro
     healthcheck:
       test: [CMD, wget, --spider, -q, "http://127.0.0.1:8080/docs/"]
       interval: 5s

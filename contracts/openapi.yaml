@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: API genérica de reservas LPS
-  version: 0.3.0
+  version: 0.4.0
   contact:
     name: Equipo LPS
   description: |
@@ -41,12 +41,13 @@ tags:
 security:
   - BearerAuth: []
 paths:
-  /api/v1/admin/reservations:
+  /api/v1/admin/reservas:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
     get:
       tags: [Administración de Reservas]
       operationId: listAdminReservations
+      x-permission: reservas:administrar
       summary: Listar reservas de todos los usuarios del ámbito administrado
       description: |
         Requiere administrador de ámbito. Incluye reservas confirmadas y
@@ -84,12 +85,13 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/reservations:
+  /api/v1/reservas:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
     post:
       tags: [Reservas]
       operationId: createReservation
+      x-permission: reservas:operar
       summary: Crear una reserva personal
       description: |
         Crea una reserva confirmada para el usuario autenticado. La futura
@@ -149,6 +151,7 @@ paths:
     get:
       tags: [Reservas]
       operationId: listReservations
+      x-permission: reservas:leer
       summary: Listar reservas propias
       description: |
         Solo devuelve reservas propias del ámbito autenticado. Sin status incluye
@@ -186,13 +189,14 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/reservations/{id}:
+  /api/v1/reservas/{id}:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
       - $ref: '#/components/parameters/ReservationId'
     get:
       tags: [Reservas]
       operationId: getReservation
+      x-permission: reservas:leer
       summary: Consultar una reserva propia
       description: |
         Consulta una reserva confirmada o cancelada sin alterar estado ni versión.
@@ -225,6 +229,7 @@ paths:
     patch:
       tags: [Reservas]
       operationId: updateReservation
+      x-permission: reservas:operar
       summary: Modificar una reserva propia
       description: |
         Solicita un cambio parcial de horario, recurso o attributes de una reserva
@@ -248,7 +253,7 @@ paths:
               changeInterval:
                 $ref: '#/components/examples/UpdateRequest'
               changeResource:
-                value: {expectedVersion: 1, resourceId: resource-002}
+                value: {expectedVersion: 1, resourceId: 00000000-0000-4000-8000-100000000002}
               replaceAttributes:
                 value: {expectedVersion: 1, attributes: {}}
       responses:
@@ -288,13 +293,14 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/reservations/{id}/cancel:
+  /api/v1/reservas/{id}/cancelaciones:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
       - $ref: '#/components/parameters/ReservationId'
     post:
       tags: [Reservas]
       operationId: cancelReservation
+      x-permission: reservas:operar
       summary: Cancelar una reserva propia
       description: |
         Conserva la reserva y su historial con estado cancelled. Si sigue
@@ -314,7 +320,7 @@ paths:
               $ref: '#/components/schemas/CancelReservationRequest'
             examples:
               cancel:
-                value: {expectedVersion: 1}
+                $ref: '#/components/examples/CancelRequest'
       responses:
         '200':
           description: Reserva cancelada, incluyendo la respuesta de un reintento autorizado.
@@ -357,12 +363,13 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/resources:
+  /api/v1/recursos:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
     get:
       tags: [Recursos]
       operationId: listResources
+      x-permission: recursos:leer
       summary: Listar recursos visibles
       description: |
         Catálogo visible del ámbito autenticado, ordenado por id ascendente.
@@ -403,6 +410,7 @@ paths:
     post:
       tags: [Administración de Recursos]
       operationId: createResource
+      x-permission: recursos:administrar
       summary: Crear un recurso reservable en el ámbito
       description: |
         Registra un nuevo recurso exclusivo dentro del ámbito autorizado del
@@ -449,13 +457,14 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/resources/{id}:
+  /api/v1/recursos/{id}:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
       - $ref: '#/components/parameters/ResourceId'
     get:
       tags: [Administración de Recursos]
       operationId: getResource
+      x-permission: recursos:administrar
       summary: Consultar detalle administrativo de un recurso
       description: |
         Devuelve la configuración completa de un recurso del ámbito, incluyendo
@@ -486,6 +495,7 @@ paths:
     patch:
       tags: [Administración de Recursos]
       operationId: updateResource
+      x-permission: recursos:administrar
       summary: Modificar estado, política o metadatos de un recurso
       description: |
         Actualiza parcialmente nombre, habilitación (enabled), zona horaria,
@@ -547,13 +557,14 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/resources/{id}/schedule:
+  /api/v1/recursos/{id}/horarios:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
       - $ref: '#/components/parameters/ResourceId'
     put:
       tags: [Administración de Recursos]
       operationId: updateResourceSchedule
+      x-permission: recursos:administrar
       summary: Configurar horario semanal recurrente y límites de duración
       description: |
         Reemplaza las franjas horarias recurrentes del recurso (interpretadas en
@@ -615,13 +626,14 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/resources/{id}/closures:
+  /api/v1/recursos/{id}/bloqueos:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
       - $ref: '#/components/parameters/ResourceId'
     post:
       tags: [Administración de Recursos]
       operationId: createResourceClosure
+      x-permission: recursos:administrar
       summary: Registrar un bloqueo o cierre excepcional sobre un recurso
       description: |
         Registra un intervalo semiabierto [startAt, endAt) de indisponibilidad
@@ -678,7 +690,7 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/resources/{id}/closures/{closureId}:
+  /api/v1/recursos/{id}/bloqueos/{closureId}:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
       - $ref: '#/components/parameters/ResourceId'
@@ -686,6 +698,7 @@ paths:
     delete:
       tags: [Administración de Recursos]
       operationId: deleteResourceClosure
+      x-permission: recursos:administrar
       summary: Eliminar un bloqueo o cierre excepcional de un recurso
       description: |
         Levanta un bloqueo excepcional previamente registrado sobre el recurso,
@@ -714,13 +727,14 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
-  /api/v1/resources/{id}/availability:
+  /api/v1/recursos/{id}/disponibilidades:
     parameters:
       - $ref: '#/components/parameters/MockScenario'
       - $ref: '#/components/parameters/ResourceId'
     get:
       tags: [Disponibilidad]
       operationId: getResourceAvailability
+      x-permission: recursos:leer
       summary: Consultar disponibilidad de un recurso
       description: |
         Ventanas continuas libres ordenadas, sin solapamientos y dentro de
@@ -805,26 +819,26 @@ components:
       name: id
       in: path
       required: true
-      description: Identificador opaco de una reserva propia del ámbito autenticado.
+      description: UUID de una reserva propia del ámbito autenticado.
       schema:
         $ref: '#/components/schemas/Identifier'
-      example: reservation-001
+      example: 00000000-0000-4000-8000-200000000001
     ResourceId:
       name: id
       in: path
       required: true
-      description: Identificador opaco de un recurso visible.
+      description: UUID de un recurso visible.
       schema:
         $ref: '#/components/schemas/Identifier'
-      example: resource-001
+      example: 00000000-0000-4000-8000-100000000001
     ClosureId:
       name: closureId
       in: path
       required: true
-      description: Identificador opaco de un bloqueo temporal del recurso.
+      description: UUID de un bloqueo temporal del recurso.
       schema:
         $ref: '#/components/schemas/Identifier'
-      example: closure-001
+      example: 00000000-0000-4000-8000-300000000001
     IdempotencyKey:
       name: Idempotency-Key
       in: header
@@ -833,6 +847,8 @@ components:
       schema:
         type: string
         minLength: 1
+        maxLength: 128
+        pattern: '\S'
       example: demo-create-001
     ResourceFilter:
       name: resourceId
@@ -878,12 +894,14 @@ components:
       schema:
         type: string
         minLength: 1
+        maxLength: 2048
+        pattern: '\S'
   schemas:
     Identifier:
       type: string
-      minLength: 1
-      pattern: '\S'
-      description: Identificador opaco no vacío; no fija UUID ni ObjectID.
+      format: uuid
+      pattern: '^[0-9A-Fa-f]{8}(-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$'
+      description: Identificador UUID de un registro de BookingMS.
     DateTime:
       type: string
       format: date-time
@@ -938,6 +956,7 @@ components:
           type: integer
           format: int64
           minimum: 1
+          maximum: 9007199254740991
           description: Versión consultada por el cliente, no la nueva versión a persistir.
         resourceId:
           $ref: '#/components/schemas/Identifier'
@@ -956,6 +975,7 @@ components:
           type: integer
           format: int64
           minimum: 1
+          maximum: 9007199254740991
           description: Precondición para una transición nueva; un reintento ya cancelado no repite efectos.
     Reservation:
       type: object
@@ -992,6 +1012,7 @@ components:
           type: integer
           format: int64
           minimum: 0
+          maximum: 9007199254740991
           description: Duración original aceptada, inmutable; no procede del cliente.
         cancellationDeadline:
           $ref: '#/components/schemas/DateTime'
@@ -999,6 +1020,7 @@ components:
           type: integer
           format: int64
           minimum: 1
+          maximum: 9007199254740991
         createdAt:
           $ref: '#/components/schemas/DateTime'
         updatedAt:
@@ -1030,8 +1052,7 @@ components:
           items:
             $ref: '#/components/schemas/Reservation'
         nextCursor:
-          type: string
-          nullable: true
+          type: [string, "null"]
           minLength: 1
           description: null cuando no hay más resultados.
     Resource:
@@ -1044,11 +1065,15 @@ components:
         name:
           type: string
           minLength: 1
+          maxLength: 128
+          pattern: '\S'
         enabled:
           type: boolean
         timeZone:
           type: string
           minLength: 1
+          maxLength: 64
+          pattern: '\S'
           description: Nombre de zona IANA para presentación y horarios del recurso.
           example: America/Santiago
         attributes:
@@ -1064,8 +1089,7 @@ components:
           items:
             $ref: '#/components/schemas/Resource'
         nextCursor:
-          type: string
-          nullable: true
+          type: [string, "null"]
           minLength: 1
           description: null cuando no hay más resultados.
     ExternalReference:
@@ -1077,10 +1101,14 @@ components:
         system:
           type: string
           minLength: 1
+          maxLength: 128
+          pattern: '\S'
           example: catalogo-institucional
         id:
           type: string
           minLength: 1
+          maxLength: 128
+          pattern: '\S'
           example: cat-rec-001
     ResourcePolicy:
       type: object
@@ -1091,6 +1119,7 @@ components:
         slotDurationSeconds:
           type: integer
           minimum: 60
+          maximum: 9007199254740991
           multipleOf: 60
           description: Duración fija de cada bloque reservable en segundos, en minutos enteros. Los bloques se alinean con el inicio de cada franja semanal; no se ofrecen bloques parciales. Debe estar dentro de los límites mínimo y máximo.
           example: 3600
@@ -1098,18 +1127,21 @@ components:
           type: integer
           format: int64
           minimum: 0
+          maximum: 9007199254740991
           description: Anticipación mínima L en segundos exigida para cancelar o reprogramar.
           example: 7200
         minDurationSeconds:
           type: integer
           format: int64
           minimum: 60
+          maximum: 9007199254740991
           description: Duración mínima permitida por reserva en segundos.
           example: 3600
         maxDurationSeconds:
           type: integer
           format: int64
           minimum: 60
+          maximum: 9007199254740991
           description: Duración máxima permitida por reserva en segundos.
           example: 7200
     WeeklyScheduleRule:
@@ -1151,6 +1183,8 @@ components:
         reason:
           type: string
           minLength: 1
+          maxLength: 500
+          pattern: '\S'
           example: Mantenimiento preventivo de iluminación
         createdAt:
           $ref: '#/components/schemas/DateTime'
@@ -1175,11 +1209,15 @@ components:
         name:
           type: string
           minLength: 1
+          maxLength: 128
+          pattern: '\S'
         enabled:
           type: boolean
         timeZone:
           type: string
           minLength: 1
+          maxLength: 64
+          pattern: '\S'
           example: America/Santiago
         externalReference:
           $ref: '#/components/schemas/ExternalReference'
@@ -1187,6 +1225,7 @@ components:
           $ref: '#/components/schemas/ResourcePolicy'
         weeklySchedule:
           type: array
+          maxItems: 100
           items:
             $ref: '#/components/schemas/WeeklyScheduleRule'
         closures:
@@ -1199,6 +1238,7 @@ components:
           type: integer
           format: int64
           minimum: 1
+          maximum: 9007199254740991
         createdAt:
           $ref: '#/components/schemas/DateTime'
         updatedAt:
@@ -1211,11 +1251,15 @@ components:
         name:
           type: string
           minLength: 1
+          maxLength: 128
+          pattern: '\S'
         enabled:
           type: boolean
         timeZone:
           type: string
           minLength: 1
+          maxLength: 64
+          pattern: '\S'
           example: America/Santiago
         externalReference:
           $ref: '#/components/schemas/ExternalReference'
@@ -1223,6 +1267,7 @@ components:
           $ref: '#/components/schemas/ResourcePolicy'
         weeklySchedule:
           type: array
+          maxItems: 100
           items:
             $ref: '#/components/schemas/WeeklyScheduleRule'
         attributes:
@@ -1238,14 +1283,19 @@ components:
           type: integer
           format: int64
           minimum: 1
+          maximum: 9007199254740991
         name:
           type: string
           minLength: 1
+          maxLength: 128
+          pattern: '\S'
         enabled:
           type: boolean
         timeZone:
           type: string
           minLength: 1
+          maxLength: 64
+          pattern: '\S'
         externalReference:
           $ref: '#/components/schemas/ExternalReference'
         policy:
@@ -1261,10 +1311,12 @@ components:
           type: integer
           format: int64
           minimum: 1
+          maximum: 9007199254740991
         policy:
           $ref: '#/components/schemas/ResourcePolicy'
         weeklySchedule:
           type: array
+          maxItems: 100
           items:
             $ref: '#/components/schemas/WeeklyScheduleRule'
     CreateResourceClosureRequest:
@@ -1279,6 +1331,8 @@ components:
         reason:
           type: string
           minLength: 1
+          maxLength: 500
+          pattern: '\S'
     AvailableWindow:
       type: object
       additionalProperties: false
@@ -1300,6 +1354,8 @@ components:
         timeZone:
           type: string
           minLength: 1
+          maxLength: 64
+          pattern: '\S'
           example: America/Santiago
         from:
           $ref: '#/components/schemas/DateTime'
@@ -1313,6 +1369,7 @@ components:
         slotDurationSeconds:
           type: integer
           minimum: 60
+          maximum: 9007199254740991
           multipleOf: 60
           description: Duración fija configurada del recurso. El usuario selecciona un bloque completo, sin escribir inicio ni término.
         availableSlots:
@@ -1478,12 +1535,16 @@ components:
             serviceUnavailable:
               $ref: '#/components/examples/ServiceUnavailable'
   examples:
+    CancelRequest:
+      summary: Cancelación con la versión consultada
+      value: {expectedVersion: 1}
+
     AdminReservationPage:
       summary: Reserva de otro usuario visible para el administrador de su ámbito.
       value:
         items:
-          - id: reservation-005
-            resourceId: resource-002
+          - id: 00000000-0000-4000-8000-200000000005
+            resourceId: 00000000-0000-4000-8000-100000000002
             responsible: {issuer: demo, subject: user-002}
             startAt: '2026-11-09T13:00:00Z'
             endAt: '2026-11-09T13:30:00Z'
@@ -1498,7 +1559,7 @@ components:
     CreateRequest:
       summary: Reserva genérica sin datos específicos de contexto.
       value:
-        resourceId: resource-001
+        resourceId: 00000000-0000-4000-8000-100000000001
         startAt: '2026-11-10T19:00:00-03:00'
         endAt: '2026-11-10T20:00:00-03:00'
         attributes: {}
@@ -1512,8 +1573,8 @@ components:
     ConfirmedReservation:
       summary: Confirmación prefijada; no se almacena ni envía correo real.
       value:
-        id: reservation-001
-        resourceId: resource-001
+        id: 00000000-0000-4000-8000-200000000001
+        resourceId: 00000000-0000-4000-8000-100000000001
         responsible: {issuer: demo, subject: user-001}
         startAt: '2026-11-10T22:00:00Z'
         endAt: '2026-11-10T23:00:00Z'
@@ -1527,8 +1588,8 @@ components:
     UpdatedReservation:
       summary: Resultado prefijado de una modificación, no un cambio persistido.
       value:
-        id: reservation-001
-        resourceId: resource-001
+        id: 00000000-0000-4000-8000-200000000001
+        resourceId: 00000000-0000-4000-8000-100000000001
         responsible: {issuer: demo, subject: user-001}
         startAt: '2026-11-10T23:00:00Z'
         endAt: '2026-11-11T00:00:00Z'
@@ -1542,8 +1603,8 @@ components:
     CancelledReservation:
       summary: Resultado prefijado de cancelación; también ilustra un reintento.
       value:
-        id: reservation-001
-        resourceId: resource-001
+        id: 00000000-0000-4000-8000-200000000001
+        resourceId: 00000000-0000-4000-8000-100000000001
         responsible: {issuer: demo, subject: user-001}
         startAt: '2026-11-10T22:00:00Z'
         endAt: '2026-11-10T23:00:00Z'
@@ -1558,8 +1619,8 @@ components:
       summary: Página ilustrativa de reservas propias.
       value:
         items:
-          - id: reservation-001
-            resourceId: resource-001
+          - id: 00000000-0000-4000-8000-200000000001
+            resourceId: 00000000-0000-4000-8000-100000000001
             responsible: {issuer: demo, subject: user-001}
             startAt: '2026-11-10T22:00:00Z'
             endAt: '2026-11-10T23:00:00Z'
@@ -1575,12 +1636,12 @@ components:
       summary: Catálogo genérico ilustrativo para el selector.
       value:
         items:
-          - id: resource-001
+          - id: 00000000-0000-4000-8000-100000000001
             name: Recurso 1
             enabled: true
             timeZone: America/Santiago
             attributes: {}
-          - id: resource-002
+          - id: 00000000-0000-4000-8000-100000000002
             name: Recurso 2
             enabled: true
             timeZone: America/Santiago
@@ -1589,7 +1650,7 @@ components:
     Availability:
       summary: Ventanas libres estáticas; no se calcula ocupación.
       value:
-        resourceId: resource-001
+        resourceId: 00000000-0000-4000-8000-100000000001
         enabled: true
         timeZone: America/Santiago
         from: '2026-11-10T21:00:00Z'
@@ -1610,7 +1671,7 @@ components:
     NoAvailability:
       summary: Recurso habilitado sin ventanas libres en el rango ilustrativo.
       value:
-        resourceId: resource-001
+        resourceId: 00000000-0000-4000-8000-100000000001
         enabled: true
         timeZone: America/Santiago
         from: '2026-11-10T21:00:00Z'
@@ -1621,7 +1682,7 @@ components:
     DisabledAvailability:
       summary: Recurso visible deshabilitado, sin ventanas libres.
       value:
-        resourceId: resource-003
+        resourceId: 00000000-0000-4000-8000-100000000003
         enabled: false
         timeZone: America/Santiago
         from: '2026-11-10T21:00:00Z'
@@ -1759,7 +1820,7 @@ components:
     ResourceDetail:
       summary: Configuración administrativa completa del recurso.
       value:
-        id: resource-001
+        id: 00000000-0000-4000-8000-100000000001
         name: Recurso 1
         enabled: true
         timeZone: America/Santiago
@@ -1779,8 +1840,8 @@ components:
             startLocalTime: '08:00'
             endLocalTime: '22:00'
         closures:
-          - id: closure-001
-            resourceId: resource-001
+          - id: 00000000-0000-4000-8000-300000000001
+            resourceId: 00000000-0000-4000-8000-100000000001
             startAt: '2026-11-12T15:00:00Z'
             endAt: '2026-11-12T18:00:00Z'
             reason: Mantenimiento preventivo de instalaciones
@@ -1792,7 +1853,7 @@ components:
     UpdatedResourceDetail:
       summary: Recurso actualizado con versión incrementada.
       value:
-        id: resource-001
+        id: 00000000-0000-4000-8000-100000000001
         name: Recurso 1 - Sector Norte
         enabled: true
         timeZone: America/Santiago
@@ -1812,8 +1873,8 @@ components:
             startLocalTime: '09:00'
             endLocalTime: '21:00'
         closures:
-          - id: closure-001
-            resourceId: resource-001
+          - id: 00000000-0000-4000-8000-300000000001
+            resourceId: 00000000-0000-4000-8000-100000000001
             startAt: '2026-11-12T15:00:00Z'
             endAt: '2026-11-12T18:00:00Z'
             reason: Mantenimiento preventivo de instalaciones
@@ -1825,8 +1886,8 @@ components:
     ResourceClosure:
       summary: Bloqueo temporal registrado sobre el recurso.
       value:
-        id: closure-001
-        resourceId: resource-001
+        id: 00000000-0000-4000-8000-300000000001
+        resourceId: 00000000-0000-4000-8000-100000000001
         startAt: '2026-11-12T15:00:00Z'
         endAt: '2026-11-12T18:00:00Z'
         reason: Mantenimiento preventivo de instalaciones
@@ -1846,7 +1907,7 @@ components:
           message: El cambio de disponibilidad o bloqueo afecta reservas confirmadas vigentes.
           requestId: request-demo-001
           details:
-            - field: reservation-001
+            - field: 00000000-0000-4000-8000-200000000001
               code: CONFIRMED_RESERVATION_OVERLAP
     ClosureNotFound:
       summary: Bloqueo inexistente en el recurso.

@@ -46,23 +46,23 @@ beforeEach(() => {
       failure.remaining--
       return response({ error: { code: failure.code ?? 'SERVICE_UNAVAILABLE', message: 'Error de prueba; vuelve a intentarlo.' } }, 409)
     }
-    if (url.pathname.endsWith('/availability')) {
+    if (url.pathname.endsWith('/disponibilidades')) {
       const id = url.pathname.split('/')[4]!
       return response(configuredAvailability(resourceDetail(id), reservations, url.searchParams.get('from')!, url.searchParams.get('to')!, DEMO_NOW))
     }
-    if (url.pathname.endsWith('/closures') && method === 'POST') return response({ ...resourceDetail('resource-001').closures[0], ...body }, 201)
+    if (url.pathname.endsWith('/bloqueos') && method === 'POST') return response({ ...resourceDetail('00000000-0000-4000-8000-100000000001').closures[0], ...body }, 201)
     if (method === 'DELETE') return response(null, 204)
-    if (url.pathname.endsWith('/schedule')) return response({ ...resourceDetail('resource-001'), ...body, version: 2 })
-    if (url.pathname.endsWith('/resources')) {
-      if (method === 'POST') return response({ ...resourceDetail('resource-001'), ...body }, 201)
+    if (url.pathname.endsWith('/horarios')) return response({ ...resourceDetail('00000000-0000-4000-8000-100000000001'), ...body, version: 2 })
+    if (url.pathname.endsWith('/recursos')) {
+      if (method === 'POST') return response({ ...resourceDetail('00000000-0000-4000-8000-100000000001'), ...body }, 201)
       const enabled = url.searchParams.get('enabled')
       let items = resources.filter(r => enabled === null || r.enabled === (enabled === 'true'))
       if (empty) items = []
       return response({ items: paginate ? items.slice(url.searchParams.has('cursor') ? 1 : 0, url.searchParams.has('cursor') ? 2 : 1) : items, nextCursor: paginate && !url.searchParams.has('cursor') ? 'page-2' : null })
     }
-    if (url.pathname.includes('/resources/')) return response({ ...resourceDetail(url.pathname.split('/')[4]!), ...body })
-    if (url.pathname.endsWith('/cancel')) return response({ ...cancelled, id: confirmed.id })
-    if (url.pathname.endsWith('/reservations')) {
+    if (url.pathname.includes('/recursos/')) return response({ ...resourceDetail(url.pathname.split('/')[4]!), ...body })
+    if (url.pathname.endsWith('/cancelaciones')) return response({ ...cancelled, id: confirmed.id })
+    if (url.pathname.endsWith('/reservas')) {
       if (method === 'POST') return response({ ...confirmed, ...body }, 201)
       let items = url.pathname.includes('/admin/') ? adminReservations : reservations
       if (url.searchParams.get('status')) items = items.filter(r => r.status === url.searchParams.get('status'))
@@ -86,12 +86,12 @@ describe('reservas y navegación', () => {
     expect(wrapper.text()).toContain('user-002')
     expect(wrapper.text()).toContain('user-003')
     expect(document.body.textContent).not.toContain('Nueva reserva')
-    await wrapper.get('button[aria-label="Ver detalle de reservation-005"]').trigger('click'); await settle()
+    await wrapper.get('button[aria-label="Ver detalle de 00000000-0000-4000-8000-200000000005"]').trigger('click'); await settle()
     expect(document.querySelector('dialog')?.textContent).toContain('user-002')
     expect(document.querySelector('dialog')?.textContent).not.toContain('Modificar reserva')
     await click('Cerrar', document.querySelector('dialog')!)
     expect(document.querySelector('dialog')).toBeNull()
-    expect(calls.find(c => c.path.includes('/admin/reservations'))?.headers.Authorization).toBe('Bearer demo-admin')
+    expect(calls.find(c => c.path.includes('/admin/reservas'))?.headers.Authorization).toBe('Bearer demo-admin')
     await click('Usuario'); expect(router.currentRoute.value.path).toBe('/reservas')
   })
   it('filtra, valida fechas, limpia filtros y carga otra página', async () => {
@@ -99,7 +99,7 @@ describe('reservas y navegación', () => {
     await click('Cargar más'); expect(wrapper.text()).toContain(expired.id)
     expect(calls.some(c => c.path.includes('cursor=page-2'))).toBe(true)
     await input('Estado', 'cancelled'); expect(wrapper.text()).toContain(cancelled.id)
-    await input('Recurso', 'resource-001'); expect(wrapper.text()).toContain('No encontramos coincidencias')
+    await input('Recurso', '00000000-0000-4000-8000-100000000001'); expect(wrapper.text()).toContain('No encontramos coincidencias')
     await click('Limpiar filtros')
     await input('Fecha de inicio', '2026-11-10'); expect(wrapper.text()).toContain('Completa ambas fechas')
     await input('Fecha de término', '2026-11-09'); expect(wrapper.text()).toContain('El término debe ser posterior')
@@ -108,7 +108,7 @@ describe('reservas y navegación', () => {
     await click('Limpiar filtros'); expect(wrapper.text()).not.toContain('El término debe ser posterior')
   })
   it('recupera una consulta fallida y permite comenzar desde el historial vacío', async () => {
-    failure = { path: '/reservations', remaining: 1 }; await open('/reservas')
+    failure = { path: '/reservas', remaining: 1 }; await open('/reservas')
     expect(wrapper.text()).toContain('Error de prueba')
     empty = true; await click('Reintentar'); expect(wrapper.text()).toContain('Aún no tienes reservas')
     await click('Crear mi primera reserva'); expect(router.currentRoute.value.path).toBe('/reservas/nueva')
@@ -145,7 +145,7 @@ describe('crear y reprogramar', () => {
     expect(wrapper.text()).toContain('Revisa tu reserva')
     await click('Confirmar reserva')
     expect(wrapper.text()).toContain('Reserva confirmada')
-    const sent = calls.find(c => c.method === 'POST' && c.path.endsWith('/reservations'))!
+    const sent = calls.find(c => c.method === 'POST' && c.path.endsWith('/reservas'))!
     expect(Date.parse(sent.body.endAt) - Date.parse(sent.body.startAt)).toBe(3600000)
     expect(sent.body).not.toHaveProperty('responsible')
     expect(sent.headers['Idempotency-Key']).toBeTruthy()
@@ -153,7 +153,7 @@ describe('crear y reprogramar', () => {
   })
   it('conserva la clave al reintentar un fallo y permite volver a cambiar horario', async () => {
     await open('/reservas/nueva'); await chooseSlot()
-    failure = { path: '/reservations', method: 'POST', remaining: 1 }
+    failure = { path: '/reservas', method: 'POST', remaining: 1 }
     await click('Confirmar reserva'); expect(wrapper.text()).toContain('Error de prueba')
     await click('Confirmar reserva')
     const attempts = calls.filter(c => c.method === 'POST')
@@ -185,7 +185,7 @@ describe('crear y reprogramar', () => {
   it('recarga después de un conflicto de versión y no permite sobrescribirlo', async () => {
     await open(`/reservas/${confirmed.id}/editar`)
     await wrapper.get('.slot-option').trigger('click'); await click('Continuar')
-    failure = { path: `/reservations/${confirmed.id}`, method: 'PATCH', remaining: 1, code: 'RESERVATION_VERSION_CONFLICT' }
+    failure = { path: `/reservas/${confirmed.id}`, method: 'PATCH', remaining: 1, code: 'RESERVATION_VERSION_CONFLICT' }
     await click('Guardar cambios')
     expect([...document.querySelectorAll<HTMLButtonElement>('button')].find(b => b.textContent === 'Guardar cambios')?.disabled).toBe(true)
     await click('Actualizar información'); expect(wrapper.text()).toContain('Elige fecha y horario')
@@ -205,16 +205,16 @@ describe('detalle y cancelación', () => {
   })
   it('cancela únicamente después de confirmar el diálogo', async () => {
     await open(`/reservas/${confirmed.id}`); await click('Cancelar reserva')
-    expect(calls.some(c => c.path.endsWith('/cancel'))).toBe(false)
+    expect(calls.some(c => c.path.endsWith('/cancelaciones'))).toBe(false)
     await click('Volver', document.querySelector('dialog')!)
     await click('Cancelar reserva'); await click('Sí, cancelar reserva', document.querySelector('dialog')!)
     expect(wrapper.text()).toContain('Reserva cancelada')
-    expect(calls.find(c => c.path.endsWith('/cancel'))?.body).toEqual({ expectedVersion: confirmed.version })
+    expect(calls.find(c => c.path.endsWith('/cancelaciones'))?.body).toEqual({ expectedVersion: confirmed.version })
     expect(document.querySelector('dialog')).toBeNull()
   })
   it('recupera un conflicto de cancelación consultando la versión vigente', async () => {
     await open(`/reservas/${confirmed.id}`); await click('Cancelar reserva')
-    failure = { path: '/cancel', remaining: 1, code: 'RESERVATION_VERSION_CONFLICT' }
+    failure = { path: '/cancelaciones', remaining: 1, code: 'RESERVATION_VERSION_CONFLICT' }
     await click('Sí, cancelar reserva', document.querySelector('dialog')!)
     expect(document.querySelector('dialog')?.textContent).toContain('Error de prueba')
     await click('Actualizar información', document.querySelector('dialog')!)
@@ -229,7 +229,7 @@ describe('recursos y configuración', () => {
     expect(wrapper.text()).toContain(resources[1]!.name)
     await click('Deshabilitados'); expect(wrapper.text()).toContain('Recurso 3')
     await wrapper.get('button[aria-label="Administrar Recurso 3"]').trigger('click'); await settle()
-    expect(router.currentRoute.value.path).toBe('/recursos/resource-003')
+    expect(router.currentRoute.value.path).toBe('/recursos/00000000-0000-4000-8000-100000000003')
     await router.push('/recursos'); await settle(); await click('Crear recurso')
     expect(router.currentRoute.value.path).toBe('/recursos/nuevo')
   })
@@ -257,7 +257,7 @@ describe('recursos y configuración', () => {
     await click('Cancelar'); expect(router.currentRoute.value.path).toBe('/recursos')
   })
   it('descarta y guarda información general sin alterar otros recursos', async () => {
-    await open('/recursos/resource-001')
+    await open('/recursos/00000000-0000-4000-8000-100000000001')
     await input('Nombre', 'Otro nombre'); await click('Descartar cambios')
     expect(wrapper.get('input[placeholder="Ej. Recurso Norte"]').element.value).toBe(resources[0]!.name)
     await input('Nombre', 'Nombre guardado'); await submit()
@@ -265,12 +265,12 @@ describe('recursos y configuración', () => {
     expect(calls.find(c => c.method === 'PATCH')?.body).toMatchObject({ expectedVersion: 1, name: 'Nombre guardado' })
   })
   it('requiere recargar un conflicto de versión del recurso', async () => {
-    await open('/recursos/resource-001'); failure = { path: '/resources/resource-001', method: 'PATCH', remaining: 1, code: 'RESOURCE_VERSION_CONFLICT' }
+    await open('/recursos/00000000-0000-4000-8000-100000000001'); failure = { path: '/recursos/00000000-0000-4000-8000-100000000001', method: 'PATCH', remaining: 1, code: 'RESOURCE_VERSION_CONFLICT' }
     await submit(); expect(wrapper.get('button[type="submit"]').attributes('disabled')).toBeDefined()
     await click('Actualizar información'); expect(wrapper.get('button[type="submit"]').attributes('disabled')).toBeUndefined()
   })
   it('edita franjas, valida solapamiento y guarda el horario con su versión', async () => {
-    await open('/recursos/resource-001'); await click('Horarios')
+    await open('/recursos/00000000-0000-4000-8000-100000000001'); await click('Horarios')
     const monday = wrapper.get('.schedule-day')
     await monday.get('.add-range').trigger('click'); await submit()
     expect(wrapper.text()).toContain('no pueden solaparse')
@@ -282,7 +282,7 @@ describe('recursos y configuración', () => {
     expect(monday.text()).toContain('Cerrado')
   })
   it('valida y crea un bloqueo temporal, y confirma su eliminación', async () => {
-    await open('/recursos/resource-001'); await click('Bloqueos'); await click('Crear bloqueo')
+    await open('/recursos/00000000-0000-4000-8000-100000000001'); await click('Bloqueos'); await click('Crear bloqueo')
     await submit(); expect(wrapper.text()).toContain('El motivo es obligatorio')
     await input('Inicio', '2026-11-13T12:00'); await submit(); expect(wrapper.text()).toContain('anterior al término')
     await input('Inicio', '2026-11-12T12:00'); await input('Motivo', 'Mantenimiento'); await submit()
@@ -293,18 +293,18 @@ describe('recursos y configuración', () => {
     expect(calls.some(c => c.method === 'DELETE')).toBe(true)
   })
   it('conserva el bloqueo si falla la eliminación y permite reintentar', async () => {
-    await open('/recursos/resource-001'); await click('Bloqueos'); await click('Eliminar bloqueo')
-    failure = { path: '/closures/closure-001', method: 'DELETE', remaining: 1 }
+    await open('/recursos/00000000-0000-4000-8000-100000000001'); await click('Bloqueos'); await click('Eliminar bloqueo')
+    failure = { path: '/bloqueos/00000000-0000-4000-8000-300000000001', method: 'DELETE', remaining: 1 }
     await click('Sí, eliminar bloqueo', document.querySelector('dialog')!)
     expect(document.querySelector('dialog')?.textContent).toContain('Error de prueba')
     await click('Sí, eliminar bloqueo', document.querySelector('dialog')!)
     expect(document.querySelector('dialog')).toBeNull()
   })
   it('recupera fallos de carga de recursos y detalle', async () => {
-    failure = { path: '/resources', remaining: 1 }; await open('/recursos')
+    failure = { path: '/recursos', remaining: 1 }; await open('/recursos')
     await click('Reintentar'); expect(wrapper.text()).toContain(resources[0]!.name)
-    failure = { path: '/resources/resource-001', remaining: 1 }
-    await router.push('/recursos/resource-001'); await settle()
+    failure = { path: '/recursos/00000000-0000-4000-8000-100000000001', remaining: 1 }
+    await router.push('/recursos/00000000-0000-4000-8000-100000000001'); await settle()
     expect(wrapper.text()).toContain('Error de prueba'); await click('Reintentar')
     expect(wrapper.text()).toContain('Información general')
     refreshKey.value++; await settle(); expect(wrapper.text()).toContain('Información general')

@@ -15,20 +15,20 @@ Estado: preparado para el Hito 1 (demostración de vista de administrador y resp
 
 | Operación | Método y ruta | Propósito |
 |---|---|---|
-| Crear recurso | `POST /api/v1/resources` | Registrar un nuevo recurso reservable en el ámbito con su zona horaria IANA, política de cancelación y referencia externa opcional. |
-| Consultar detalle de recurso | `GET /api/v1/resources/{id}` | Obtener la configuración completa del recurso, su `version`, política vigente, horario semanal recurrente y bloqueos activos. |
-| Modificar recurso | `PATCH /api/v1/resources/{id}` | Cambiar nombre, estado `enabled`, zona horaria, referencia externa, plazo de cancelación o `attributes` enviando `expectedVersion`. |
-| Configurar horario y límites de tiempo | `PUT /api/v1/resources/{id}/schedule` | Reemplazar las reglas semanales recurrentes de apertura y límites de duración (`minDurationSeconds`, `maxDurationSeconds`) enviando `expectedVersion`. |
-| Registrar bloqueo / cierre temporal | `POST /api/v1/resources/{id}/closures` | Crear un intervalo excepcional de cierre `[startAt, endAt)` por mantenimiento o evento administrativo. |
-| Eliminar bloqueo / cierre temporal | `DELETE /api/v1/resources/{id}/closures/{closureId}` | Levantar un bloqueo temporal existente del recurso. |
+| Crear recurso | `POST /api/v1/recursos` | Registrar un nuevo recurso reservable en el ámbito con su zona horaria IANA, política de cancelación y referencia externa opcional. |
+| Consultar detalle de recurso | `GET /api/v1/recursos/{id}` | Obtener la configuración completa del recurso, su `version`, política vigente, horario semanal recurrente y bloqueos activos. |
+| Modificar recurso | `PATCH /api/v1/recursos/{id}` | Cambiar nombre, estado `enabled`, zona horaria, referencia externa, plazo de cancelación o `attributes` enviando `expectedVersion`. |
+| Configurar horario y límites de tiempo | `PUT /api/v1/recursos/{id}/horarios` | Reemplazar las reglas semanales recurrentes de apertura y límites de duración (`minDurationSeconds`, `maxDurationSeconds`) enviando `expectedVersion`. |
+| Registrar bloqueo / cierre temporal | `POST /api/v1/recursos/{id}/bloqueos` | Crear un intervalo excepcional de cierre `[startAt, endAt)` por mantenimiento o evento administrativo. |
+| Eliminar bloqueo / cierre temporal | `DELETE /api/v1/recursos/{id}/bloqueos/{closureId}` | Levantar un bloqueo temporal existente del recurso. |
 
 ## Representación administrativa del recurso (`ResourceDetail`)
 
-Extiende la vista resumida de `GET /api/v1/resources` con los metadatos de gobierno del recurso:
+Extiende la vista resumida de `GET /api/v1/recursos` con los metadatos de gobierno del recurso:
 
 ```json
 {
-  "id": "resource-001",
+  "id": "00000000-0000-4000-8000-100000000001",
   "name": "Recurso 1",
   "enabled": true,
   "timeZone": "America/Santiago",
@@ -51,8 +51,8 @@ Extiende la vista resumida de `GET /api/v1/resources` con los metadatos de gobie
   ],
   "closures": [
     {
-      "id": "closure-001",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-300000000001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "startAt": "2026-11-12T15:00:00Z",
       "endAt": "2026-11-12T18:00:00Z",
       "reason": "Mantenimiento programado",

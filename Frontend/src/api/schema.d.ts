@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/api/v1/admin/reservations": {
+    "/api/v1/admin/reservas": {
         parameters: {
             query?: never;
             header?: {
@@ -32,7 +32,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/reservations": {
+    "/api/v1/reservas": {
         parameters: {
             query?: never;
             header?: {
@@ -69,7 +69,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/reservations/{id}": {
+    "/api/v1/reservas/{id}": {
         parameters: {
             query?: never;
             header?: {
@@ -78,8 +78,8 @@ export interface paths {
             };
             path: {
                 /**
-                 * @description Identificador opaco de una reserva propia del ámbito autenticado.
-                 * @example reservation-001
+                 * @description UUID de una reserva propia del ámbito autenticado.
+                 * @example 00000000-0000-4000-8000-200000000001
                  */
                 id: components["parameters"]["ReservationId"];
             };
@@ -114,7 +114,7 @@ export interface paths {
         patch: operations["updateReservation"];
         trace?: never;
     };
-    "/api/v1/reservations/{id}/cancel": {
+    "/api/v1/reservas/{id}/cancelaciones": {
         parameters: {
             query?: never;
             header?: {
@@ -123,8 +123,8 @@ export interface paths {
             };
             path: {
                 /**
-                 * @description Identificador opaco de una reserva propia del ámbito autenticado.
-                 * @example reservation-001
+                 * @description UUID de una reserva propia del ámbito autenticado.
+                 * @example 00000000-0000-4000-8000-200000000001
                  */
                 id: components["parameters"]["ReservationId"];
             };
@@ -151,7 +151,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/resources": {
+    "/api/v1/recursos": {
         parameters: {
             query?: never;
             header?: {
@@ -184,7 +184,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/resources/{id}": {
+    "/api/v1/recursos/{id}": {
         parameters: {
             query?: never;
             header?: {
@@ -193,8 +193,8 @@ export interface paths {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };
@@ -224,7 +224,7 @@ export interface paths {
         patch: operations["updateResource"];
         trace?: never;
     };
-    "/api/v1/resources/{id}/schedule": {
+    "/api/v1/recursos/{id}/horarios": {
         parameters: {
             query?: never;
             header?: {
@@ -233,8 +233,8 @@ export interface paths {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };
@@ -258,7 +258,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/resources/{id}/closures": {
+    "/api/v1/recursos/{id}/bloqueos": {
         parameters: {
             query?: never;
             header?: {
@@ -267,8 +267,8 @@ export interface paths {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };
@@ -291,7 +291,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/resources/{id}/closures/{closureId}": {
+    "/api/v1/recursos/{id}/bloqueos/{closureId}": {
         parameters: {
             query?: never;
             header?: {
@@ -300,13 +300,13 @@ export interface paths {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
                 /**
-                 * @description Identificador opaco de un bloqueo temporal del recurso.
-                 * @example closure-001
+                 * @description UUID de un bloqueo temporal del recurso.
+                 * @example 00000000-0000-4000-8000-300000000001
                  */
                 closureId: components["parameters"]["ClosureId"];
             };
@@ -326,7 +326,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/resources/{id}/availability": {
+    "/api/v1/recursos/{id}/disponibilidades": {
         parameters: {
             query?: never;
             header?: {
@@ -335,8 +335,8 @@ export interface paths {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };
@@ -374,7 +374,10 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /** @description Identificador opaco no vacío; no fija UUID ni ObjectID. */
+        /**
+         * Format: uuid
+         * @description Identificador UUID de un registro de BookingMS.
+         */
         Identifier: string;
         /**
          * Format: date-time
@@ -710,18 +713,18 @@ export interface components {
         /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
         MockScenario: "normal" | "success" | "empty" | "paginated" | "cancelled" | "expired" | "started" | "notFound" | "disabled" | "conflict" | "version" | "deadline" | "policy" | "error" | "unauthorized" | "forbidden";
         /**
-         * @description Identificador opaco de una reserva propia del ámbito autenticado.
-         * @example reservation-001
+         * @description UUID de una reserva propia del ámbito autenticado.
+         * @example 00000000-0000-4000-8000-200000000001
          */
         ReservationId: components["schemas"]["Identifier"];
         /**
-         * @description Identificador opaco de un recurso visible.
-         * @example resource-001
+         * @description UUID de un recurso visible.
+         * @example 00000000-0000-4000-8000-100000000001
          */
         ResourceId: components["schemas"]["Identifier"];
         /**
-         * @description Identificador opaco de un bloqueo temporal del recurso.
-         * @example closure-001
+         * @description UUID de un bloqueo temporal del recurso.
+         * @example 00000000-0000-4000-8000-300000000001
          */
         ClosureId: components["schemas"]["Identifier"];
         /**
@@ -914,8 +917,8 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de una reserva propia del ámbito autenticado.
-                 * @example reservation-001
+                 * @description UUID de una reserva propia del ámbito autenticado.
+                 * @example 00000000-0000-4000-8000-200000000001
                  */
                 id: components["parameters"]["ReservationId"];
             };
@@ -949,8 +952,8 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de una reserva propia del ámbito autenticado.
-                 * @example reservation-001
+                 * @description UUID de una reserva propia del ámbito autenticado.
+                 * @example 00000000-0000-4000-8000-200000000001
                  */
                 id: components["parameters"]["ReservationId"];
             };
@@ -998,8 +1001,8 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de una reserva propia del ámbito autenticado.
-                 * @example reservation-001
+                 * @description UUID de una reserva propia del ámbito autenticado.
+                 * @example 00000000-0000-4000-8000-200000000001
                  */
                 id: components["parameters"]["ReservationId"];
             };
@@ -1134,8 +1137,8 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };
@@ -1169,8 +1172,8 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };
@@ -1226,8 +1229,8 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };
@@ -1283,8 +1286,8 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };
@@ -1340,13 +1343,13 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
                 /**
-                 * @description Identificador opaco de un bloqueo temporal del recurso.
-                 * @example closure-001
+                 * @description UUID de un bloqueo temporal del recurso.
+                 * @example 00000000-0000-4000-8000-300000000001
                  */
                 closureId: components["parameters"]["ClosureId"];
             };
@@ -1397,8 +1400,8 @@ export interface operations {
             };
             path: {
                 /**
-                 * @description Identificador opaco de un recurso visible.
-                 * @example resource-001
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
                  */
                 id: components["parameters"]["ResourceId"];
             };

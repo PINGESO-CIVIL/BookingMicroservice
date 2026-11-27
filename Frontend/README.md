@@ -24,7 +24,7 @@ npm run test:e2e
 npm run verify:http
 ```
 
-`contracts` regenera los tipos públicos y los ejemplos desde `../contracts/openapi/openapi.yaml`. Los archivos generados se incluyen en el repositorio. `build` comprueba los componentes Vue y genera `dist/`. Las pruebas de navegador utilizan Microsoft Edge instalado y un servidor exclusivo en el puerto 5180; no interrumpen el servidor de desarrollo. Para otro sistema, sustituir `channel: 'msedge'` en `playwright.config.ts` por el navegador disponible.
+`contracts` regenera los tipos públicos y los ejemplos desde `../contracts/openapi.yaml`. Los archivos generados se incluyen en el repositorio. `build` comprueba los componentes Vue y genera `dist/`. Las pruebas de navegador utilizan Microsoft Edge instalado y un servidor exclusivo en el puerto 5180; no interrumpen el servidor de desarrollo. Para otro sistema, sustituir `channel: 'msedge'` en `playwright.config.ts` por el navegador disponible.
 
 `test:coverage` genera LCOV en `../reports/frontend/lcov.info`, incluyendo TypeScript y componentes Vue, salvo declaraciones de tipos. `scripts/quality.ps1 Sonar` ejecuta esta cobertura y normaliza sus rutas para que SonarQube la importe desde la raíz del repositorio. Los componentes sin pruebas se mantienen en la medición; no se excluyen para elevar porcentajes.
 

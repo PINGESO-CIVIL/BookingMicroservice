@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 const url = 'http://127.0.0.1:8080/docs/'
 const served = await fetch(`${url}openapi.yaml`)
 assert.equal(served.status, 200)
-assert.equal(await served.text(), readFileSync(new URL('../../contracts/openapi/openapi.yaml', import.meta.url), 'utf8'), 'Swagger debe publicar el contrato actual.')
+assert.equal(await served.text(), readFileSync(new URL('../../contracts/openapi.yaml', import.meta.url), 'utf8'), 'Swagger debe publicar el contrato actual.')
 const browser = await chromium.launch({ channel: 'msedge', headless: true })
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
@@ -20,7 +20,7 @@ try {
   const operation = page.locator('#operations-Reservas-listReservations')
   await operation.locator('.opblock-summary').click()
   await operation.getByRole('button', { name: 'Try it out', exact: true }).click()
-  const responsePromise = page.waitForResponse(r => r.url().includes(':4010/api/v1/reservations') && r.request().method() === 'GET')
+  const responsePromise = page.waitForResponse(r => r.url().includes(':4010/api/v1/reservas') && r.request().method() === 'GET')
   await operation.getByRole('button', { name: 'Execute', exact: true }).click()
   const response = await responsePromise
   assert.equal(response.status(), 200, `${response.url()} → ${await response.text()}`)

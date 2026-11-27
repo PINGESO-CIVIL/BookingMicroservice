@@ -2,7 +2,15 @@
 
 Actualización 0.3.0: el usuario confirmó bloques de duración fija configurables por recurso. `ResourcePolicy` incluye `slotDurationSeconds` (minutos enteros expresados en segundos); disponibilidad incluye esa duración y `availableSlots`, manteniendo `availableWindows` como ventanas continuas. La interfaz selecciona bloques completos y no solicita escribir horas. El frontend calcula los bloques sobre configuración y ocupación de ejemplo, sin persistencia; el backend real sigue pendiente.
 
-Este directorio contiene el [contrato OpenAPI 3.0.3](openapi.yaml) compartido por el futuro backend Go y el frontend Vue. Incluye las catorce operaciones y ejemplos prefijados de solicitudes y respuestas. Se valida con Redocly CLI, incluida la compatibilidad de los ejemplos con sus esquemas. Swagger UI está publicado localmente; el servidor HTTP mock Go está implementado para el Hito 1, sin lógica de negocio productiva. Ver [la entrega y demostración](../../docs/hito-1.md).
+El [contrato OpenAPI 3.1](../openapi.yaml) es la fuente de las catorce operaciones, sus tipos y los ejemplos del mock. Desde la raíz, instalar las dependencias con `npm ci --prefix Frontend` y ejecutar `pnpm codegen` para regenerar los tipos TypeScript y los fixtures. Para validar el YAML y sus ejemplos, usar `npm ci --prefix contracts` y `npm run validate --prefix contracts`.
+
+## Transición a 0.4.0
+
+- Las rutas de reservas y recursos se publican en español bajo `/api/v1`. Las tablas de operaciones de este documento recogen las rutas nuevas.
+- Los IDs de reservas, recursos y bloqueos usan UUID. Las referencias de identidad y los identificadores de catálogos externos conservan su formato.
+- Cada operación declara su permiso con `x-permission`. En la demo, `demo-user` tiene `reservas:leer`, `reservas:operar` y `recursos:leer`. `demo-admin` tiene además `reservas:administrar` y `recursos:administrar`. Estos nombres están pendientes de confirmación con la sección.
+
+Los consumidores deben actualizar rutas e identificadores juntos. La publicación se coordina con los equipos que indique el documento de componentes, compartiendo el enlace al YAML en el commit acordado.
 
 La [definición funcional de creación](crear-reserva.md) fue aprobada por el usuario el 2026-11-04, incluyendo `attributes` y creación personal. Los detalles de lógica real identificados como pendientes se mantienen para el siguiente hito.
 
@@ -12,20 +20,20 @@ La [definición funcional de modificación](modificar-reserva.md) fue aprobada p
 
 | Operación | Método y ruta | Documento | Estado funcional |
 |---|---|---|---|
-| Listar reservas del ámbito (Admin) | `GET /api/v1/admin/reservations` | [Consulta administrativa](listar-reservas-admin.md) | Solicitado por el usuario para Hito 1 (Mock) |
-| Crear reserva | `POST /api/v1/reservations` | [Creación](crear-reserva.md) | Aprobado; detalles técnicos pendientes señalados |
-| Modificar reserva | `PATCH /api/v1/reservations/{id}` | [Modificación](modificar-reserva.md) | Aprobado; detalles técnicos pendientes señalados |
-| Cancelar reserva | `POST /api/v1/reservations/{id}/cancel` | [Cancelación](cancelar-reserva.md) | Para revisión |
-| Listar reservas propias | `GET /api/v1/reservations` | [Listado](listar-reservas.md) | Para revisión |
-| Consultar reserva propia | `GET /api/v1/reservations/{id}` | [Detalle](consultar-reserva.md) | Para revisión |
-| Listar recursos visibles | `GET /api/v1/resources` | [Recursos](listar-recursos.md) | Para revisión |
-| Consultar disponibilidad | `GET /api/v1/resources/{id}/availability` | [Disponibilidad](consultar-disponibilidad.md) | Para revisión |
-| Crear recurso (Admin) | `POST /api/v1/resources` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
-| Consultar detalle de recurso (Admin) | `GET /api/v1/resources/{id}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
-| Modificar recurso / política (Admin) | `PATCH /api/v1/resources/{id}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
-| Configurar horario recurrente (Admin) | `PUT /api/v1/resources/{id}/schedule` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
-| Registrar bloqueo temporal (Admin) | `POST /api/v1/resources/{id}/closures` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
-| Eliminar bloqueo temporal (Admin) | `DELETE /api/v1/resources/{id}/closures/{closureId}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Listar reservas del ámbito (Admin) | `GET /api/v1/admin/reservas` | [Consulta administrativa](listar-reservas-admin.md) | Solicitado por el usuario para Hito 1 (Mock) |
+| Crear reserva | `POST /api/v1/reservas` | [Creación](crear-reserva.md) | Aprobado; detalles técnicos pendientes señalados |
+| Modificar reserva | `PATCH /api/v1/reservas/{id}` | [Modificación](modificar-reserva.md) | Aprobado; detalles técnicos pendientes señalados |
+| Cancelar reserva | `POST /api/v1/reservas/{id}/cancelaciones` | [Cancelación](cancelar-reserva.md) | Para revisión |
+| Listar reservas propias | `GET /api/v1/reservas` | [Listado](listar-reservas.md) | Para revisión |
+| Consultar reserva propia | `GET /api/v1/reservas/{id}` | [Detalle](consultar-reserva.md) | Para revisión |
+| Listar recursos visibles | `GET /api/v1/recursos` | [Recursos](listar-recursos.md) | Para revisión |
+| Consultar disponibilidad | `GET /api/v1/recursos/{id}/disponibilidades` | [Disponibilidad](consultar-disponibilidad.md) | Para revisión |
+| Crear recurso (Admin) | `POST /api/v1/recursos` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Consultar detalle de recurso (Admin) | `GET /api/v1/recursos/{id}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Modificar recurso / política (Admin) | `PATCH /api/v1/recursos/{id}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Configurar horario recurrente (Admin) | `PUT /api/v1/recursos/{id}/horarios` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Registrar bloqueo temporal (Admin) | `POST /api/v1/recursos/{id}/bloqueos` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
+| Eliminar bloqueo temporal (Admin) | `DELETE /api/v1/recursos/{id}/bloqueos/{closureId}` | [Administración de recursos](administrar-recursos.md) | Aprobado para Hito 1 (Mock) |
 
 Las [convenciones comunes](convenciones.md) consolidan identidad, respuestas, fechas, errores y paginación. El usuario confirmó que todas las operaciones de reservas se limitan a sus propias reservas dentro de su ámbito. El 2026-11-04 aprobó los límites de página (20 por defecto, 100 máximo) y disponibilidad (31 días por consulta). Estos límites controlan la carga de datos por solicitud, no la cantidad de reservas ni la anticipación permitida para reservar.
 
@@ -77,6 +85,6 @@ La validación se realiza localmente con Redocly; Swagger UI no envía el contra
 - Mantener el contrato versionado y comprobar su validez y compatibilidad en integración continua.
 - Mapear los tipos de transporte a los modelos internos; los documentos MongoDB pertenecen al repositorio.
 
-Se ha seleccionado OpenAPI 3.0.3 y Redocly CLI 2.75.0 para esta entrega. Los tipos TypeScript se generan desde OpenAPI y Vue consume el mock HTTP Go. La publicación es local; un despliegue remoto debe acordarse. La lógica real corresponde al Hito 2.
+Se ha seleccionado OpenAPI 3.1 y Redocly CLI 2.75.0 para esta entrega. Los tipos TypeScript se generan desde OpenAPI y Vue consume el mock HTTP Go. La publicación es local; un despliegue remoto debe acordarse. La lógica real corresponde al Hito 2.
 
 Referencia: [especificación oficial OpenAPI](https://spec.openapis.org/oas/latest.html).

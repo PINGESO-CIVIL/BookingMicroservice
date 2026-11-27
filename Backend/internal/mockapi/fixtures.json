@@ -1,10 +1,13 @@
 {
   "examples": {
+    "CancelRequest": {
+      "expectedVersion": 1
+    },
     "AdminReservationPage": {
       "items": [
         {
-          "id": "reservation-005",
-          "resourceId": "resource-002",
+          "id": "00000000-0000-4000-8000-200000000005",
+          "resourceId": "00000000-0000-4000-8000-100000000002",
           "responsible": {
             "issuer": "demo",
             "subject": "user-002"
@@ -23,7 +26,7 @@
       "nextCursor": null
     },
     "CreateRequest": {
-      "resourceId": "resource-001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "startAt": "2026-11-10T19:00:00-03:00",
       "endAt": "2026-11-10T20:00:00-03:00",
       "attributes": {}
@@ -35,8 +38,8 @@
       "attributes": {}
     },
     "ConfirmedReservation": {
-      "id": "reservation-001",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -52,8 +55,8 @@
       "updatedAt": "2026-11-04T12:00:00Z"
     },
     "UpdatedReservation": {
-      "id": "reservation-001",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -69,8 +72,8 @@
       "updatedAt": "2026-11-04T12:05:00Z"
     },
     "CancelledReservation": {
-      "id": "reservation-001",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -88,8 +91,8 @@
     "ReservationPage": {
       "items": [
         {
-          "id": "reservation-001",
-          "resourceId": "resource-001",
+          "id": "00000000-0000-4000-8000-200000000001",
+          "resourceId": "00000000-0000-4000-8000-100000000001",
           "responsible": {
             "issuer": "demo",
             "subject": "user-001"
@@ -110,14 +113,14 @@
     "ResourcePage": {
       "items": [
         {
-          "id": "resource-001",
+          "id": "00000000-0000-4000-8000-100000000001",
           "name": "Recurso 1",
           "enabled": true,
           "timeZone": "America/Santiago",
           "attributes": {}
         },
         {
-          "id": "resource-002",
+          "id": "00000000-0000-4000-8000-100000000002",
           "name": "Recurso 2",
           "enabled": true,
           "timeZone": "America/Santiago",
@@ -127,7 +130,7 @@
       "nextCursor": null
     },
     "Availability": {
-      "resourceId": "resource-001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "enabled": true,
       "timeZone": "America/Santiago",
       "from": "2026-11-10T21:00:00Z",
@@ -159,7 +162,7 @@
       ]
     },
     "NoAvailability": {
-      "resourceId": "resource-001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "enabled": true,
       "timeZone": "America/Santiago",
       "from": "2026-11-10T21:00:00Z",
@@ -169,7 +172,7 @@
       "availableWindows": []
     },
     "DisabledAvailability": {
-      "resourceId": "resource-003",
+      "resourceId": "00000000-0000-4000-8000-100000000003",
       "enabled": false,
       "timeZone": "America/Santiago",
       "from": "2026-11-10T21:00:00Z",
@@ -369,7 +372,7 @@
       "reason": "Mantenimiento preventivo de instalaciones"
     },
     "ResourceDetail": {
-      "id": "resource-001",
+      "id": "00000000-0000-4000-8000-100000000001",
       "name": "Recurso 1",
       "enabled": true,
       "timeZone": "America/Santiago",
@@ -397,8 +400,8 @@
       ],
       "closures": [
         {
-          "id": "closure-001",
-          "resourceId": "resource-001",
+          "id": "00000000-0000-4000-8000-300000000001",
+          "resourceId": "00000000-0000-4000-8000-100000000001",
           "startAt": "2026-11-12T15:00:00Z",
           "endAt": "2026-11-12T18:00:00Z",
           "reason": "Mantenimiento preventivo de instalaciones",
@@ -411,7 +414,7 @@
       "updatedAt": "2026-11-04T12:00:00Z"
     },
     "UpdatedResourceDetail": {
-      "id": "resource-001",
+      "id": "00000000-0000-4000-8000-100000000001",
       "name": "Recurso 1 - Sector Norte",
       "enabled": true,
       "timeZone": "America/Santiago",
@@ -439,8 +442,8 @@
       ],
       "closures": [
         {
-          "id": "closure-001",
-          "resourceId": "resource-001",
+          "id": "00000000-0000-4000-8000-300000000001",
+          "resourceId": "00000000-0000-4000-8000-100000000001",
           "startAt": "2026-11-12T15:00:00Z",
           "endAt": "2026-11-12T18:00:00Z",
           "reason": "Mantenimiento preventivo de instalaciones",
@@ -453,8 +456,8 @@
       "updatedAt": "2026-11-04T12:10:00Z"
     },
     "ResourceClosure": {
-      "id": "closure-001",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-300000000001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "startAt": "2026-11-12T15:00:00Z",
       "endAt": "2026-11-12T18:00:00Z",
       "reason": "Mantenimiento preventivo de instalaciones",
@@ -474,7 +477,7 @@
         "requestId": "request-demo-001",
         "details": [
           {
-            "field": "reservation-001",
+            "field": "00000000-0000-4000-8000-200000000001",
             "code": "CONFIRMED_RESERVATION_OVERLAP"
           }
         ]
@@ -490,21 +493,21 @@
   },
   "resources": [
     {
-      "id": "resource-001",
+      "id": "00000000-0000-4000-8000-100000000001",
       "name": "Recurso 1",
       "enabled": true,
       "timeZone": "America/Santiago",
       "attributes": {}
     },
     {
-      "id": "resource-002",
+      "id": "00000000-0000-4000-8000-100000000002",
       "name": "Recurso 2",
       "enabled": true,
       "timeZone": "America/Santiago",
       "attributes": {}
     },
     {
-      "id": "resource-003",
+      "id": "00000000-0000-4000-8000-100000000003",
       "name": "Recurso 3",
       "enabled": false,
       "timeZone": "America/Santiago",
@@ -513,8 +516,8 @@
   ],
   "reservations": [
     {
-      "id": "reservation-004",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000004",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -530,8 +533,8 @@
       "updatedAt": "2026-11-01T12:00:00Z"
     },
     {
-      "id": "reservation-003",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000003",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -547,8 +550,8 @@
       "updatedAt": "2026-11-04T12:00:00Z"
     },
     {
-      "id": "reservation-001",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -564,8 +567,8 @@
       "updatedAt": "2026-11-04T12:00:00Z"
     },
     {
-      "id": "reservation-002",
-      "resourceId": "resource-002",
+      "id": "00000000-0000-4000-8000-200000000002",
+      "resourceId": "00000000-0000-4000-8000-100000000002",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -583,8 +586,8 @@
   ],
   "adminReservations": [
     {
-      "id": "reservation-004",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000004",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -600,8 +603,8 @@
       "updatedAt": "2026-11-01T12:00:00Z"
     },
     {
-      "id": "reservation-003",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000003",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -617,8 +620,8 @@
       "updatedAt": "2026-11-04T12:00:00Z"
     },
     {
-      "id": "reservation-005",
-      "resourceId": "resource-002",
+      "id": "00000000-0000-4000-8000-200000000005",
+      "resourceId": "00000000-0000-4000-8000-100000000002",
       "responsible": {
         "issuer": "demo",
         "subject": "user-002"
@@ -634,8 +637,8 @@
       "updatedAt": "2026-11-04T12:00:00Z"
     },
     {
-      "id": "reservation-001",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000001",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -651,8 +654,8 @@
       "updatedAt": "2026-11-04T12:00:00Z"
     },
     {
-      "id": "reservation-002",
-      "resourceId": "resource-002",
+      "id": "00000000-0000-4000-8000-200000000002",
+      "resourceId": "00000000-0000-4000-8000-100000000002",
       "responsible": {
         "issuer": "demo",
         "subject": "user-001"
@@ -668,8 +671,8 @@
       "updatedAt": "2026-11-04T12:05:00Z"
     },
     {
-      "id": "reservation-006",
-      "resourceId": "resource-001",
+      "id": "00000000-0000-4000-8000-200000000006",
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "responsible": {
         "issuer": "demo",
         "subject": "user-003"
@@ -686,8 +689,8 @@
     }
   ],
   "details": {
-    "resource-001": {
-      "id": "resource-001",
+    "00000000-0000-4000-8000-100000000001": {
+      "id": "00000000-0000-4000-8000-100000000001",
       "name": "Recurso 1",
       "enabled": true,
       "timeZone": "America/Santiago",
@@ -715,8 +718,8 @@
       ],
       "closures": [
         {
-          "id": "closure-001",
-          "resourceId": "resource-001",
+          "id": "00000000-0000-4000-8000-300000000001",
+          "resourceId": "00000000-0000-4000-8000-100000000001",
           "startAt": "2026-11-12T15:00:00Z",
           "endAt": "2026-11-12T18:00:00Z",
           "reason": "Mantenimiento preventivo de instalaciones",
@@ -728,8 +731,8 @@
       "createdAt": "2026-11-01T10:00:00Z",
       "updatedAt": "2026-11-04T12:00:00Z"
     },
-    "resource-002": {
-      "id": "resource-002",
+    "00000000-0000-4000-8000-100000000002": {
+      "id": "00000000-0000-4000-8000-100000000002",
       "name": "Recurso 2",
       "enabled": true,
       "timeZone": "America/Santiago",
@@ -761,8 +764,8 @@
       "createdAt": "2026-11-01T10:00:00Z",
       "updatedAt": "2026-11-04T12:00:00Z"
     },
-    "resource-003": {
-      "id": "resource-003",
+    "00000000-0000-4000-8000-100000000003": {
+      "id": "00000000-0000-4000-8000-100000000003",
       "name": "Recurso 3",
       "enabled": false,
       "timeZone": "America/Santiago",
@@ -796,8 +799,8 @@
     }
   },
   "availability": {
-    "resource-001": {
-      "resourceId": "resource-001",
+    "00000000-0000-4000-8000-100000000001": {
+      "resourceId": "00000000-0000-4000-8000-100000000001",
       "enabled": true,
       "timeZone": "America/Santiago",
       "from": "2026-11-04T03:00:00Z",
@@ -2248,8 +2251,8 @@
         }
       ]
     },
-    "resource-002": {
-      "resourceId": "resource-002",
+    "00000000-0000-4000-8000-100000000002": {
+      "resourceId": "00000000-0000-4000-8000-100000000002",
       "enabled": true,
       "timeZone": "America/Santiago",
       "from": "2026-11-04T03:00:00Z",
@@ -5044,8 +5047,8 @@
         }
       ]
     },
-    "resource-003": {
-      "resourceId": "resource-003",
+    "00000000-0000-4000-8000-100000000003": {
+      "resourceId": "00000000-0000-4000-8000-100000000003",
       "enabled": false,
       "timeZone": "America/Santiago",
       "from": "2026-11-04T03:00:00Z",

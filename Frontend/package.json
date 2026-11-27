@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "contracts": "openapi-typescript ../contracts/openapi/openapi.yaml -o src/api/schema.d.ts && node scripts/fixtures.mjs && node scripts/mock-fixtures.mjs",
+    "contracts": "openapi-typescript ../contracts/openapi.yaml -o src/api/schema.d.ts && node scripts/fixtures.mjs && node scripts/mock-fixtures.mjs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",

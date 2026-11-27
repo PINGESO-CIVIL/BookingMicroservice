@@ -4,7 +4,7 @@
   "private": true,
   "description": "Validación del contrato OpenAPI; sin implementación de negocio.",
   "scripts": {
-    "validate": "redocly lint --config redocly.yaml openapi/openapi.yaml"
+    "validate": "redocly lint --config redocly.yaml openapi.yaml"
   },
   "engines": {
     "node": ">=22.12.0",

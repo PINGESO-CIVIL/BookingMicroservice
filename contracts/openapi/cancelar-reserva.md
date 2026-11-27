@@ -4,7 +4,7 @@ Estado: preparado para revisión. Las reglas temporales provienen del diseño ap
 
 ## Operación
 
-`POST /api/v1/reservations/{id}/cancel`
+`POST /api/v1/reservas/{id}/cancelaciones`
 
 Cancela una reserva propia, dentro del ámbito autenticado, conservando su historial. No borra la reserva ni modifica recurso, intervalo, responsable o atributos.
 

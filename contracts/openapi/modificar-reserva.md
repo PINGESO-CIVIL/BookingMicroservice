@@ -4,7 +4,7 @@ Estado: definición funcional aprobada por el usuario el 2026-11-04, incluyendo 
 
 ## Operación propuesta
 
-`PATCH /api/v1/reservations/{id}`
+`PATCH /api/v1/reservas/{id}`
 
 Modificar parcialmente una reserva confirmada. Los campos omitidos conservan sus valores. Los cambios se aplican todos juntos o se rechaza toda la solicitud, conservando la reserva original.
 
