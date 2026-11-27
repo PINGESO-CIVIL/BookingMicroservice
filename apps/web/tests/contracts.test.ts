@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { canChange } from '../src/api/client'
+import { canChange } from '../src/validation'
 import { confirmed } from '../src/api/fixtures'
 import { duration, localParts, overlaps, toInstant } from '../src/dates'
 import { validatePolicy, validateSchedule } from '../src/validation'

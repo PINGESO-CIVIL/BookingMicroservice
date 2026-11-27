@@ -1,8 +1,12 @@
 package api
 
 import (
+	"bytes"
+	"crypto/rand"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"io"
 	"mime"
 	"net/http"
 	"net/url"
@@ -12,17 +16,20 @@ import (
 	"time"
 
 	"bookingms/internal/service"
+
+	"github.com/danielgtaylor/huma/v2"
+	"github.com/danielgtaylor/huma/v2/adapters/humago"
 )
 
 type handler struct {
-	service  *service.Service
-	sequence atomic.Uint64
+	service   *service.Service
+	sequence  atomic.Uint64
+	authorize Authorizer
 }
 
 type operation struct {
 	name              service.Operation
 	admin             bool
-	status            int
 	request           func() any
 	required, allowed string
 	minFields         int
@@ -30,30 +37,16 @@ type operation struct {
 
 // New connects the HTTP routes to the application service.
 func New(svc *service.Service) http.Handler {
-	s := &handler{service: svc}
+	return NewWithAuthorizer(svc, nil)
+}
+
+func NewWithAuthorizer(svc *service.Service, authorize Authorizer) http.Handler {
+	s := &handler{service: svc, authorize: authorize}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
 		s.reply(w, 200, HealthResponse{Status: "ok", Mode: "mock", Persistent: false})
 	})
-	routes := []struct {
-		path string
-		op   operation
-	}{
-		{"GET /api/v1/reservas", operation{name: "listReservations"}},
-		{"GET /api/v1/admin/reservas", operation{name: "listAdminReservations", admin: true}},
-		{"POST /api/v1/reservas", operation{name: "createReservation", status: 201, request: func() any { return new(CreateReservationRequest) }, required: "resourceId startAt endAt", allowed: "resourceId startAt endAt attributes"}},
-		{"GET /api/v1/reservas/{id}", operation{name: "getReservation"}},
-		{"PATCH /api/v1/reservas/{id}", operation{name: "updateReservation", status: 200, request: func() any { return new(UpdateReservationRequest) }, minFields: 2, required: "expectedVersion", allowed: "expectedVersion resourceId startAt endAt attributes"}},
-		{"POST /api/v1/reservas/{id}/cancelaciones", operation{name: "cancelReservation", status: 200, request: func() any { return new(CancelReservationRequest) }, required: "expectedVersion", allowed: "expectedVersion"}},
-		{"GET /api/v1/recursos", operation{name: "listResources"}},
-		{"POST /api/v1/recursos", operation{name: "createResource", admin: true, status: 201, request: func() any { return new(CreateResourceRequest) }, required: "name enabled timeZone policy", allowed: "name enabled timeZone policy externalReference weeklySchedule attributes"}},
-		{"GET /api/v1/recursos/{id}", operation{name: "getResource", admin: true}},
-		{"PATCH /api/v1/recursos/{id}", operation{name: "updateResource", admin: true, status: 200, request: func() any { return new(UpdateResourceRequest) }, minFields: 2, required: "expectedVersion", allowed: "expectedVersion name enabled timeZone policy externalReference attributes"}},
-		{"PUT /api/v1/recursos/{id}/horarios", operation{name: "updateResourceSchedule", admin: true, status: 200, request: func() any { return new(UpdateResourceScheduleRequest) }, required: "expectedVersion policy weeklySchedule", allowed: "expectedVersion policy weeklySchedule"}},
-		{"POST /api/v1/recursos/{id}/bloqueos", operation{name: "createResourceClosure", admin: true, status: 201, request: func() any { return new(CreateResourceClosureRequest) }, required: "startAt endAt reason", allowed: "startAt endAt reason"}},
-		{"DELETE /api/v1/recursos/{id}/bloqueos/{closureId}", operation{name: "deleteResourceClosure", admin: true, status: 204}},
-		{"GET /api/v1/recursos/{id}/disponibilidades", operation{name: "getResourceAvailability"}},
-	}
+	registerRoutes(newHuma(mux), s)
 	mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) {
 		ready := svc.Ready(r.Context())
 		status := http.StatusOK
@@ -64,9 +57,6 @@ func New(svc *service.Service) http.Handler {
 			Ready bool `json:"ready"`
 		}{Ready: ready})
 	})
-	for _, route := range routes {
-		mux.HandleFunc(route.path, s.handle(route.op))
-	}
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		s.fail(w, 404, "RESOURCE_NOT_FOUND", "Ruta de demostración no encontrada.")
 	})
@@ -79,7 +69,7 @@ func New(svc *service.Service) http.Handler {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Vary", "Origin")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
-			w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Idempotency-Key, X-Mock-Scenario")
+			w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Idempotency-Key, X-Mock-Scenario, X-Request-Id")
 			w.Header().Set("Access-Control-Expose-Headers", "X-Mock-Response")
 		}
 		if r.Method == http.MethodOptions {
@@ -105,10 +95,21 @@ func (s *handler) fail(w http.ResponseWriter, status int, code, message string) 
 	}})
 }
 
-func (s *handler) writeFault(w http.ResponseWriter, fault *service.Fault) {
+type transportError struct {
+	ErrorResponse
+	status int
+}
+
+func (e *transportError) Error() string             { return e.ErrorResponse.Error.Message }
+func (e *transportError) GetStatus() int            { return e.status }
+func (e *transportError) ContentType(string) string { return "application/json; charset=utf-8" }
+
+func (s *handler) fault(fault *service.Fault) *transportError {
 	if fault.Message != "" {
-		s.fail(w, http.StatusBadRequest, "INVALID_REQUEST", fault.Message)
-		return
+		return &transportError{
+			ErrorResponse: ErrorResponse{Error: Error{Code: "INVALID_REQUEST", Message: fault.Message, RequestID: fmt.Sprintf("request-demo-%06d", s.sequence.Add(1))}},
+			status:        http.StatusBadRequest,
+		}
 	}
 	status := http.StatusBadRequest
 	switch fault.Example {
@@ -125,88 +126,119 @@ func (s *handler) writeFault(w http.ResponseWriter, fault *service.Fault) {
 	case "CancellationWindowClosed", "PolicyViolation":
 		status = http.StatusUnprocessableEntity
 	}
-	s.reply(w, status, s.service.ErrorExample(fault.Example))
+	return &transportError{ErrorResponse: s.service.ErrorExample(fault.Example), status: status}
 }
 
-func (s *handler) handle(op operation) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		scenario := r.Header.Get("X-Mock-Scenario")
-		actor := service.Anonymous
+type validatedInputKey struct{}
+
+// validate preserves the existing authorization order and error format before
+// Huma decodes the normalized JSON into the registered transport input.
+func (s *handler) validate(op operation, ctx huma.Context, next func(huma.Context)) {
+	r, w := humago.Unwrap(ctx)
+	scenario := r.Header.Get("X-Mock-Scenario")
+	actor := service.Anonymous
+	var subject string
+	if s.authorize != nil {
+		authenticatedSubject, fault := s.authorize(r.Header.Get("Authorization"), operationPermission(op))
+		if fault != nil {
+			response := s.fault(fault)
+			s.reply(w, response.status, response.ErrorResponse)
+			return
+		}
+		subject = authenticatedSubject
+		actor = service.DemoUser
+		if op.admin {
+			actor = service.DemoAdmin
+		}
+	} else {
 		switch r.Header.Get("Authorization") {
 		case "Bearer demo-user":
 			actor = service.DemoUser
 		case "Bearer demo-admin":
 			actor = service.DemoAdmin
 		}
-		if fault := s.service.Authorize(op.admin, actor, scenario); fault != nil {
-			s.writeFault(w, fault)
+	}
+	if fault := s.service.Authorize(op.admin, actor, scenario); fault != nil {
+		response := s.fault(fault)
+		s.reply(w, response.status, response.ErrorResponse)
+		return
+	}
+	if r.Method == "GET" && r.Body != nil && r.ContentLength > 0 {
+		s.fail(w, 400, "INVALID_REQUEST", "Las consultas no reciben cuerpo.")
+		return
+	}
+	query, queryErr := url.ParseQuery(r.URL.RawQuery)
+	allowsQuery := op.name == "listReservations" || op.name == "listAdminReservations" ||
+		op.name == "listResources" || op.name == "getResourceAvailability"
+	if queryErr != nil || (!allowsQuery && r.URL.RawQuery != "") {
+		s.fail(w, 400, "INVALID_REQUEST", "Parámetro no admitido.")
+		return
+	}
+	var confirmation service.Confirmation
+	if op.request != nil {
+		mediaType, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+		if err != nil || mediaType != "application/json" {
+			s.fail(w, 400, "INVALID_REQUEST", "Se requiere un cuerpo JSON.")
 			return
 		}
-		if r.Method == "GET" && r.Body != nil && r.ContentLength > 0 {
-			s.fail(w, 400, "INVALID_REQUEST", "Las consultas no reciben cuerpo.")
+		body := http.MaxBytesReader(w, r.Body, 1<<20)
+		target := op.request()
+		if err := DecodeRequest(body, target, op.required, op.allowed, op.minFields); err != nil {
+			s.fail(w, 400, "INVALID_REQUEST", "La solicitud contiene campos ausentes, no admitidos o con formato incorrecto.")
 			return
 		}
-		query, queryErr := url.ParseQuery(r.URL.RawQuery)
-		allowsQuery := op.name == "listReservations" || op.name == "listAdminReservations" ||
-			op.name == "listResources" || op.name == "getResourceAvailability"
-		if queryErr != nil || (!allowsQuery && r.URL.RawQuery != "") {
-			s.fail(w, 400, "INVALID_REQUEST", "Parámetro no admitido.")
+		normalized, err := json.Marshal(target)
+		if err != nil {
+			s.fail(w, 500, "INTERNAL_ERROR", "No se pudo preparar la solicitud JSON.")
 			return
 		}
-		if op.request != nil {
-			mediaType, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-			if err != nil || mediaType != "application/json" {
-				s.fail(w, 400, "INVALID_REQUEST", "Se requiere un cuerpo JSON.")
-				return
-			}
-			body := http.MaxBytesReader(w, r.Body, 1<<20)
-			if err := DecodeRequest(body, op.request(), op.required, op.allowed, op.minFields); err != nil {
-				s.fail(w, 400, "INVALID_REQUEST", "La solicitud contiene campos ausentes, no admitidos o con formato incorrecto.")
-				return
-			}
+		r.Body = io.NopCloser(bytes.NewReader(normalized))
+		if create, ok := target.(*CreateReservationRequest); ok {
+			confirmation.StartAt, confirmation.EndAt = create.StartAt, create.EndAt
 		}
-		if op.name == "createReservation" && !ValidText(r.Header.Get("Idempotency-Key"), 128) {
+
+	}
+	if op.name == "createReservation" {
+		key := r.Header.Get("Idempotency-Key")
+		if !ValidText(key, 128) {
 			s.fail(w, 400, "INVALID_REQUEST", "Idempotency-Key debe tener entre 1 y 128 caracteres.")
 			return
 		}
-		id := r.PathValue("id")
-		closureID := r.PathValue("closureId")
-		if (id != "" && !ValidUUID(id)) || (closureID != "" && !ValidUUID(closureID)) {
-			s.fail(w, 400, "INVALID_REQUEST", "El identificador debe ser un UUID.")
-			return
+		confirmation.Authorization = r.Header.Get("Authorization")
+		confirmation.RequestID = r.Header.Get("X-Request-Id")
+		if confirmation.RequestID == "" {
+			confirmation.RequestID = rand.Text()
 		}
-		id = strings.ToLower(id)
-		input := service.Input{ID: id, ClosureID: strings.ToLower(closureID), Scenario: scenario}
-		switch op.name {
-		case "listReservations", "listAdminReservations", "listResources":
-			var message string
-			input.Query, message = listQuery(query, op.name)
-			if message != "" {
-				s.fail(w, http.StatusBadRequest, "INVALID_REQUEST", message)
-				return
-			}
-			// Keep the existing cursor representation and scope across the refactor.
-			query.Del("cursor")
-			input.Query.CursorScope = r.URL.Path + "|" + r.Header.Get("Authorization") + "|" + scenario + "|" + query.Encode()
-		case "getResourceAvailability":
-			if queryAllowed(query, "from to") {
-				from, to, err := rangeQuery(query, true)
-				if err == nil {
-					input.Query.From, input.Query.To = from, to
-				}
-			}
-		}
-		result, fault := s.service.Execute(op.name, input)
-		if fault != nil {
-			s.writeFault(w, fault)
-			return
-		}
-		status := op.status
-		if status == 0 {
-			status = http.StatusOK
-		}
-		s.reply(w, status, result)
+		confirmation.IdempotencyKey = notificationKey(actor, subject, key)
 	}
+	id := r.PathValue("id")
+	closureID := r.PathValue("closureId")
+	if (id != "" && !ValidUUID(id)) || (closureID != "" && !ValidUUID(closureID)) {
+		s.fail(w, 400, "INVALID_REQUEST", "El identificador debe ser un UUID.")
+		return
+	}
+	id = strings.ToLower(id)
+	input := service.Input{ID: id, ClosureID: strings.ToLower(closureID), Scenario: scenario, Confirmation: confirmation}
+	switch op.name {
+	case "listReservations", "listAdminReservations", "listResources":
+		var message string
+		input.Query, message = listQuery(query, op.name)
+		if message != "" {
+			s.fail(w, http.StatusBadRequest, "INVALID_REQUEST", message)
+			return
+		}
+		// Keep the existing cursor representation and scope across the refactor.
+		query.Del("cursor")
+		input.Query.CursorScope = r.URL.Path + "|" + r.Header.Get("Authorization") + "|" + scenario + "|" + query.Encode()
+	case "getResourceAvailability":
+		if queryAllowed(query, "from to") {
+			from, to, err := rangeQuery(query, true)
+			if err == nil {
+				input.Query.From, input.Query.To = from, to
+			}
+		}
+	}
+	next(huma.WithValue(ctx, validatedInputKey{}, input))
 }
 
 func includes(list, value string) bool {
@@ -281,4 +313,18 @@ func listQuery(q url.Values, operation service.Operation) (service.Query, string
 		Enabled: enabled, Status: q.Get("status"), ResourceID: resourceID,
 		From: from, To: to, Limit: limit, Cursor: q.Get("cursor"),
 	}, ""
+}
+
+// G10 accepts UUID keys. Scope the derived key to the Agenda actor and write.
+func notificationKey(actor service.Actor, subject, key string) [16]byte {
+	scope := fmt.Sprintf("demo:%d", actor)
+	if subject != "" {
+		scope = fmt.Sprintf("jwt:%q", subject)
+	}
+	digest := sha256.Sum256([]byte(fmt.Sprintf("bookingms:confirmacion:v1:%s:%s", scope, key)))
+	var id [16]byte
+	copy(id[:], digest[:16])
+	id[6] = (id[6] & 0x0f) | 0x80
+	id[8] = (id[8] & 0x3f) | 0x80
+	return id
 }

@@ -29,10 +29,28 @@ type AvailabilityStore interface {
 type Service struct {
 	fixtures FixtureStore
 	database AvailabilityStore
+	notifier ConfirmationNotifier
 }
 
 func New(fixtures FixtureStore, database AvailabilityStore) *Service {
 	return &Service{fixtures: fixtures, database: database}
+}
+
+type Confirmation struct {
+	Authorization  string
+	RequestID      string
+	IdempotencyKey [16]byte
+	StartAt        string
+	EndAt          string
+}
+
+type ConfirmationNotifier interface {
+	Confirm(context.Context, Confirmation) error
+}
+
+// SetNotifier connects the optional demo integration before the server starts.
+func (s *Service) SetNotifier(notifier ConfirmationNotifier) {
+	s.notifier = notifier
 }
 
 type Operation string
@@ -46,10 +64,11 @@ const (
 )
 
 type Input struct {
-	ID        string
-	ClosureID string
-	Scenario  string
-	Query     Query
+	ID           string
+	ClosureID    string
+	Scenario     string
+	Query        Query
+	Confirmation Confirmation
 }
 
 type Query struct {
@@ -95,7 +114,7 @@ func (s *Service) Authorize(adminOnly bool, actor Actor, scenario string) *Fault
 	}
 }
 
-func (s *Service) Execute(operation Operation, input Input) (any, *Fault) {
+func (s *Service) Execute(ctx context.Context, operation Operation, input Input) (any, *Fault) {
 	switch operation {
 	case "listReservations", "listAdminReservations":
 		return s.listReservations(operation == "listAdminReservations", input)
@@ -125,7 +144,7 @@ func (s *Service) Execute(operation Operation, input Input) (any, *Fault) {
 			}
 		}
 	}
-	return s.simulateWrite(operation, input.Scenario)
+	return s.simulateWrite(ctx, operation, input)
 }
 
 func (s *Service) reservationScenario(reservation demo.Reservation, scenario string) demo.Reservation {
@@ -146,13 +165,19 @@ func (s *Service) reservationScenario(reservation demo.Reservation, scenario str
 	return reservation
 }
 
-func (s *Service) simulateWrite(operation Operation, scenario string) (any, *Fault) {
+func (s *Service) simulateWrite(ctx context.Context, operation Operation, input Input) (any, *Fault) {
+	scenario := input.Scenario
 	if scenario != "" && scenario != "normal" && scenario != "success" {
 		return nil, &Fault{Example: writeFailure(operation, scenario)}
 	}
 	switch operation {
 	case "createReservation":
-		log.Print("[MOCK] Confirmación de reserva: notificación simulada.")
+		if s.notifier == nil {
+			log.Print("[MOCK] Confirmación de reserva: notificación simulada.")
+		} else if err := s.notifier.Confirm(ctx, input.Confirmation); err != nil {
+			log.Print("Notificaciones no confirmó el envío de reserva")
+			return nil, &Fault{Example: "ServiceUnavailable"}
+		}
 		return s.fixtures.ReservationExample("ConfirmedReservation"), nil
 	case "updateReservation":
 		return s.fixtures.ReservationExample("UpdatedReservation"), nil

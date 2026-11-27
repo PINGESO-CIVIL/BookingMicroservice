@@ -2,9 +2,17 @@
   "name": "bookingms",
   "private": true,
   "scripts": {
-    "codegen": "npm --prefix apps/web run contracts"
+    "codegen:externos": "go -C apps/api generate ./internal/store/notificaciones",
+    "codegen": "go -C apps/api run ./cmd/openapi ../../contracts/openapi.yaml && pnpm --dir apps/web run contracts"
   },
   "devDependencies": {
-    "lefthook": "2.1.10"
-  }
+    "lefthook": "2.1.10",
+    "oxlint": "1.75.0",
+    "prettier": "3.9.6",
+    "prettier-plugin-tailwindcss": "0.8.1"
+  },
+  "engines": {
+    "node": "22.22.0"
+  },
+  "packageManager": "pnpm@10.13.1"
 }

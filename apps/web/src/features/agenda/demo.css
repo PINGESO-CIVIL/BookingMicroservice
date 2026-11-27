@@ -1,0 +1,73 @@
+:root {
+  font-family: 'Geist', 'Inter', system-ui, sans-serif;
+  background: #f4f6f3;
+  color: #142e29;
+  font-synthesis: none;
+}
+
+body { margin: 0; }
+
+.agenda-demo {
+  display: grid;
+  grid-template-columns: 256px minmax(0, 1fr);
+  min-height: 100vh;
+}
+.agenda-demo *, .agenda-demo *::before, .agenda-demo *::after { box-sizing: border-box; }
+.agenda-sidebar {
+  position: sticky;
+  top: 0;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 30px 20px 22px;
+  background: #112e29;
+  color: #eaf5ee;
+}
+.agenda-brand { display: flex; align-items: center; gap: 12px; padding-inline: 8px; font-size: 25px; font-weight: 750; letter-spacing: -.045em; }
+.agenda-brand-mark { position: relative; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #d6f485; color: #123529; }
+.agenda-brand-mark::before { content: ''; width: 20px; height: 19px; border: 2px solid; border-radius: 4px; background: linear-gradient(currentColor, currentColor) 0 4px / 100% 2px no-repeat; }
+.agenda-brand-mark::after { content: ''; position: absolute; width: 3px; height: 3px; bottom: 14px; left: 15px; border-radius: 50%; background: currentColor; box-shadow: 6px 0 currentColor; }
+.agenda-nav { display: grid; gap: 6px; }
+.agenda-nav a { display: flex; gap: 11px; align-items: center; padding: 11px 12px; border-radius: 9px; color: #c9ded4; text-decoration: none; font-size: .9rem; font-weight: 600; }
+.agenda-nav a span { font-size: 1.08rem; color: #afcfbc; width: 19px; text-align: center; }
+.agenda-nav a:hover { background: #214138; color: white; }
+.agenda-nav a.active { background: #2a4c40; color: #f6ffdf; box-shadow: inset 3px 0 #d6f485; }
+.agenda-nav a.active span { color: #d6f485; }
+.agenda-demo-settings { margin-top: auto; background: #1b3a32; border: 1px solid #36594b; padding: 14px; border-radius: 12px; }
+.agenda-demo-settings h2 { margin: 0 0 12px; color: #e4eee7; font-size: .82rem; font-weight: 650; }
+.agenda-role { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 3px; border-radius: 8px; background: #102c26; }
+.agenda-role button { min-height: 34px; border: 0; border-radius: 6px; font: inherit; font-size: .82rem; color: #c3dacd; background: transparent; cursor: pointer; }
+.agenda-role button[aria-pressed=true] { color: #153a2d; background: #d6f485; font-weight: 750; }
+.agenda-scenarios { display: grid; gap: 10px; margin-top: 13px; }
+.agenda-scenarios label { display: grid; gap: 5px; min-width: 0; color: #c2dbce; font-size: .75rem; }
+.agenda-scenarios select { width: 100%; padding: 7px 8px; border: 1px solid #527566; border-radius: 6px; background: #1b3a32; color: #f0f6f2; font: inherit; }
+.agenda-demo :focus-visible { outline: 2px solid #81b199; outline-offset: 3px; }
+.agenda-main { min-width: 0; padding: clamp(30px, 5vw, 64px) clamp(22px, 5vw, 72px); }
+.agenda-content { max-width: 1080px; margin-inline: auto; }
+.agenda-page-heading { margin: 0 0 28px; border-bottom: 1px solid #d7e1d9; padding-bottom: 22px; }
+.agenda-page-heading h1 { margin: 0; font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.09; font-weight: 750; letter-spacing: -.057em; }
+.agenda-page-heading p { margin: 10px 0 0; color: #49615a; line-height: 1.5; }
+
+@media (max-width: 860px) {
+  .agenda-demo { grid-template-columns: 206px minmax(0, 1fr); }
+  .agenda-sidebar { padding-inline: 14px; }
+}
+@media (max-width: 670px) {
+  .agenda-demo { display: block; }
+  .agenda-sidebar { position: static; min-height: auto; max-height: none; gap: 14px; padding: 14px; }
+  .agenda-brand { padding-inline: 2px; font-size: 21px; }
+  .agenda-brand-mark { width: 34px; height: 34px; border-radius: 9px; }
+  .agenda-brand-mark::after { bottom: 11px; left: 12px; }
+  .agenda-nav { display: flex; flex-wrap: wrap; gap: 4px; }
+  .agenda-nav a { padding: 8px 9px; font-size: .78rem; gap: 4px; }
+  .agenda-nav a span { width: 16px; }
+  .agenda-demo-settings { display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); align-items: center; padding: 9px; }
+  .agenda-demo-settings h2 { grid-column: 1 / -1; margin: 0; font-size: .72rem; }
+  .agenda-scenarios { margin: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .agenda-scenarios select { padding-inline: 4px; }
+  .agenda-main { padding: 25px 14px 35px; }
+  .agenda-page-heading { padding-bottom: 16px; margin-bottom: 16px; }
+}

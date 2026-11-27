@@ -1,19 +1,20 @@
-FROM node:24.22.2-alpine3.23 AS build
-WORKDIR /app/apps/web
-COPY apps/web/package.json apps/web/package-lock.json ./
-RUN npm ci --no-audit --no-fund
-COPY apps/web/ ./
-COPY contracts/openapi.yaml /app/contracts/openapi.yaml
-# Regenerate types/examples from the contract inside the build, never on the host.
-RUN npm run contracts && npm run build
+FROM node:22.22.0-alpine3.23@sha256:e4bf2a82ad0a4037d28035ae71529873c069b13eb0455466ae0bc13363826e34 AS build
+WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY apps/web/package.json apps/web/package.json
+RUN corepack enable && pnpm install --frozen-lockfile --ignore-scripts
+COPY apps/web/ apps/web/
+COPY contracts/openapi.yaml contracts/openapi.yaml
+RUN pnpm --dir apps/web run contracts && pnpm --dir apps/web build
 
-FROM nginx:1.30.6-alpine
-# Refresh the runtime OS packages; --pull/--no-cache rebuilds refresh security fixes.
-RUN apk upgrade --no-cache
-COPY apps/web/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/apps/web/dist /usr/share/nginx/html
-USER 101:101
+FROM golang:1.26.5-alpine3.23@sha256:622e56dbc11a8cfe87cafa2331e9a201877271cbff918af53d3be315f3da88cc AS server
+COPY apps/web/server.go /src/server.go
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/web /src/server.go
+
+FROM gcr.io/distroless/static-debian13:nonroot@sha256:f7f8f729987ad0fdf6b05eeeae94b26e6a0f613bdf46feea7fc40f7bd72953e6
+COPY --from=server /out/web /web
+COPY --from=build /app/apps/web/dist /app/dist
+USER 65532:65532
 EXPOSE 8080
-HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=12 CMD ["wget", "--spider", "-q", "http://127.0.0.1:8080/healthz"]
-ENTRYPOINT ["nginx"]
-CMD ["-g", "daemon off;"]
+HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=12 CMD ["/web", "healthcheck"]
+ENTRYPOINT ["/web"]

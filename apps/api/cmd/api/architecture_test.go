@@ -37,7 +37,7 @@ func TestLayerImports(t *testing.T) {
 	}{
 		{"api", []string{"service", "service/demo"}, []string{"database/sql", "github.com/jackc/pgx"}},
 		{"service", []string{"service/demo", "service/domain"}, []string{"net/http", "net/url", "database/sql", "github.com/jackc/pgx"}},
-		{"store", []string{"service/demo", "service/domain"}, []string{"net/http"}},
+		{"store", []string{"repository", "service/demo", "service/domain"}, []string{"net/http"}},
 	} {
 		t.Run(layer.path, func(t *testing.T) {
 			files, err := filepath.Glob(filepath.Join("..", "..", "internal", layer.path, "*.go"))

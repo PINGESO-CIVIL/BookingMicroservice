@@ -1,4 +1,4 @@
-import type { Policy, ScheduleRule } from './api/types'
+import type { Policy, Reservation, ScheduleRule } from './api/types'
 export function validatePolicy(p: Policy) {
   if (!Number.isInteger(p.slotDurationSeconds) || p.slotDurationSeconds < 60 || p.slotDurationSeconds % 60 !== 0) return 'La duración de cada reserva debe ser un número entero de minutos, mayor o igual a uno.'
   if (!Object.values(p).every(Number.isInteger)) return 'Las duraciones deben representar segundos enteros.'
@@ -16,4 +16,8 @@ export function validateSchedule(rules: ScheduleRule[]) {
     if (a.dayOfWeek === b.dayOfWeek && a.startLocalTime < b.endLocalTime && a.endLocalTime > b.startLocalTime) return 'Las franjas del mismo día no pueden solaparse.'
   }
   return ''
+}
+
+export function canChange(reservation: Reservation, now = new Date().toISOString()) {
+  return reservation.status === 'confirmed' && Date.parse(now) < Date.parse(reservation.startAt) && Date.parse(now) <= Date.parse(reservation.cancellationDeadline)
 }

@@ -1,39 +1,68 @@
 {
-  "name": "bookingms-frontend",
+  "name": "@pingeso-civil/agenda-ui",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "contracts": "openapi-typescript ../../contracts/openapi.yaml -o src/api/schema.d.ts && node scripts/fixtures.mjs && node scripts/mock-fixtures.mjs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "verify:http": "node scripts/verify-http.mjs",
-    "verify:swagger": "node scripts/verify-swagger.mjs"
+    "verify:swagger": "node scripts/verify-swagger.mjs",
+    "build:package": "vite build --config vite.library.config.ts && tsc -p tsconfig.package.json && node scripts/package-types.mjs",
+    "prepack": "pnpm build:package",
+    "mocks:init": "msw init public"
   },
   "engines": {
-    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+    "node": "22.22.0"
   },
   "dependencies": {
-    "vue": "^3.5.22",
-    "vue-router": "^4.6.3"
+    "@base-ui/react": "1.6.0",
+    "@tanstack/react-query": "5.101.4",
+    "react-hook-form": "7.83.0",
+    "openapi-fetch": "0.15.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1",
-    "@vitejs/plugin-vue": "^6.0.1",
-    "@vitest/coverage-v8": "5.0.3",
-    "@vue/test-utils": "2.5.1",
-    "ajv": "^8.20.0",
-    "ajv-formats": "^3.0.1",
+    "@playwright/test": "1.62.0",
+    "@vitest/coverage-v8": "4.1.10",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
     "jsdom": "27.4.0",
-    "openapi-typescript": "^7.10.1",
-    "typescript": "~5.9.3",
-    "vite": "^7.2.2",
-    "vitest": "5.0.3",
-    "vue-tsc": "^3.1.4",
-    "yaml": "^2.8.1"
+    "openapi-typescript": "7.13.0",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "4.1.10",
+    "yaml": "2.8.1",
+    "@vitejs/plugin-react": "6.0.4",
+    "msw": "2.15.0",
+    "tailwindcss": "4.3.3",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/dom": "10.4.1",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-router": "8.3.0"
+  },
+  "files": [
+    "package-dist",
+    "README.md"
+  ],
+  "agendaApiVersion": "0.4.0",
+  "exports": {
+    ".": {
+      "types": "./package-dist/types/componentes/index.d.ts",
+      "import": "./package-dist/index.js"
+    },
+    "./styles.css": "./package-dist/styles.css"
+  },
+  "peerDependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   }
 }

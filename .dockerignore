@@ -13,3 +13,5 @@ apps/api/bin
 **/.env
 **/.env.*
 **/*.log
+
+**/package-dist

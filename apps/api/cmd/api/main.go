@@ -14,6 +14,7 @@ import (
 	"bookingms/internal/api"
 	"bookingms/internal/service"
 	"bookingms/internal/store"
+	"bookingms/internal/store/notificaciones"
 )
 
 func main() {
@@ -50,10 +51,26 @@ func main() {
 	if docsDir == "" {
 		docsDir = "/docs"
 	}
-	handler := api.New(service.New(fixtures, database))
-	server := &http.Server{Addr: address, Handler: routes(handler, os.Getenv("API_ENV"), docsDir), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 15 * time.Second, IdleTimeout: 60 * time.Second}
+	svc := service.New(fixtures, database)
+	if url := os.Getenv("NOTIFICACIONES_URL"); url != "" && os.Getenv("API_ENV") == "dev" {
+		sender, err := notificaciones.NewSender(url, os.Getenv("NOTIFICACIONES_DEMO_DESTINATARIO"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		svc.SetNotifier(sender)
+	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+	issuer, audience, jwksURL := os.Getenv("BOOKING_JWT_ISSUER"), os.Getenv("BOOKING_JWT_AUDIENCE"), os.Getenv("BOOKING_JWKS_URL")
+	var authorizer api.Authorizer
+	if issuer != "" || audience != "" || jwksURL != "" {
+		authorizer, err = api.NewJWTAuthorizer(ctx, issuer, audience, jwksURL)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	handler := api.NewWithAuthorizer(svc, authorizer)
+	server := &http.Server{Addr: address, Handler: routes(handler, os.Getenv("API_ENV"), docsDir), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 15 * time.Second, IdleTimeout: 60 * time.Second}
 	go func() {
 		<-ctx.Done()
 		shutdown, cancel := context.WithTimeout(context.Background(), 5*time.Second)

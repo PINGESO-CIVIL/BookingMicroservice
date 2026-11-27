@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 
+	"bookingms/internal/repository"
+
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
@@ -21,7 +23,11 @@ func OpenPostgres(dsn string) (*Postgres, error) {
 }
 
 func (p *Postgres) Ready(ctx context.Context) bool {
-	return p.db != nil && p.db.PingContext(ctx) == nil
+	if p.db == nil {
+		return false
+	}
+	ready, err := repository.New(p.db).DatabaseReady(ctx)
+	return err == nil && ready
 }
 
 func (p *Postgres) Close() error {

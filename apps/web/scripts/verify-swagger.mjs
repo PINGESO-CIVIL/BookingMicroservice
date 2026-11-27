@@ -45,8 +45,8 @@ try {
   const proxied = await proxiedPromise
   assert.equal(proxied.status(), 200)
   assert.equal(proxied.headers()['x-mock-response'], 'true')
-  await frontend.locator('.desktop-table tbody tr').first().waitFor()
-  assert.equal(await frontend.locator('.desktop-table tbody tr').count(), 4)
+  await frontend.getByRole('article').first().waitFor()
+  assert.equal(await frontend.getByRole('article').count(), 4)
   writeFileSync(new URL('swagger.json', destination), JSON.stringify({ checkedAt: new Date().toISOString(), operations: 14, servedContractMatches: true, tryItOutStatus: response.status(), mockResponse: true, frontendProxyStatus: proxied.status() }, null, 2) + '\n')
-  console.log('Swagger ejecuta Try it out y Vue consulta el mismo backend por su proxy. Ambas peticiones devuelven HTTP 200.')
+  console.log('Swagger ejecuta Try it out y React consulta el mismo backend por su proxy. Ambas peticiones devuelven HTTP 200.')
 } finally { await browser.close() }

@@ -6,7 +6,7 @@ test('la pantalla consume una respuesta HTTP del mock Go', async ({ page }) => {
   expect(response.status()).toBe(200)
   expect(response.headers()['x-mock-response']).toBe('true')
   expect((await response.json()).items).toHaveLength(4)
-  await expect(page.locator('.desktop-table tbody tr')).toHaveCount(4)
+  await expect(page.getByRole('article')).toHaveCount(4)
 })
 test('crear y cancelar usan HTTP y las escrituras no persisten', async ({ request }) => {
   const headers = { Authorization: 'Bearer demo-user', 'Idempotency-Key': 'http-demo-key' }

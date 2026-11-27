@@ -32,6 +32,225 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/recursos": {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listar recursos visibles
+         * @description Catálogo visible del ámbito autenticado, ordenado por id ascendente.
+         *     enabled por defecto true alimenta el selector de recursos habilitados;
+         *     false selecciona deshabilitados visibles. Estar habilitado no garantiza
+         *     disponibilidad de un intervalo. No admite filtros arbitrarios de atributos.
+         */
+        get: operations["listResources"];
+        put?: never;
+        /**
+         * Crear un recurso reservable en el ámbito
+         * @description Registra un nuevo recurso exclusivo dentro del ámbito autorizado del
+         *     administrador. Define nombre visible, habilitación inicial, zona horaria
+         *     IANA, referencia opcional a un catálogo externo, política inicial y
+         *     atributos del recurso. En la fase de mocks devuelve un ejemplo prefijado.
+         */
+        post: operations["createResource"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recursos/{id}": {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
+                 */
+                id: components["parameters"]["ResourceId"];
+            };
+            cookie?: never;
+        };
+        /**
+         * Consultar detalle administrativo de un recurso
+         * @description Devuelve la configuración completa de un recurso del ámbito, incluyendo
+         *     su versión vigente, referencia a catálogo externo, política de tiempo y
+         *     cancelación, horario semanal recurrente y bloqueos activos.
+         */
+        get: operations["getResource"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Modificar estado, política o metadatos de un recurso
+         * @description Actualiza parcialmente nombre, habilitación (enabled), zona horaria,
+         *     referencia externa, política o atributos del recurso exigiendo
+         *     expectedVersion. Cambiar cancellationNoticeSeconds rige únicamente para
+         *     nuevas reservas y no altera el plazo original aceptado por reservas ya
+         *     confirmadas (REQ-031). Si se intenta deshabilitar un recurso que posee
+         *     reservas futuras confirmadas, se rechaza íntegramente con 409 (REQ-012).
+         */
+        patch: operations["updateResource"];
+        trace?: never;
+    };
+    "/api/v1/recursos/{id}/bloqueos": {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
+                 */
+                id: components["parameters"]["ResourceId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registrar un bloqueo o cierre excepcional sobre un recurso
+         * @description Registra un intervalo semiabierto [startAt, endAt) de indisponibilidad
+         *     por mantenimiento o cierre administrativo. Si el bloqueo se solapa con
+         *     una reserva confirmada vigente en ese recurso, se rechaza con 409
+         *     RESOURCE_SCHEDULE_CONFLICT para que el actor autorizado resuelva el
+         *     conflicto antes de aplicar el cierre (REQ-012, AC-021).
+         */
+        post: operations["createResourceClosure"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recursos/{id}/bloqueos/{closureId}": {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
+                 */
+                id: components["parameters"]["ResourceId"];
+                /**
+                 * @description UUID de un bloqueo temporal del recurso.
+                 * @example 00000000-0000-4000-8000-300000000001
+                 */
+                closureId: components["parameters"]["ClosureId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Eliminar un bloqueo o cierre excepcional de un recurso
+         * @description Levanta un bloqueo excepcional previamente registrado sobre el recurso,
+         *     restituyendo la disponibilidad gobernada por su horario recurrente.
+         */
+        delete: operations["deleteResourceClosure"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recursos/{id}/disponibilidades": {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
+                 */
+                id: components["parameters"]["ResourceId"];
+            };
+            cookie?: never;
+        };
+        /**
+         * Consultar disponibilidad de un recurso
+         * @description Ventanas continuas libres ordenadas, sin solapamientos y dentro de
+         *     [from, to). Exige ambos extremos y un máximo de 31 días por consulta.
+         *     Ese máximo limita la carga del calendario, no la anticipación de reservas.
+         *     La precisión temporal y el cómputo técnico del máximo en cambios de zona
+         *     se cerrarán antes de implementar la lógica real.
+         *
+         *     La futura implementación descuenta bloqueos y reservas confirmadas de
+         *     todos los usuarios, sin exponer identidades ni motivos privados.
+         *     availableWindows conserva las ventanas continuas y availableSlots
+         *     ofrece bloques completos según slotDurationSeconds del recurso,
+         *     alineados a cada apertura semanal y sin reservas ni bloqueos solapados.
+         *     Ningún bloque garantiza disponibilidad para una creación posterior.
+         *     Un recurso visible deshabilitado devuelve enabled=false y
+         *     availableWindows vacío. Una consulta sin ventanas libres devuelve 200.
+         *     No se permite excluir una reserva mediante parámetros en esta consulta.
+         *     Los intervalos del mock son ejemplos estáticos, no cálculos reales.
+         */
+        get: operations["getResourceAvailability"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recursos/{id}/horarios": {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
+                 */
+                id: components["parameters"]["ResourceId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Configurar horario semanal recurrente y límites de duración
+         * @description Reemplaza las franjas horarias recurrentes del recurso (interpretadas en
+         *     la zona IANA del recurso) y su política de duración mínima/máxima,
+         *     exigiendo expectedVersion. Si el nuevo horario deja fuera del rango
+         *     habilitado alguna reserva futura confirmada, la operación se rechaza
+         *     íntegramente con 409 RESOURCE_SCHEDULE_CONFLICT sin cancelar ni
+         *     reubicar reservas silenciosamente (REQ-012, AC-021).
+         */
+        put: operations["updateResourceSchedule"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/reservas": {
         parameters: {
             query?: never;
@@ -151,240 +370,10 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/recursos": {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Listar recursos visibles
-         * @description Catálogo visible del ámbito autenticado, ordenado por id ascendente.
-         *     enabled por defecto true alimenta el selector de recursos habilitados;
-         *     false selecciona deshabilitados visibles. Estar habilitado no garantiza
-         *     disponibilidad de un intervalo. No admite filtros arbitrarios de atributos.
-         */
-        get: operations["listResources"];
-        put?: never;
-        /**
-         * Crear un recurso reservable en el ámbito
-         * @description Registra un nuevo recurso exclusivo dentro del ámbito autorizado del
-         *     administrador. Define nombre visible, habilitación inicial, zona horaria
-         *     IANA, referencia opcional a un catálogo externo, política inicial y
-         *     atributos del recurso. En la fase de mocks devuelve un ejemplo prefijado.
-         */
-        post: operations["createResource"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/recursos/{id}": {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de un recurso visible.
-                 * @example 00000000-0000-4000-8000-100000000001
-                 */
-                id: components["parameters"]["ResourceId"];
-            };
-            cookie?: never;
-        };
-        /**
-         * Consultar detalle administrativo de un recurso
-         * @description Devuelve la configuración completa de un recurso del ámbito, incluyendo
-         *     su versión vigente, referencia a catálogo externo, política de tiempo y
-         *     cancelación, horario semanal recurrente y bloqueos activos.
-         */
-        get: operations["getResource"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Modificar estado, política o metadatos de un recurso
-         * @description Actualiza parcialmente nombre, habilitación (enabled), zona horaria,
-         *     referencia externa, política o atributos del recurso exigiendo
-         *     expectedVersion. Cambiar cancellationNoticeSeconds rige únicamente para
-         *     nuevas reservas y no altera el plazo original aceptado por reservas ya
-         *     confirmadas (REQ-031). Si se intenta deshabilitar un recurso que posee
-         *     reservas futuras confirmadas, se rechaza íntegramente con 409 (REQ-012).
-         */
-        patch: operations["updateResource"];
-        trace?: never;
-    };
-    "/api/v1/recursos/{id}/horarios": {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de un recurso visible.
-                 * @example 00000000-0000-4000-8000-100000000001
-                 */
-                id: components["parameters"]["ResourceId"];
-            };
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Configurar horario semanal recurrente y límites de duración
-         * @description Reemplaza las franjas horarias recurrentes del recurso (interpretadas en
-         *     la zona IANA del recurso) y su política de duración mínima/máxima,
-         *     exigiendo expectedVersion. Si el nuevo horario deja fuera del rango
-         *     habilitado alguna reserva futura confirmada, la operación se rechaza
-         *     íntegramente con 409 RESOURCE_SCHEDULE_CONFLICT sin cancelar ni
-         *     reubicar reservas silenciosamente (REQ-012, AC-021).
-         */
-        put: operations["updateResourceSchedule"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/recursos/{id}/bloqueos": {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de un recurso visible.
-                 * @example 00000000-0000-4000-8000-100000000001
-                 */
-                id: components["parameters"]["ResourceId"];
-            };
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Registrar un bloqueo o cierre excepcional sobre un recurso
-         * @description Registra un intervalo semiabierto [startAt, endAt) de indisponibilidad
-         *     por mantenimiento o cierre administrativo. Si el bloqueo se solapa con
-         *     una reserva confirmada vigente en ese recurso, se rechaza con 409
-         *     RESOURCE_SCHEDULE_CONFLICT para que el actor autorizado resuelva el
-         *     conflicto antes de aplicar el cierre (REQ-012, AC-021).
-         */
-        post: operations["createResourceClosure"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/recursos/{id}/bloqueos/{closureId}": {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de un recurso visible.
-                 * @example 00000000-0000-4000-8000-100000000001
-                 */
-                id: components["parameters"]["ResourceId"];
-                /**
-                 * @description UUID de un bloqueo temporal del recurso.
-                 * @example 00000000-0000-4000-8000-300000000001
-                 */
-                closureId: components["parameters"]["ClosureId"];
-            };
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Eliminar un bloqueo o cierre excepcional de un recurso
-         * @description Levanta un bloqueo excepcional previamente registrado sobre el recurso,
-         *     restituyendo la disponibilidad gobernada por su horario recurrente.
-         */
-        delete: operations["deleteResourceClosure"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/recursos/{id}/disponibilidades": {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de un recurso visible.
-                 * @example 00000000-0000-4000-8000-100000000001
-                 */
-                id: components["parameters"]["ResourceId"];
-            };
-            cookie?: never;
-        };
-        /**
-         * Consultar disponibilidad de un recurso
-         * @description Ventanas continuas libres ordenadas, sin solapamientos y dentro de
-         *     [from, to). Exige ambos extremos y un máximo de 31 días por consulta.
-         *     Ese máximo limita la carga del calendario, no la anticipación de reservas.
-         *     La precisión temporal y el cómputo técnico del máximo en cambios de zona
-         *     se cerrarán antes de implementar la lógica real.
-         *
-         *     La futura implementación descuenta bloqueos y reservas confirmadas de
-         *     todos los usuarios, sin exponer identidades ni motivos privados.
-         *     availableWindows conserva las ventanas continuas y availableSlots
-         *     ofrece bloques completos según slotDurationSeconds del recurso,
-         *     alineados a cada apertura semanal y sin reservas ni bloqueos solapados.
-         *     Ningún bloque garantiza disponibilidad para una creación posterior.
-         *     Un recurso visible deshabilitado devuelve enabled=false y
-         *     availableWindows vacío. Una consulta sin ventanas libres devuelve 200.
-         *     No se permite excluir una reserva mediante parámetros en esta consulta.
-         *     Los intervalos del mock son ejemplos estáticos, no cálculos reales.
-         */
-        get: operations["getResourceAvailability"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /**
-         * Format: uuid
-         * @description Identificador UUID de un registro de BookingMS.
-         */
-        Identifier: string;
-        /**
-         * Format: date-time
-         * @description Instante RFC 3339 con desplazamiento explícito o Z; respuestas en UTC.
-         * @example 2026-11-10T22:00:00Z
-         */
-        DateTime: string;
         /**
          * @description Objeto genérico vacío. Cada adaptación deberá definir explícitamente sus
          *     campos, tipos y validaciones antes de admitir claves adicionales. No
@@ -392,34 +381,23 @@ export interface components {
          * @example {}
          */
         Attributes: Record<string, never>;
-        IdentityReference: {
-            /** @description Emisor externo de la identidad. */
-            issuer: string;
-            /** @description Identificador de la identidad dentro del emisor. */
-            subject: string;
-        };
-        /**
-         * @description El paso del tiempo no cancela automáticamente una reserva.
-         * @enum {string}
-         */
-        ReservationStatus: "confirmed" | "cancelled";
-        CreateReservationRequest: {
+        Availability: {
+            /** @description Bloques completos reservables, alineados al inicio de cada franja semanal, dentro del rango y futuros. Excluyen solapamientos con reservas confirmadas y bloqueos. Un remanente menor a la duración no genera un bloque. No retienen disponibilidad. */
+            availableSlots: components["schemas"]["AvailableWindow"][];
+            /** @description Ventanas continuas libres; no turnos fijos ni reservas retenidas. */
+            availableWindows: components["schemas"]["AvailableWindow"][];
+            enabled: boolean;
+            from: components["schemas"]["DateTime"];
             resourceId: components["schemas"]["Identifier"];
-            startAt: components["schemas"]["DateTime"];
-            endAt: components["schemas"]["DateTime"];
-            attributes?: components["schemas"]["Attributes"];
+            /** @description Duración fija configurada del recurso. El usuario selecciona un bloque completo, sin escribir inicio ni término. */
+            slotDurationSeconds: number;
+            /** @example America/Santiago */
+            timeZone: string;
+            to: components["schemas"]["DateTime"];
         };
-        /** @description Al menos un campo modificable además de la versión esperada; null no se admite. */
-        UpdateReservationRequest: {
-            /**
-             * Format: int64
-             * @description Versión consultada por el cliente, no la nueva versión a persistir.
-             */
-            expectedVersion: number;
-            resourceId?: components["schemas"]["Identifier"];
-            startAt?: components["schemas"]["DateTime"];
-            endAt?: components["schemas"]["DateTime"];
-            attributes?: components["schemas"]["Attributes"];
+        AvailableWindow: {
+            endAt: components["schemas"]["DateTime"];
+            startAt: components["schemas"]["DateTime"];
         };
         CancelReservationRequest: {
             /**
@@ -428,68 +406,145 @@ export interface components {
              */
             expectedVersion: number;
         };
-        Reservation: {
-            id: components["schemas"]["Identifier"];
-            resourceId: components["schemas"]["Identifier"];
-            responsible: components["schemas"]["IdentityReference"];
-            startAt: components["schemas"]["DateTime"];
-            endAt: components["schemas"]["DateTime"];
-            status: components["schemas"]["ReservationStatus"];
-            attributes: components["schemas"]["Attributes"];
-            /**
-             * Format: int64
-             * @description Duración original aceptada, inmutable; no procede del cliente.
-             */
-            cancellationNoticeSeconds: number;
-            cancellationDeadline: components["schemas"]["DateTime"];
-            /** Format: int64 */
-            version: number;
-            createdAt: components["schemas"]["DateTime"];
-            updatedAt: components["schemas"]["DateTime"];
+        CancelledReservation: components["schemas"]["Reservation"] & {
+            /** @enum {string} */
+            status?: "cancelled";
         };
         ConfirmedReservation: components["schemas"]["Reservation"] & {
             /** @enum {string} */
             status?: "confirmed";
         };
-        CancelledReservation: components["schemas"]["Reservation"] & {
-            /** @enum {string} */
-            status?: "cancelled";
+        CreateReservationRequest: {
+            attributes?: components["schemas"]["Attributes"];
+            endAt: components["schemas"]["DateTime"];
+            resourceId: components["schemas"]["Identifier"];
+            startAt: components["schemas"]["DateTime"];
+        };
+        CreateResourceClosureRequest: {
+            endAt: components["schemas"]["DateTime"];
+            reason: string;
+            startAt: components["schemas"]["DateTime"];
+        };
+        CreateResourceRequest: {
+            attributes?: components["schemas"]["Attributes"];
+            enabled: boolean;
+            externalReference?: components["schemas"]["ExternalReference"];
+            name: string;
+            policy: components["schemas"]["ResourcePolicy"];
+            /** @example America/Santiago */
+            timeZone: string;
+            weeklySchedule?: components["schemas"]["WeeklyScheduleRule"][];
+        };
+        /**
+         * Format: date-time
+         * @description Instante RFC 3339 con desplazamiento explícito o Z; respuestas en UTC.
+         * @example 2026-11-10T22:00:00Z
+         */
+        DateTime: string;
+        ErrorResponse: {
+            error: {
+                /** @enum {string} */
+                code: "INVALID_REQUEST" | "UNAUTHENTICATED" | "FORBIDDEN" | "RESERVATION_NOT_FOUND" | "RESOURCE_NOT_FOUND" | "CLOSURE_NOT_FOUND" | "RESERVATION_VERSION_CONFLICT" | "RESOURCE_VERSION_CONFLICT" | "RESOURCE_SCHEDULE_CONFLICT" | "RESOURCE_UNAVAILABLE" | "RESERVATION_STATE_CONFLICT" | "IDEMPOTENCY_KEY_CONFLICT" | "INVALID_INTERVAL" | "RESERVATION_ALREADY_STARTED" | "CANCELLATION_WINDOW_CLOSED" | "POLICY_VIOLATION" | "ATTRIBUTES_INVALID" | "SERVICE_UNAVAILABLE" | "INTERNAL_ERROR";
+                details?: {
+                    code: string;
+                    field: string;
+                }[];
+                /** @description Texto público; el cliente decide por code, no por este texto. */
+                message: string;
+                requestId: string;
+            };
+        };
+        /** @description Vínculo opcional con el catálogo maestro externo del negocio. */
+        ExternalReference: {
+            /** @example cat-rec-001 */
+            id: string;
+            /** @example catalogo-institucional */
+            system: string;
+        };
+        /**
+         * Format: uuid
+         * @description Identificador UUID de un registro de BookingMS.
+         */
+        Identifier: string;
+        IdentityReference: {
+            /** @description Emisor externo de la identidad. */
+            issuer: string;
+            /** @description Identificador de la identidad dentro del emisor. */
+            subject: string;
+        };
+        Reservation: {
+            attributes: components["schemas"]["Attributes"];
+            cancellationDeadline: components["schemas"]["DateTime"];
+            /**
+             * Format: int64
+             * @description Duración original aceptada, inmutable; no procede del cliente.
+             */
+            cancellationNoticeSeconds: number;
+            createdAt: components["schemas"]["DateTime"];
+            endAt: components["schemas"]["DateTime"];
+            id: components["schemas"]["Identifier"];
+            resourceId: components["schemas"]["Identifier"];
+            responsible: components["schemas"]["IdentityReference"];
+            startAt: components["schemas"]["DateTime"];
+            status: components["schemas"]["ReservationStatus"];
+            updatedAt: components["schemas"]["DateTime"];
+            /** Format: int64 */
+            version: number;
         };
         ReservationPage: {
             items: components["schemas"]["Reservation"][];
             /** @description null cuando no hay más resultados. */
             nextCursor: string | null;
         };
+        /**
+         * @description El paso del tiempo no cancela automáticamente una reserva.
+         * @enum {string}
+         */
+        ReservationStatus: "confirmed" | "cancelled";
         Resource: {
+            attributes: components["schemas"]["Attributes"];
+            enabled: boolean;
             id: components["schemas"]["Identifier"];
             name: string;
-            enabled: boolean;
             /**
              * @description Nombre de zona IANA para presentación y horarios del recurso.
              * @example America/Santiago
              */
             timeZone: string;
+        };
+        /** @description Intervalo excepcional de bloqueo o mantenimiento sobre un recurso. */
+        ResourceClosure: {
+            createdAt: components["schemas"]["DateTime"];
+            endAt: components["schemas"]["DateTime"];
+            id: components["schemas"]["Identifier"];
+            /** @example Mantenimiento preventivo de iluminación */
+            reason: string;
+            resourceId: components["schemas"]["Identifier"];
+            startAt: components["schemas"]["DateTime"];
+        };
+        ResourceDetail: {
             attributes: components["schemas"]["Attributes"];
+            closures: components["schemas"]["ResourceClosure"][];
+            createdAt: components["schemas"]["DateTime"];
+            enabled: boolean;
+            externalReference?: components["schemas"]["ExternalReference"];
+            id: components["schemas"]["Identifier"];
+            name: string;
+            policy: components["schemas"]["ResourcePolicy"];
+            /** @example America/Santiago */
+            timeZone: string;
+            updatedAt: components["schemas"]["DateTime"];
+            /** Format: int64 */
+            version: number;
+            weeklySchedule: components["schemas"]["WeeklyScheduleRule"][];
         };
         ResourcePage: {
             items: components["schemas"]["Resource"][];
             /** @description null cuando no hay más resultados. */
             nextCursor: string | null;
         };
-        /** @description Vínculo opcional con el catálogo maestro externo del negocio. */
-        ExternalReference: {
-            /** @example catalogo-institucional */
-            system: string;
-            /** @example cat-rec-001 */
-            id: string;
-        };
         /** @description Política temporal vigente para nuevas reservas sobre el recurso. */
         ResourcePolicy: {
-            /**
-             * @description Duración fija de cada bloque reservable en segundos, en minutos enteros. Los bloques se alinean con el inicio de cada franja semanal; no se ofrecen bloques parciales. Debe estar dentro de los límites mínimo y máximo.
-             * @example 3600
-             */
-            slotDurationSeconds: number;
             /**
              * Format: int64
              * @description Anticipación mínima L en segundos exigida para cancelar o reprogramar.
@@ -498,16 +553,50 @@ export interface components {
             cancellationNoticeSeconds: number;
             /**
              * Format: int64
+             * @description Duración máxima permitida por reserva en segundos.
+             * @example 7200
+             */
+            maxDurationSeconds: number;
+            /**
+             * Format: int64
              * @description Duración mínima permitida por reserva en segundos.
              * @example 3600
              */
             minDurationSeconds: number;
             /**
-             * Format: int64
-             * @description Duración máxima permitida por reserva en segundos.
-             * @example 7200
+             * @description Duración fija de cada bloque reservable en segundos, en minutos enteros. Los bloques se alinean con el inicio de cada franja semanal; no se ofrecen bloques parciales. Debe estar dentro de los límites mínimo y máximo.
+             * @example 3600
              */
-            maxDurationSeconds: number;
+            slotDurationSeconds: number;
+        };
+        /** @description Al menos un campo modificable además de la versión esperada; null no se admite. */
+        UpdateReservationRequest: {
+            attributes?: components["schemas"]["Attributes"];
+            endAt?: components["schemas"]["DateTime"];
+            /**
+             * Format: int64
+             * @description Versión consultada por el cliente, no la nueva versión a persistir.
+             */
+            expectedVersion: number;
+            resourceId?: components["schemas"]["Identifier"];
+            startAt?: components["schemas"]["DateTime"];
+        };
+        /** @description Al menos un campo modificable además de expectedVersion. */
+        UpdateResourceRequest: {
+            attributes?: components["schemas"]["Attributes"];
+            enabled?: boolean;
+            /** Format: int64 */
+            expectedVersion: number;
+            externalReference?: components["schemas"]["ExternalReference"];
+            name?: string;
+            policy?: components["schemas"]["ResourcePolicy"];
+            timeZone?: string;
+        };
+        UpdateResourceScheduleRequest: {
+            /** Format: int64 */
+            expectedVersion: number;
+            policy: components["schemas"]["ResourcePolicy"];
+            weeklySchedule: components["schemas"]["WeeklyScheduleRule"][];
         };
         /** @description Franja horaria recurrente interpretada en la zona IANA del recurso. */
         WeeklyScheduleRule: {
@@ -517,118 +606,20 @@ export interface components {
              */
             dayOfWeek: number;
             /**
-             * @description Hora local de apertura en formato HH:MM.
-             * @example 08:00
-             */
-            startLocalTime: string;
-            /**
              * @description Hora local de cierre en formato HH:MM.
              * @example 22:00
              */
             endLocalTime: string;
-        };
-        /** @description Intervalo excepcional de bloqueo o mantenimiento sobre un recurso. */
-        ResourceClosure: {
-            id: components["schemas"]["Identifier"];
-            resourceId: components["schemas"]["Identifier"];
-            startAt: components["schemas"]["DateTime"];
-            endAt: components["schemas"]["DateTime"];
-            /** @example Mantenimiento preventivo de iluminación */
-            reason: string;
-            createdAt: components["schemas"]["DateTime"];
-        };
-        ResourceDetail: {
-            id: components["schemas"]["Identifier"];
-            name: string;
-            enabled: boolean;
-            /** @example America/Santiago */
-            timeZone: string;
-            externalReference?: components["schemas"]["ExternalReference"];
-            policy: components["schemas"]["ResourcePolicy"];
-            weeklySchedule: components["schemas"]["WeeklyScheduleRule"][];
-            closures: components["schemas"]["ResourceClosure"][];
-            attributes: components["schemas"]["Attributes"];
-            /** Format: int64 */
-            version: number;
-            createdAt: components["schemas"]["DateTime"];
-            updatedAt: components["schemas"]["DateTime"];
-        };
-        CreateResourceRequest: {
-            name: string;
-            enabled: boolean;
-            /** @example America/Santiago */
-            timeZone: string;
-            externalReference?: components["schemas"]["ExternalReference"];
-            policy: components["schemas"]["ResourcePolicy"];
-            weeklySchedule?: components["schemas"]["WeeklyScheduleRule"][];
-            attributes?: components["schemas"]["Attributes"];
-        };
-        /** @description Al menos un campo modificable además de expectedVersion. */
-        UpdateResourceRequest: {
-            /** Format: int64 */
-            expectedVersion: number;
-            name?: string;
-            enabled?: boolean;
-            timeZone?: string;
-            externalReference?: components["schemas"]["ExternalReference"];
-            policy?: components["schemas"]["ResourcePolicy"];
-            attributes?: components["schemas"]["Attributes"];
-        };
-        UpdateResourceScheduleRequest: {
-            /** Format: int64 */
-            expectedVersion: number;
-            policy: components["schemas"]["ResourcePolicy"];
-            weeklySchedule: components["schemas"]["WeeklyScheduleRule"][];
-        };
-        CreateResourceClosureRequest: {
-            startAt: components["schemas"]["DateTime"];
-            endAt: components["schemas"]["DateTime"];
-            reason: string;
-        };
-        AvailableWindow: {
-            startAt: components["schemas"]["DateTime"];
-            endAt: components["schemas"]["DateTime"];
-        };
-        Availability: {
-            resourceId: components["schemas"]["Identifier"];
-            enabled: boolean;
-            /** @example America/Santiago */
-            timeZone: string;
-            from: components["schemas"]["DateTime"];
-            to: components["schemas"]["DateTime"];
-            /** @description Ventanas continuas libres; no turnos fijos ni reservas retenidas. */
-            availableWindows: components["schemas"]["AvailableWindow"][];
-            /** @description Duración fija configurada del recurso. El usuario selecciona un bloque completo, sin escribir inicio ni término. */
-            slotDurationSeconds: number;
-            /** @description Bloques completos reservables, alineados al inicio de cada franja semanal, dentro del rango y futuros. Excluyen solapamientos con reservas confirmadas y bloqueos. Un remanente menor a la duración no genera un bloque. No retienen disponibilidad. */
-            availableSlots: components["schemas"]["AvailableWindow"][];
-        };
-        ErrorResponse: {
-            error: {
-                /** @enum {string} */
-                code: "INVALID_REQUEST" | "UNAUTHENTICATED" | "FORBIDDEN" | "RESERVATION_NOT_FOUND" | "RESOURCE_NOT_FOUND" | "CLOSURE_NOT_FOUND" | "RESERVATION_VERSION_CONFLICT" | "RESOURCE_VERSION_CONFLICT" | "RESOURCE_SCHEDULE_CONFLICT" | "RESOURCE_UNAVAILABLE" | "RESERVATION_STATE_CONFLICT" | "IDEMPOTENCY_KEY_CONFLICT" | "INVALID_INTERVAL" | "RESERVATION_ALREADY_STARTED" | "CANCELLATION_WINDOW_CLOSED" | "POLICY_VIOLATION" | "ATTRIBUTES_INVALID" | "SERVICE_UNAVAILABLE" | "INTERNAL_ERROR";
-                /** @description Texto público; el cliente decide por code, no por este texto. */
-                message: string;
-                requestId: string;
-                details?: {
-                    field: string;
-                    code: string;
-                }[];
-            };
+            /**
+             * @description Hora local de apertura en formato HH:MM.
+             * @example 08:00
+             */
+            startLocalTime: string;
         };
     };
     responses: {
         /** @description Forma, parámetro, campo, cabecera o cursor no admitido. */
         BadRequest: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["ErrorResponse"];
-            };
-        };
-        /** @description No existe identidad autenticada válida. */
-        Unauthorized: {
             headers: {
                 [name: string]: unknown;
             };
@@ -645,26 +636,8 @@ export interface components {
                 "application/json": components["schemas"]["ErrorResponse"];
             };
         };
-        /** @description Recurso inexistente o no visible para el solicitante. */
-        ResourceNotFound: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["ErrorResponse"];
-            };
-        };
-        /** @description Reserva inexistente, ajena o de otro ámbito, sin distinguir los casos. */
-        ReservationNotFound: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["ErrorResponse"];
-            };
-        };
-        /** @description Reserva propia o recurso resultante no encontrado o no accesible. */
-        ReservationOrResourceNotFound: {
+        /** @description Fallo no previsto, sin detalles internos ni datos sensibles. */
+        InternalError: {
             headers: {
                 [name: string]: unknown;
             };
@@ -690,8 +663,35 @@ export interface components {
                 "application/json": components["schemas"]["ErrorResponse"];
             };
         };
-        /** @description Fallo no previsto, sin detalles internos ni datos sensibles. */
-        InternalError: {
+        /** @description Reserva inexistente, ajena o de otro ámbito, sin distinguir los casos. */
+        ReservationNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ErrorResponse"];
+            };
+        };
+        /** @description Reserva propia o recurso resultante no encontrado o no accesible. */
+        ReservationOrResourceNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ErrorResponse"];
+            };
+        };
+        /** @description Recurso inexistente o no visible para el solicitante. */
+        ResourceNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ErrorResponse"];
+            };
+        };
+        /** @description No existe identidad autenticada válida. */
+        Unauthorized: {
             headers: {
                 [name: string]: unknown;
             };
@@ -710,32 +710,25 @@ export interface components {
         };
     };
     parameters: {
-        /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-        MockScenario: "normal" | "success" | "empty" | "paginated" | "cancelled" | "expired" | "started" | "notFound" | "disabled" | "conflict" | "version" | "deadline" | "policy" | "error" | "unauthorized" | "forbidden";
-        /**
-         * @description UUID de una reserva propia del ámbito autenticado.
-         * @example 00000000-0000-4000-8000-200000000001
-         */
-        ReservationId: components["schemas"]["Identifier"];
-        /**
-         * @description UUID de un recurso visible.
-         * @example 00000000-0000-4000-8000-100000000001
-         */
-        ResourceId: components["schemas"]["Identifier"];
         /**
          * @description UUID de un bloqueo temporal del recurso.
          * @example 00000000-0000-4000-8000-300000000001
          */
         ClosureId: components["schemas"]["Identifier"];
         /**
+         * @description Continuación opaca de la misma consulta, identidad y ámbito. No concede
+         *     acceso ni promete una fotografía inmutable de páginas concurrentes.
+         */
+        Cursor: string;
+        /**
          * @description Identifica reintentos de la misma creación; no concede autorización.
          * @example demo-create-001
          */
         IdempotencyKey: string;
-        /** @description Filtrar por recurso dentro del alcance personal o administrativo autorizado del endpoint. */
-        ResourceFilter: components["schemas"]["Identifier"];
-        /** @description Omitido incluye ambos estados. */
-        StatusFilter: components["schemas"]["ReservationStatus"];
+        /** @description Elementos por página; no se recortan silenciosamente valores inválidos. */
+        Limit: number;
+        /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+        MockScenario: "normal" | "success" | "empty" | "paginated" | "cancelled" | "expired" | "started" | "notFound" | "disabled" | "conflict" | "version" | "deadline" | "policy" | "error" | "unauthorized" | "forbidden";
         /**
          * @description Inicio inclusivo del filtro de solapamiento; requiere también to.
          * @example 2026-11-01T00:00:00Z
@@ -746,13 +739,20 @@ export interface components {
          * @example 2026-12-01T00:00:00Z
          */
         OptionalTo: components["schemas"]["DateTime"];
-        /** @description Elementos por página; no se recortan silenciosamente valores inválidos. */
-        Limit: number;
         /**
-         * @description Continuación opaca de la misma consulta, identidad y ámbito. No concede
-         *     acceso ni promete una fotografía inmutable de páginas concurrentes.
+         * @description UUID de una reserva propia del ámbito autenticado.
+         * @example 00000000-0000-4000-8000-200000000001
          */
-        Cursor: string;
+        ReservationId: components["schemas"]["Identifier"];
+        /** @description Filtrar por recurso dentro del alcance personal o administrativo autorizado del endpoint. */
+        ResourceFilter: components["schemas"]["Identifier"];
+        /**
+         * @description UUID de un recurso visible.
+         * @example 00000000-0000-4000-8000-100000000001
+         */
+        ResourceId: components["schemas"]["Identifier"];
+        /** @description Omitido incluye ambos estados. */
+        StatusFilter: components["schemas"]["ReservationStatus"];
     };
     requestBodies: never;
     headers: never;
@@ -806,245 +806,6 @@ export interface operations {
             400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
-            500: components["responses"]["InternalError"];
-            503: components["responses"]["Unavailable"];
-        };
-    };
-    listReservations: {
-        parameters: {
-            query?: {
-                /** @description Filtrar por recurso dentro del alcance personal o administrativo autorizado del endpoint. */
-                resourceId?: components["parameters"]["ResourceFilter"];
-                /** @description Omitido incluye ambos estados. */
-                status?: components["parameters"]["StatusFilter"];
-                /**
-                 * @description Inicio inclusivo del filtro de solapamiento; requiere también to.
-                 * @example 2026-11-01T00:00:00Z
-                 */
-                from?: components["parameters"]["OptionalFrom"];
-                /**
-                 * @description Término exclusivo del filtro de solapamiento; requiere también from.
-                 * @example 2026-12-01T00:00:00Z
-                 */
-                to?: components["parameters"]["OptionalTo"];
-                /** @description Elementos por página; no se recortan silenciosamente valores inválidos. */
-                limit?: components["parameters"]["Limit"];
-                /**
-                 * @description Continuación opaca de la misma consulta, identidad y ámbito. No concede
-                 *     acceso ni promete una fotografía inmutable de páginas concurrentes.
-                 */
-                cursor?: components["parameters"]["Cursor"];
-            };
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Página de reservas propias; una búsqueda sin resultados no es un error. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ReservationPage"];
-                };
-            };
-            400: components["responses"]["BadRequest"];
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-            500: components["responses"]["InternalError"];
-            503: components["responses"]["Unavailable"];
-        };
-    };
-    createReservation: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-                /**
-                 * @description Identifica reintentos de la misma creación; no concede autorización.
-                 * @example demo-create-001
-                 */
-                "Idempotency-Key": components["parameters"]["IdempotencyKey"];
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateReservationRequest"];
-            };
-        };
-        responses: {
-            /** @description Reserva confirmada; en el mock es una respuesta prefijada sin escritura. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ConfirmedReservation"];
-                };
-            };
-            400: components["responses"]["BadRequest"];
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-            404: components["responses"]["ResourceNotFound"];
-            /** @description Colisión, bloqueo o misma clave de idempotencia con otro contenido. */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            422: components["responses"]["InvalidCreation"];
-            500: components["responses"]["InternalError"];
-            503: components["responses"]["Unavailable"];
-        };
-    };
-    getReservation: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de una reserva propia del ámbito autenticado.
-                 * @example 00000000-0000-4000-8000-200000000001
-                 */
-                id: components["parameters"]["ReservationId"];
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Representación vigente; el mock devuelve el ejemplo seleccionado. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Reservation"];
-                };
-            };
-            400: components["responses"]["BadRequest"];
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-            404: components["responses"]["ReservationNotFound"];
-            500: components["responses"]["InternalError"];
-            503: components["responses"]["Unavailable"];
-        };
-    };
-    updateReservation: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de una reserva propia del ámbito autenticado.
-                 * @example 00000000-0000-4000-8000-200000000001
-                 */
-                id: components["parameters"]["ReservationId"];
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateReservationRequest"];
-            };
-        };
-        responses: {
-            /** @description Reserva actualizada; un cambio efectivo incrementará version y updatedAt. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ConfirmedReservation"];
-                };
-            };
-            400: components["responses"]["BadRequest"];
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-            404: components["responses"]["ReservationOrResourceNotFound"];
-            /** @description Versión desactualizada, estado incompatible o conflicto de disponibilidad. */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            422: components["responses"]["InvalidModification"];
-            500: components["responses"]["InternalError"];
-            503: components["responses"]["Unavailable"];
-        };
-    };
-    cancelReservation: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de una reserva propia del ámbito autenticado.
-                 * @example 00000000-0000-4000-8000-200000000001
-                 */
-                id: components["parameters"]["ReservationId"];
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CancelReservationRequest"];
-            };
-        };
-        responses: {
-            /** @description Reserva cancelada, incluyendo la respuesta de un reintento autorizado. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CancelledReservation"];
-                };
-            };
-            400: components["responses"]["BadRequest"];
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-            404: components["responses"]["ReservationNotFound"];
-            /** @description La reserva confirmada tiene otra versión. */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description El plazo original venció o la reserva ya comenzó. */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
             500: components["responses"]["InternalError"];
             503: components["responses"]["Unavailable"];
         };
@@ -1220,63 +981,6 @@ export interface operations {
             503: components["responses"]["Unavailable"];
         };
     };
-    updateResourceSchedule: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
-                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
-            };
-            path: {
-                /**
-                 * @description UUID de un recurso visible.
-                 * @example 00000000-0000-4000-8000-100000000001
-                 */
-                id: components["parameters"]["ResourceId"];
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateResourceScheduleRequest"];
-            };
-        };
-        responses: {
-            /** @description Horario y reglas temporales actualizados. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ResourceDetail"];
-                };
-            };
-            400: components["responses"]["BadRequest"];
-            401: components["responses"]["Unauthorized"];
-            403: components["responses"]["Forbidden"];
-            404: components["responses"]["ResourceNotFound"];
-            /** @description Versión desactualizada o conflicto del nuevo horario con reservas confirmadas. */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Reglas horarias o límites de duración inconsistentes. */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            500: components["responses"]["InternalError"];
-            503: components["responses"]["Unavailable"];
-        };
-    };
     createResourceClosure: {
         parameters: {
             query?: never;
@@ -1422,6 +1126,304 @@ export interface operations {
             401: components["responses"]["Unauthorized"];
             403: components["responses"]["Forbidden"];
             404: components["responses"]["ResourceNotFound"];
+            500: components["responses"]["InternalError"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    updateResourceSchedule: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de un recurso visible.
+                 * @example 00000000-0000-4000-8000-100000000001
+                 */
+                id: components["parameters"]["ResourceId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateResourceScheduleRequest"];
+            };
+        };
+        responses: {
+            /** @description Horario y reglas temporales actualizados. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceDetail"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ResourceNotFound"];
+            /** @description Versión desactualizada o conflicto del nuevo horario con reservas confirmadas. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Reglas horarias o límites de duración inconsistentes. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            500: components["responses"]["InternalError"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    listReservations: {
+        parameters: {
+            query?: {
+                /** @description Filtrar por recurso dentro del alcance personal o administrativo autorizado del endpoint. */
+                resourceId?: components["parameters"]["ResourceFilter"];
+                /** @description Omitido incluye ambos estados. */
+                status?: components["parameters"]["StatusFilter"];
+                /**
+                 * @description Inicio inclusivo del filtro de solapamiento; requiere también to.
+                 * @example 2026-11-01T00:00:00Z
+                 */
+                from?: components["parameters"]["OptionalFrom"];
+                /**
+                 * @description Término exclusivo del filtro de solapamiento; requiere también from.
+                 * @example 2026-12-01T00:00:00Z
+                 */
+                to?: components["parameters"]["OptionalTo"];
+                /** @description Elementos por página; no se recortan silenciosamente valores inválidos. */
+                limit?: components["parameters"]["Limit"];
+                /**
+                 * @description Continuación opaca de la misma consulta, identidad y ámbito. No concede
+                 *     acceso ni promete una fotografía inmutable de páginas concurrentes.
+                 */
+                cursor?: components["parameters"]["Cursor"];
+            };
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Página de reservas propias; una búsqueda sin resultados no es un error. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReservationPage"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            500: components["responses"]["InternalError"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    createReservation: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+                /**
+                 * @description Identifica reintentos de la misma creación; no concede autorización.
+                 * @example demo-create-001
+                 */
+                "Idempotency-Key": components["parameters"]["IdempotencyKey"];
+                /** @description Identificador de correlación para el envío de la confirmación. */
+                "X-Request-Id"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReservationRequest"];
+            };
+        };
+        responses: {
+            /** @description Reserva confirmada; en el mock es una respuesta prefijada sin escritura. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConfirmedReservation"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ResourceNotFound"];
+            /** @description Colisión, bloqueo o misma clave de idempotencia con otro contenido. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            422: components["responses"]["InvalidCreation"];
+            500: components["responses"]["InternalError"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    getReservation: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de una reserva propia del ámbito autenticado.
+                 * @example 00000000-0000-4000-8000-200000000001
+                 */
+                id: components["parameters"]["ReservationId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Representación vigente; el mock devuelve el ejemplo seleccionado. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Reservation"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ReservationNotFound"];
+            500: components["responses"]["InternalError"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    updateReservation: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de una reserva propia del ámbito autenticado.
+                 * @example 00000000-0000-4000-8000-200000000001
+                 */
+                id: components["parameters"]["ReservationId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateReservationRequest"];
+            };
+        };
+        responses: {
+            /** @description Reserva actualizada; un cambio efectivo incrementará version y updatedAt. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConfirmedReservation"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ReservationOrResourceNotFound"];
+            /** @description Versión desactualizada, estado incompatible o conflicto de disponibilidad. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            422: components["responses"]["InvalidModification"];
+            500: components["responses"]["InternalError"];
+            503: components["responses"]["Unavailable"];
+        };
+    };
+    cancelReservation: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Solo para el Hito 1. Selecciona una respuesta simulada; no es parte de la autorización ni una función productiva. Escenarios incompatibles con una escritura devuelven 400. Usar demo-admin en Authorize para las operaciones administrativas. */
+                "X-Mock-Scenario"?: components["parameters"]["MockScenario"];
+            };
+            path: {
+                /**
+                 * @description UUID de una reserva propia del ámbito autenticado.
+                 * @example 00000000-0000-4000-8000-200000000001
+                 */
+                id: components["parameters"]["ReservationId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelReservationRequest"];
+            };
+        };
+        responses: {
+            /** @description Reserva cancelada, incluyendo la respuesta de un reintento autorizado. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CancelledReservation"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ReservationNotFound"];
+            /** @description La reserva confirmada tiene otra versión. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description El plazo original venció o la reserva ya comenzó. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             500: components["responses"]["InternalError"];
             503: components["responses"]["Unavailable"];
         };

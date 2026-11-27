@@ -1,6 +1,6 @@
 # BookingMS
 
-Núcleo genérico de reservas de un único recurso exclusivo, con frontend **Vue**, contratos **OpenAPI** y backend **Go**. La lógica real de reservas y su persistencia en PostgreSQL corresponden al Hito 2.
+Núcleo genérico de reservas de un único recurso exclusivo, con frontend **React**, contratos **OpenAPI** y backend **Go**. La lógica real de reservas y su persistencia en PostgreSQL corresponden al Hito 2.
 
 ## Hito 1: demostración HTTP con mocks
 
@@ -22,58 +22,29 @@ El backend sirve Swagger con `API_ENV=dev`, el valor predeterminado de Compose. 
 
 Para personalizar el entorno, copiar `.env.example` a `.env` y asignar la contraseña local antes de crear el volumen.
 
-Para detener la demo, ejecutar `docker compose stop`. `scripts/demo.ps1 Start|Status|Stop` usa el mismo Compose.
+Para detener la demo, ejecutar `docker compose stop`.
 
 ### Verificación del contrato
 
 Con la demo levantada, ejecutar desde la raíz:
 
 ```powershell
-npm --prefix apps/web ci
-npm --prefix apps/web run verify:http
-npm --prefix apps/web run verify:swagger
+pnpm --dir apps/web ci
+pnpm --dir apps/web run verify:http
+pnpm --dir apps/web run verify:swagger
 ```
 
-El primer verificador comprueba las 14 operaciones y que las escrituras simuladas dejan intactas las consultas. El segundo usa Edge para comprobar Swagger y el proxy de Vue. Los informes quedan en `reports/demo/`.
+El primer verificador comprueba las 14 operaciones y que las escrituras simuladas dejan intactas las consultas. El segundo usa Edge para comprobar Swagger y el proxy del frontend. Los informes quedan en `reports/demo/`.
 
-## Auditorías manuales
+## Verificación técnica
 
-Para generar cobertura y auditar el código, se necesitan también Node 22.22.2+ de la rama 22, Node 24.15+ de la rama 24 o Node 26+, y Go >= 1.24 en el host. Desde PowerShell en la raíz:
-
-```powershell
-npm --prefix apps/web ci
-.\scripts\quality.ps1 Start
-.\scripts\quality.ps1 Setup
-.\scripts\quality.ps1 Check
-.\scripts\quality.ps1 TrivyImages
-```
-
-`Check` genera cobertura Go y Vue/TypeScript, envía ambas a SonarQube y ejecuta Trivy sobre el repositorio. `TrivyImages` analiza las imágenes de backend, frontend y migraciones construidas por Compose. Las auditorías se ejecutan por separado. Los resultados quedan en `reports/` y SonarQube está en http://127.0.0.1:9000.
-
-Después de actualizar dependencias o corregir imágenes, reconstruir las imágenes antes de evaluar los resultados. En Git Bash, desde la raíz:
-
-```bash
-npm --prefix apps/web ci
-docker compose build --pull --no-cache
-docker compose up -d --wait
-powershell.exe -NoProfile -File ./scripts/quality.ps1 Check
-powershell.exe -NoProfile -File ./scripts/quality.ps1 TrivyImages
-```
-
-Los archivos estáticos de Swagger se copian desde la versión fijada al construir el backend. Los reportes de auditoría corresponden a las imágenes analizadas en cada ejecución.
-
-En Swagger, autorizar con `demo-user` o `demo-admin`. Son valores de demostración. Las escrituras devuelven ejemplos y no persisten cambios.
-
-El backend separa HTTP, casos de uso y acceso a datos en `apps/api`. La app Vue de transición vive en `apps/web`. La revisión formal de arquitectura corresponde al evaluador.
-
-La configuración de hooks vive en `lefthook.yml`. Para activarla, instalar las dependencias de la raíz con `pnpm install --frozen-lockfile --ignore-scripts`, instalar Gitleaks y ejecutar `pnpm exec lefthook install`. El workflow de GitHub usa los secretos del curso para Gitleaks y SonarQube.
+Instalar Node y pnpm según `.nvmrc` y `package.json`, y ejecutar `pnpm install --frozen-lockfile` desde la raíz. `make generate` regenera OpenAPI, sus tipos, el cliente de Notificaciones y el repositorio sqlc. CI verifica los artefactos generados, la compatibilidad con oasdiff, las pruebas, SonarQube y las imágenes con Trivy.
 
 ## Documentación
 
-- [Frontend Vue](apps/web/README.md).
+- [Frontend React](apps/web/README.md).
 - [Backend y separación del mock](apps/api/README.md).
-- [Contratos OpenAPI](contracts/openapi/README.md).
-- [Calidad y seguridad](docs/calidad-seguridad.md).
+- [Contratos OpenAPI](spec/contratos/README.md).
 - [Modos de falla](docs/modos-de-falla.md).
 
 El Hito 2 reemplazará los mocks por lógica real y persistencia, con los umbrales de calidad correspondientes. Esta demo no acredita todavía exclusividad concurrente, idempotencia real ni autorización productiva.

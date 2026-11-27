@@ -6,7 +6,7 @@ x-database-client: &database-client
 
 services:
   postgres:
-    image: postgres:17.11-alpine3.23@sha256:05aa77262db9277fde6374bb2f901c9604b8a9373029e1a7993440c6aae48736
+    image: postgres:17.11@sha256:ff87138949ad9a46f32ff23bd6852b52ce024a13dffe9b4087be98292cdd3b4f
     environment:
       POSTGRES_DB: bookingms
       POSTGRES_USER: bookingms
@@ -45,6 +45,11 @@ services:
       <<: *database-client
       MOCK_ADDR: 0.0.0.0:8080
       API_ENV: ${API_ENV-dev}
+      BOOKING_JWT_ISSUER: ${BOOKING_JWT_ISSUER:-}
+      BOOKING_JWT_AUDIENCE: ${BOOKING_JWT_AUDIENCE:-}
+      BOOKING_JWKS_URL: ${BOOKING_JWKS_URL:-}
+      NOTIFICACIONES_URL: ${NOTIFICACIONES_URL:-}
+      NOTIFICACIONES_DEMO_DESTINATARIO: ${NOTIFICACIONES_DEMO_DESTINATARIO:-}
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -64,11 +69,11 @@ services:
       backend:
         condition: service_healthy
         restart: true
+    environment:
+      BOOKING_API_URL: http://backend:8080
     ports:
       - "127.0.0.1:5190:8080"
     read_only: true
-    tmpfs:
-      - /tmp
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     restart: unless-stopped
