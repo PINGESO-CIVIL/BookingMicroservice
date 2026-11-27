@@ -46,11 +46,10 @@ components:
       type: http
       scheme: bearer
       description: |
-        Referencia de autenticación para el contrato. En el mock se utilizarán
-        demo-user o demo-admin como valores de demostración, no credenciales reales.
-        La presencia de esta
-        definición no implementa identidad ni autorización. El emisor y el
-        formato de producción permanecen pendientes; no se presupone JWT.
+        Autenticación HTTP entre servicios. En el mock dev se admiten demo-user
+        y demo-admin. El navegador usa la cookie de sesión emitida por Usuarios
+        y Roles. Su nombre se configura en Agenda con AUTH_COOKIE_NAME según
+        el contrato de ese servicio.
   parameters:
     MockScenario:
       name: X-Mock-Scenario
@@ -83,7 +82,7 @@ components:
       required: true
       description: UUID de una reserva propia del ámbito autenticado.
       schema:
-        $ref: "#/components/schemas/Identifier"
+        $ref: '#/components/schemas/Identifier'
       example: 00000000-0000-4000-8000-200000000001
     ResourceId:
       name: id
@@ -91,7 +90,7 @@ components:
       required: true
       description: UUID de un recurso visible.
       schema:
-        $ref: "#/components/schemas/Identifier"
+        $ref: '#/components/schemas/Identifier'
       example: 00000000-0000-4000-8000-100000000001
     ClosureId:
       name: closureId
@@ -99,7 +98,7 @@ components:
       required: true
       description: UUID de un bloqueo temporal del recurso.
       schema:
-        $ref: "#/components/schemas/Identifier"
+        $ref: '#/components/schemas/Identifier'
       example: 00000000-0000-4000-8000-300000000001
     IdempotencyKey:
       name: Idempotency-Key
@@ -117,27 +116,27 @@ components:
       in: query
       description: Filtrar por recurso dentro del alcance personal o administrativo autorizado del endpoint.
       schema:
-        $ref: "#/components/schemas/Identifier"
+        $ref: '#/components/schemas/Identifier'
     StatusFilter:
       name: status
       in: query
       description: Omitido incluye ambos estados.
       schema:
-        $ref: "#/components/schemas/ReservationStatus"
+        $ref: '#/components/schemas/ReservationStatus'
     OptionalFrom:
       name: from
       in: query
       description: Inicio inclusivo del filtro de solapamiento; requiere también to.
       example: 2026-11-01T00:00:00Z
       schema:
-        $ref: "#/components/schemas/DateTime"
+        $ref: '#/components/schemas/DateTime'
     OptionalTo:
       name: to
       in: query
       description: Término exclusivo del filtro de solapamiento; requiere también from.
       example: 2026-12-01T00:00:00Z
       schema:
-        $ref: "#/components/schemas/DateTime"
+        $ref: '#/components/schemas/DateTime'
     Limit:
       name: limit
       in: query
@@ -195,13 +194,13 @@ components:
       additionalProperties: false
       properties:
         resourceId:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         startAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         endAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         attributes:
-          $ref: "#/components/schemas/Attributes"
+          $ref: '#/components/schemas/Attributes'
     UpdateReservationRequest:
       additionalProperties: false
       minProperties: 2
@@ -213,13 +212,13 @@ components:
           maximum: 9007199254740991
           description: Versión consultada por el cliente, no la nueva versión a persistir.
         resourceId:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         startAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         endAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         attributes:
-          $ref: "#/components/schemas/Attributes"
+          $ref: '#/components/schemas/Attributes'
     CancelReservationRequest:
       additionalProperties: false
       properties:
@@ -232,37 +231,37 @@ components:
       additionalProperties: false
       properties:
         id:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         resourceId:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         responsible:
-          $ref: "#/components/schemas/IdentityReference"
+          $ref: '#/components/schemas/IdentityReference'
         startAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         endAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         status:
-          $ref: "#/components/schemas/ReservationStatus"
+          $ref: '#/components/schemas/ReservationStatus'
         attributes:
-          $ref: "#/components/schemas/Attributes"
+          $ref: '#/components/schemas/Attributes'
         cancellationNoticeSeconds:
           format: int64
           minimum: 0
           maximum: 9007199254740991
           description: Duración original aceptada, inmutable; no procede del cliente.
         cancellationDeadline:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         version:
           format: int64
           minimum: 1
           maximum: 9007199254740991
         createdAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         updatedAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
     ConfirmedReservation:
       allOf:
-        - $ref: "#/components/schemas/Reservation"
+        - $ref: '#/components/schemas/Reservation'
         - type: object
           properties:
             status:
@@ -271,7 +270,7 @@ components:
                 - confirmed
     CancelledReservation:
       allOf:
-        - $ref: "#/components/schemas/Reservation"
+        - $ref: '#/components/schemas/Reservation'
         - type: object
           properties:
             status:
@@ -285,18 +284,18 @@ components:
           type: array
           maxItems: 100
           items:
-            $ref: "#/components/schemas/Reservation"
+            $ref: '#/components/schemas/Reservation'
         nextCursor:
           type:
             - string
-            - "null"
+            - 'null'
           minLength: 1
           description: null cuando no hay más resultados.
     Resource:
       additionalProperties: false
       properties:
         id:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         name:
           minLength: 1
           maxLength: 128
@@ -308,7 +307,7 @@ components:
           description: Nombre de zona IANA para presentación y horarios del recurso.
           example: America/Santiago
         attributes:
-          $ref: "#/components/schemas/Attributes"
+          $ref: '#/components/schemas/Attributes'
     ResourcePage:
       additionalProperties: false
       properties:
@@ -316,11 +315,11 @@ components:
           type: array
           maxItems: 100
           items:
-            $ref: "#/components/schemas/Resource"
+            $ref: '#/components/schemas/Resource'
         nextCursor:
           type:
             - string
-            - "null"
+            - 'null'
           minLength: 1
           description: null cuando no hay más resultados.
     ExternalReference:
@@ -387,25 +386,25 @@ components:
       description: Intervalo excepcional de bloqueo o mantenimiento sobre un recurso.
       properties:
         id:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         resourceId:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         startAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         endAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         reason:
           minLength: 1
           maxLength: 500
           pattern: \S
           example: Mantenimiento preventivo de iluminación
         createdAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
     ResourceDetail:
       additionalProperties: false
       properties:
         id:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         name:
           minLength: 1
           maxLength: 128
@@ -416,28 +415,28 @@ components:
           pattern: \S
           example: America/Santiago
         externalReference:
-          $ref: "#/components/schemas/ExternalReference"
+          $ref: '#/components/schemas/ExternalReference'
         policy:
-          $ref: "#/components/schemas/ResourcePolicy"
+          $ref: '#/components/schemas/ResourcePolicy'
         weeklySchedule:
           type: array
           maxItems: 100
           items:
-            $ref: "#/components/schemas/WeeklyScheduleRule"
+            $ref: '#/components/schemas/WeeklyScheduleRule'
         closures:
           type: array
           items:
-            $ref: "#/components/schemas/ResourceClosure"
+            $ref: '#/components/schemas/ResourceClosure'
         attributes:
-          $ref: "#/components/schemas/Attributes"
+          $ref: '#/components/schemas/Attributes'
         version:
           format: int64
           minimum: 1
           maximum: 9007199254740991
         createdAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         updatedAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
     CreateResourceRequest:
       additionalProperties: false
       properties:
@@ -451,16 +450,16 @@ components:
           pattern: \S
           example: America/Santiago
         externalReference:
-          $ref: "#/components/schemas/ExternalReference"
+          $ref: '#/components/schemas/ExternalReference'
         policy:
-          $ref: "#/components/schemas/ResourcePolicy"
+          $ref: '#/components/schemas/ResourcePolicy'
         weeklySchedule:
           type: array
           maxItems: 100
           items:
-            $ref: "#/components/schemas/WeeklyScheduleRule"
+            $ref: '#/components/schemas/WeeklyScheduleRule'
         attributes:
-          $ref: "#/components/schemas/Attributes"
+          $ref: '#/components/schemas/Attributes'
     UpdateResourceRequest:
       additionalProperties: false
       minProperties: 2
@@ -479,11 +478,11 @@ components:
           maxLength: 64
           pattern: \S
         externalReference:
-          $ref: "#/components/schemas/ExternalReference"
+          $ref: '#/components/schemas/ExternalReference'
         policy:
-          $ref: "#/components/schemas/ResourcePolicy"
+          $ref: '#/components/schemas/ResourcePolicy'
         attributes:
-          $ref: "#/components/schemas/Attributes"
+          $ref: '#/components/schemas/Attributes'
     UpdateResourceScheduleRequest:
       additionalProperties: false
       properties:
@@ -492,19 +491,19 @@ components:
           minimum: 1
           maximum: 9007199254740991
         policy:
-          $ref: "#/components/schemas/ResourcePolicy"
+          $ref: '#/components/schemas/ResourcePolicy'
         weeklySchedule:
           type: array
           maxItems: 100
           items:
-            $ref: "#/components/schemas/WeeklyScheduleRule"
+            $ref: '#/components/schemas/WeeklyScheduleRule'
     CreateResourceClosureRequest:
       additionalProperties: false
       properties:
         startAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         endAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         reason:
           minLength: 1
           maxLength: 500
@@ -513,28 +512,28 @@ components:
       additionalProperties: false
       properties:
         startAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         endAt:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
     Availability:
       additionalProperties: false
       properties:
         resourceId:
-          $ref: "#/components/schemas/Identifier"
+          $ref: '#/components/schemas/Identifier'
         timeZone:
           minLength: 1
           maxLength: 64
           pattern: \S
           example: America/Santiago
         from:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         to:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         availableWindows:
           type: array
           description: Ventanas continuas libres; no turnos fijos ni reservas retenidas.
           items:
-            $ref: "#/components/schemas/AvailableWindow"
+            $ref: '#/components/schemas/AvailableWindow'
         slotDurationSeconds:
           minimum: 60
           maximum: 9007199254740991
@@ -544,7 +543,7 @@ components:
           type: array
           description: Bloques completos reservables, alineados al inicio de cada franja semanal, dentro del rango y futuros. Excluyen solapamientos con reservas confirmadas y bloqueos. Un remanente menor a la duración no genera un bloque. No retienen disponibilidad.
           items:
-            $ref: "#/components/schemas/AvailableWindow"
+            $ref: '#/components/schemas/AvailableWindow'
     ErrorResponse:
       additionalProperties: false
       properties:
@@ -606,105 +605,105 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             invalidRequest:
-              $ref: "#/components/examples/InvalidRequest"
+              $ref: '#/components/examples/InvalidRequest'
     Unauthorized:
       description: No existe identidad autenticada válida.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             unauthenticated:
-              $ref: "#/components/examples/Unauthenticated"
+              $ref: '#/components/examples/Unauthenticated'
     Forbidden:
       description: Acceso general a la operación no autorizado, sin revelar entidades ajenas.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             forbidden:
-              $ref: "#/components/examples/Forbidden"
+              $ref: '#/components/examples/Forbidden'
     ResourceNotFound:
       description: Recurso inexistente o no visible para el solicitante.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             resourceNotFound:
-              $ref: "#/components/examples/ResourceNotFound"
+              $ref: '#/components/examples/ResourceNotFound'
     ReservationNotFound:
       description: Reserva inexistente, ajena o de otro ámbito, sin distinguir los casos.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             reservationNotFound:
-              $ref: "#/components/examples/ReservationNotFound"
+              $ref: '#/components/examples/ReservationNotFound'
     ReservationOrResourceNotFound:
       description: Reserva propia o recurso resultante no encontrado o no accesible.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             reservationNotFound:
-              $ref: "#/components/examples/ReservationNotFound"
+              $ref: '#/components/examples/ReservationNotFound'
             resourceNotFound:
-              $ref: "#/components/examples/ResourceNotFound"
+              $ref: '#/components/examples/ResourceNotFound'
     InvalidCreation:
       description: Intervalo, política o atributos de la nueva reserva no válidos.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             invalidInterval:
-              $ref: "#/components/examples/InvalidInterval"
+              $ref: '#/components/examples/InvalidInterval'
             policyViolation:
-              $ref: "#/components/examples/PolicyViolation"
+              $ref: '#/components/examples/PolicyViolation'
             invalidAttributes:
-              $ref: "#/components/examples/InvalidAttributes"
+              $ref: '#/components/examples/InvalidAttributes'
     InvalidModification:
       description: Intervalo inválido, inicio alcanzado, plazo vencido o política incumplida.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             invalidInterval:
-              $ref: "#/components/examples/InvalidInterval"
+              $ref: '#/components/examples/InvalidInterval'
             alreadyStarted:
-              $ref: "#/components/examples/AlreadyStarted"
+              $ref: '#/components/examples/AlreadyStarted'
             deadlineExpired:
-              $ref: "#/components/examples/CancellationWindowClosed"
+              $ref: '#/components/examples/CancellationWindowClosed'
             policyViolation:
-              $ref: "#/components/examples/PolicyViolation"
+              $ref: '#/components/examples/PolicyViolation'
             invalidAttributes:
-              $ref: "#/components/examples/InvalidAttributes"
+              $ref: '#/components/examples/InvalidAttributes'
     InternalError:
       description: Fallo no previsto, sin detalles internos ni datos sensibles.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             internalError:
-              $ref: "#/components/examples/InternalError"
+              $ref: '#/components/examples/InternalError'
     Unavailable:
       description: Servicio temporalmente incapaz de completar la operación.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: '#/components/schemas/ErrorResponse'
           examples:
             serviceUnavailable:
-              $ref: "#/components/examples/ServiceUnavailable"
+              $ref: '#/components/examples/ServiceUnavailable'
   examples:
     CancelRequest:
       summary: Cancelación con la versión consultada
@@ -1161,36 +1160,36 @@ operations:
       solapamiento, y paginación por cursor. No habilita crear para terceros,
       modificar ni cancelar sus reservas. El mock requiere demo-admin.
     parameters:
-      - $ref: "#/components/parameters/ResourceFilter"
-      - $ref: "#/components/parameters/StatusFilter"
-      - $ref: "#/components/parameters/OptionalFrom"
-      - $ref: "#/components/parameters/OptionalTo"
-      - $ref: "#/components/parameters/Limit"
-      - $ref: "#/components/parameters/Cursor"
+      - $ref: '#/components/parameters/ResourceFilter'
+      - $ref: '#/components/parameters/StatusFilter'
+      - $ref: '#/components/parameters/OptionalFrom'
+      - $ref: '#/components/parameters/OptionalTo'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
     responses:
-      "200":
+      '200':
         description: Página de reservas del ámbito, con la referencia de identidad de cada responsable; vacío no es un error.
         content:
           application/json:
             examples:
               reservations:
-                $ref: "#/components/examples/AdminReservationPage"
+                $ref: '#/components/examples/AdminReservationPage'
               empty:
                 value:
                   items: []
                   nextCursor: null
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters:
-      - $ref: "#/components/parameters/MockScenario"
+      - $ref: '#/components/parameters/MockScenario'
   createReservation:
     tags:
       - Reservas
@@ -1204,7 +1203,7 @@ operations:
       duplicar efectos. La retención y el alcance técnico de la clave quedan
       pendientes para el hito de lógica real; el mock solo muestra ejemplos.
     parameters:
-      - $ref: "#/components/parameters/IdempotencyKey"
+      - $ref: '#/components/parameters/IdempotencyKey'
       - name: X-Request-Id
         in: header
         description: Identificador de correlación para el envío de la confirmación.
@@ -1216,46 +1215,46 @@ operations:
         application/json:
           examples:
             genericReservation:
-              $ref: "#/components/examples/CreateRequest"
+              $ref: '#/components/examples/CreateRequest'
     responses:
-      "201":
+      '201':
         description: Reserva confirmada; en el mock es una respuesta prefijada sin escritura.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ConfirmedReservation"
+              $ref: '#/components/schemas/ConfirmedReservation'
             examples:
               confirmed:
-                $ref: "#/components/examples/ConfirmedReservation"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ResourceNotFound"
-      "409":
+                $ref: '#/components/examples/ConfirmedReservation'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ResourceNotFound'
+      '409':
         description: Colisión, bloqueo o misma clave de idempotencia con otro contenido.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               collision:
-                $ref: "#/components/examples/ResourceUnavailable"
+                $ref: '#/components/examples/ResourceUnavailable'
               blocked:
-                $ref: "#/components/examples/ResourceBlocked"
+                $ref: '#/components/examples/ResourceBlocked'
               idempotencyConflict:
-                $ref: "#/components/examples/IdempotencyConflict"
-      "422":
-        $ref: "#/components/responses/InvalidCreation"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/IdempotencyConflict'
+      '422':
+        $ref: '#/components/responses/InvalidCreation'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters: &a1
-      - $ref: "#/components/parameters/MockScenario"
+      - $ref: '#/components/parameters/MockScenario'
   listReservations:
     tags:
       - Reservas
@@ -1269,34 +1268,34 @@ operations:
       ascendentes. El límite de 31 días de disponibilidad no limita este listado.
       Los ejemplos no ejecutan filtros ni paginación real.
     parameters:
-      - $ref: "#/components/parameters/ResourceFilter"
-      - $ref: "#/components/parameters/StatusFilter"
-      - $ref: "#/components/parameters/OptionalFrom"
-      - $ref: "#/components/parameters/OptionalTo"
-      - $ref: "#/components/parameters/Limit"
-      - $ref: "#/components/parameters/Cursor"
+      - $ref: '#/components/parameters/ResourceFilter'
+      - $ref: '#/components/parameters/StatusFilter'
+      - $ref: '#/components/parameters/OptionalFrom'
+      - $ref: '#/components/parameters/OptionalTo'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
     responses:
-      "200":
+      '200':
         description: Página de reservas propias; una búsqueda sin resultados no es un error.
         content:
           application/json:
             examples:
               reservations:
-                $ref: "#/components/examples/ReservationPage"
+                $ref: '#/components/examples/ReservationPage'
               empty:
                 value:
                   items: []
                   nextCursor: null
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters: *a1
   getReservation:
     tags:
@@ -1308,30 +1307,30 @@ operations:
       Una reserva inexistente, ajena o de otro ámbito produce el mismo 404.
       version permite construir expectedVersion en posteriores escrituras.
     responses:
-      "200":
+      '200':
         description: Representación vigente; el mock devuelve el ejemplo seleccionado.
         content:
           application/json:
             examples:
               confirmed:
-                $ref: "#/components/examples/ConfirmedReservation"
+                $ref: '#/components/examples/ConfirmedReservation'
               cancelled:
-                $ref: "#/components/examples/CancelledReservation"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ReservationNotFound"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/CancelledReservation'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ReservationNotFound'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters: &a2
-      - $ref: "#/components/parameters/MockScenario"
-      - $ref: "#/components/parameters/ReservationId"
+      - $ref: '#/components/parameters/MockScenario'
+      - $ref: '#/components/parameters/ReservationId'
   updateReservation:
     tags:
       - Reservas
@@ -1355,7 +1354,7 @@ operations:
         application/json:
           examples:
             changeInterval:
-              $ref: "#/components/examples/UpdateRequest"
+              $ref: '#/components/examples/UpdateRequest'
             changeResource:
               value:
                 expectedVersion: 1
@@ -1365,42 +1364,42 @@ operations:
                 expectedVersion: 1
                 attributes: {}
     responses:
-      "200":
+      '200':
         description: Reserva actualizada; un cambio efectivo incrementará version y updatedAt.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ConfirmedReservation"
+              $ref: '#/components/schemas/ConfirmedReservation'
             examples:
               updated:
-                $ref: "#/components/examples/UpdatedReservation"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ReservationOrResourceNotFound"
-      "409":
+                $ref: '#/components/examples/UpdatedReservation'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ReservationOrResourceNotFound'
+      '409':
         description: Versión desactualizada, estado incompatible o conflicto de disponibilidad.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               versionConflict:
-                $ref: "#/components/examples/VersionConflict"
+                $ref: '#/components/examples/VersionConflict'
               cancelledReservation:
-                $ref: "#/components/examples/StateConflict"
+                $ref: '#/components/examples/StateConflict'
               collision:
-                $ref: "#/components/examples/ResourceUnavailable"
-      "422":
-        $ref: "#/components/responses/InvalidModification"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/ResourceUnavailable'
+      '422':
+        $ref: '#/components/responses/InvalidModification'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters: *a2
   cancelReservation:
     tags:
@@ -1423,52 +1422,52 @@ operations:
         application/json:
           examples:
             cancel:
-              $ref: "#/components/examples/CancelRequest"
+              $ref: '#/components/examples/CancelRequest'
     responses:
-      "200":
+      '200':
         description: Reserva cancelada, incluyendo la respuesta de un reintento autorizado.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CancelledReservation"
+              $ref: '#/components/schemas/CancelledReservation'
             examples:
               cancelled:
-                $ref: "#/components/examples/CancelledReservation"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ReservationNotFound"
-      "409":
+                $ref: '#/components/examples/CancelledReservation'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ReservationNotFound'
+      '409':
         description: La reserva confirmada tiene otra versión.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               versionConflict:
-                $ref: "#/components/examples/VersionConflict"
-      "422":
+                $ref: '#/components/examples/VersionConflict'
+      '422':
         description: El plazo original venció o la reserva ya comenzó.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               deadlineExpired:
-                $ref: "#/components/examples/CancellationWindowClosed"
+                $ref: '#/components/examples/CancellationWindowClosed'
               alreadyStarted:
-                $ref: "#/components/examples/AlreadyStarted"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/AlreadyStarted'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters:
-      - $ref: "#/components/parameters/MockScenario"
-      - $ref: "#/components/parameters/ReservationId"
+      - $ref: '#/components/parameters/MockScenario'
+      - $ref: '#/components/parameters/ReservationId'
   listResources:
     tags:
       - Recursos
@@ -1486,32 +1485,32 @@ operations:
         schema:
           type: boolean
           default: true
-      - $ref: "#/components/parameters/Limit"
-      - $ref: "#/components/parameters/Cursor"
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
     responses:
-      "200":
+      '200':
         description: Página de recursos visibles o lista vacía.
         content:
           application/json:
             examples:
               resources:
-                $ref: "#/components/examples/ResourcePage"
+                $ref: '#/components/examples/ResourcePage'
               empty:
                 value:
                   items: []
                   nextCursor: null
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters: &a3
-      - $ref: "#/components/parameters/MockScenario"
+      - $ref: '#/components/parameters/MockScenario'
   createResource:
     tags:
       - Administración de Recursos
@@ -1528,36 +1527,36 @@ operations:
         application/json:
           examples:
             createResource:
-              $ref: "#/components/examples/CreateResourceRequest"
+              $ref: '#/components/examples/CreateResourceRequest'
     responses:
-      "201":
+      '201':
         description: Recurso creado; en el mock devuelve una respuesta simulada.
         content:
           application/json:
             examples:
               created:
-                $ref: "#/components/examples/ResourceDetail"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "422":
+                $ref: '#/components/examples/ResourceDetail'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '422':
         description: Política o atributos del recurso no válidos.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               policyViolation:
-                $ref: "#/components/examples/PolicyViolation"
+                $ref: '#/components/examples/PolicyViolation'
               invalidAttributes:
-                $ref: "#/components/examples/InvalidAttributes"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/InvalidAttributes'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters: *a3
   getResource:
     tags:
@@ -1569,28 +1568,28 @@ operations:
       su versión vigente, referencia a catálogo externo, política de tiempo y
       cancelación, horario semanal recurrente y bloqueos activos.
     responses:
-      "200":
+      '200':
         description: Detalle administrativo del recurso.
         content:
           application/json:
             examples:
               detail:
-                $ref: "#/components/examples/ResourceDetail"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ResourceNotFound"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/ResourceDetail'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ResourceNotFound'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters: &a4
-      - $ref: "#/components/parameters/MockScenario"
-      - $ref: "#/components/parameters/ResourceId"
+      - $ref: '#/components/parameters/MockScenario'
+      - $ref: '#/components/parameters/ResourceId'
   updateResource:
     tags:
       - Administración de Recursos
@@ -1609,49 +1608,49 @@ operations:
         application/json:
           examples:
             updatePolicyAndState:
-              $ref: "#/components/examples/UpdateResourceRequest"
+              $ref: '#/components/examples/UpdateResourceRequest'
     responses:
-      "200":
+      '200':
         description: Recurso actualizado con versión incrementada.
         content:
           application/json:
             examples:
               updated:
-                $ref: "#/components/examples/UpdatedResourceDetail"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ResourceNotFound"
-      "409":
+                $ref: '#/components/examples/UpdatedResourceDetail'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ResourceNotFound'
+      '409':
         description: Versión desactualizada del recurso o conflicto con reservas confirmadas al deshabilitar.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               versionConflict:
-                $ref: "#/components/examples/ResourceVersionConflict"
+                $ref: '#/components/examples/ResourceVersionConflict'
               scheduleConflict:
-                $ref: "#/components/examples/ResourceScheduleConflict"
-      "422":
+                $ref: '#/components/examples/ResourceScheduleConflict'
+      '422':
         description: Política o atributos del recurso no válidos.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               policyViolation:
-                $ref: "#/components/examples/PolicyViolation"
+                $ref: '#/components/examples/PolicyViolation'
               invalidAttributes:
-                $ref: "#/components/examples/InvalidAttributes"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/InvalidAttributes'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters: *a4
   updateResourceSchedule:
     tags:
@@ -1671,52 +1670,52 @@ operations:
         application/json:
           examples:
             weeklySchedule:
-              $ref: "#/components/examples/UpdateResourceScheduleRequest"
+              $ref: '#/components/examples/UpdateResourceScheduleRequest'
     responses:
-      "200":
+      '200':
         description: Horario y reglas temporales actualizados.
         content:
           application/json:
             examples:
               updated:
-                $ref: "#/components/examples/UpdatedResourceDetail"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ResourceNotFound"
-      "409":
+                $ref: '#/components/examples/UpdatedResourceDetail'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ResourceNotFound'
+      '409':
         description: Versión desactualizada o conflicto del nuevo horario con reservas confirmadas.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               scheduleConflict:
-                $ref: "#/components/examples/ResourceScheduleConflict"
+                $ref: '#/components/examples/ResourceScheduleConflict'
               versionConflict:
-                $ref: "#/components/examples/ResourceVersionConflict"
-      "422":
+                $ref: '#/components/examples/ResourceVersionConflict'
+      '422':
         description: Reglas horarias o límites de duración inconsistentes.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               invalidInterval:
-                $ref: "#/components/examples/InvalidInterval"
+                $ref: '#/components/examples/InvalidInterval'
               policyViolation:
-                $ref: "#/components/examples/PolicyViolation"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/PolicyViolation'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters:
-      - $ref: "#/components/parameters/MockScenario"
-      - $ref: "#/components/parameters/ResourceId"
+      - $ref: '#/components/parameters/MockScenario'
+      - $ref: '#/components/parameters/ResourceId'
   createResourceClosure:
     tags:
       - Administración de Recursos
@@ -1734,48 +1733,48 @@ operations:
         application/json:
           examples:
             maintenanceClosure:
-              $ref: "#/components/examples/CreateResourceClosureRequest"
+              $ref: '#/components/examples/CreateResourceClosureRequest'
     responses:
-      "201":
+      '201':
         description: Bloqueo temporal registrado sobre el recurso.
         content:
           application/json:
             examples:
               createdClosure:
-                $ref: "#/components/examples/ResourceClosure"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ResourceNotFound"
-      "409":
+                $ref: '#/components/examples/ResourceClosure'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ResourceNotFound'
+      '409':
         description: El bloqueo propuesto entra en conflicto con reservas confirmadas existentes.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               scheduleConflict:
-                $ref: "#/components/examples/ResourceScheduleConflict"
-      "422":
+                $ref: '#/components/examples/ResourceScheduleConflict'
+      '422':
         description: Intervalo de bloqueo inválido (startAt >= endAt).
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               invalidInterval:
-                $ref: "#/components/examples/InvalidInterval"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/InvalidInterval'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters:
-      - $ref: "#/components/parameters/MockScenario"
-      - $ref: "#/components/parameters/ResourceId"
+      - $ref: '#/components/parameters/MockScenario'
+      - $ref: '#/components/parameters/ResourceId'
   deleteResourceClosure:
     tags:
       - Administración de Recursos
@@ -1785,33 +1784,33 @@ operations:
       Levanta un bloqueo excepcional previamente registrado sobre el recurso,
       restituyendo la disponibilidad gobernada por su horario recurrente.
     responses:
-      "204":
+      '204':
         description: Bloqueo eliminado correctamente.
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
         description: Recurso o bloqueo inexistente en el ámbito autorizado.
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ErrorResponse"
+              $ref: '#/components/schemas/ErrorResponse'
             examples:
               closureNotFound:
-                $ref: "#/components/examples/ClosureNotFound"
+                $ref: '#/components/examples/ClosureNotFound'
               resourceNotFound:
-                $ref: "#/components/examples/ResourceNotFound"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/ResourceNotFound'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters:
-      - $ref: "#/components/parameters/MockScenario"
-      - $ref: "#/components/parameters/ResourceId"
-      - $ref: "#/components/parameters/ClosureId"
+      - $ref: '#/components/parameters/MockScenario'
+      - $ref: '#/components/parameters/ResourceId'
+      - $ref: '#/components/parameters/ClosureId'
   getResourceAvailability:
     tags:
       - Disponibilidad
@@ -1840,39 +1839,39 @@ operations:
         required: true
         description: Inicio inclusivo del rango, con zona explícita.
         schema:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         example: 2026-11-10T21:00:00Z
       - name: to
         in: query
         required: true
         description: Término exclusivo, posterior a from; máximo 31 días de rango.
         schema:
-          $ref: "#/components/schemas/DateTime"
+          $ref: '#/components/schemas/DateTime'
         example: 2026-11-11T01:00:00Z
     responses:
-      "200":
+      '200':
         description: Disponibilidad del rango solicitado, sin datos privados de otras reservas.
         content:
           application/json:
             examples:
               available:
-                $ref: "#/components/examples/Availability"
+                $ref: '#/components/examples/Availability'
               noAvailability:
-                $ref: "#/components/examples/NoAvailability"
+                $ref: '#/components/examples/NoAvailability'
               disabledResource:
-                $ref: "#/components/examples/DisabledAvailability"
-      "400":
-        $ref: "#/components/responses/BadRequest"
-      "401":
-        $ref: "#/components/responses/Unauthorized"
-      "403":
-        $ref: "#/components/responses/Forbidden"
-      "404":
-        $ref: "#/components/responses/ResourceNotFound"
-      "500":
-        $ref: "#/components/responses/InternalError"
-      "503":
-        $ref: "#/components/responses/Unavailable"
+                $ref: '#/components/examples/DisabledAvailability'
+      '400':
+        $ref: '#/components/responses/BadRequest'
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '404':
+        $ref: '#/components/responses/ResourceNotFound'
+      '500':
+        $ref: '#/components/responses/InternalError'
+      '503':
+        $ref: '#/components/responses/Unavailable'
     pathParameters:
-      - $ref: "#/components/parameters/MockScenario"
-      - $ref: "#/components/parameters/ResourceId"
+      - $ref: '#/components/parameters/MockScenario'
+      - $ref: '#/components/parameters/ResourceId'

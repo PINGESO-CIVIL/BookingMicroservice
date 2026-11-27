@@ -13,10 +13,11 @@ COPY apps/api/go.mod apps/api/go.sum ./
 RUN go mod download
 
 FROM go-deps AS backend-build
+ARG VERSION=dev
 COPY apps/api/cmd/api ./cmd/api
 COPY apps/api/internal/ ./internal/
 COPY --from=fixtures /app/apps/api/internal/store/fixtures.json ./internal/store/fixtures.json
-RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/bookingms-api ./cmd/api
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -X main.version=${VERSION}" -o /out/bookingms-api ./cmd/api
 
 FROM swaggerapi/swagger-ui:v5.32.14@sha256:3d93169968848d371a6a56ca1ab18b47a8906ba461b8eba0688866354f5431d5 AS swagger
 
@@ -25,7 +26,6 @@ COPY --from=backend-build /out/bookingms-api /bookingms-api
 COPY --from=swagger /usr/share/nginx/html/swagger-ui.css /usr/share/nginx/html/swagger-ui-bundle.js /usr/share/nginx/html/swagger-ui-bundle.js.LICENSE.txt /docs/
 COPY contracts/openapi.yaml /docs/openapi.yaml
 USER 65532:65532
-ENV MOCK_ADDR=0.0.0.0:8080
 EXPOSE 8080
 HEALTHCHECK --interval=5s --timeout=4s --start-period=5s --retries=12 CMD ["/bookingms-api", "healthcheck"]
 ENTRYPOINT ["/bookingms-api"]

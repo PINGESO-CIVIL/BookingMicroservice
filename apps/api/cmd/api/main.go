@@ -3,13 +3,13 @@ package main
 
 import (
 	"context"
-	"log"
-	"net"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+	_ "time/tzdata"
 
 	"bookingms/internal/api"
 	"bookingms/internal/service"
@@ -17,18 +17,14 @@ import (
 	"bookingms/internal/store/notificaciones"
 )
 
+const serviceName = "bookingms"
+
+var version = "dev"
+
 func main() {
-	address := os.Getenv("MOCK_ADDR")
-	if address == "" {
-		address = "127.0.0.1:4010"
-	}
 	if len(os.Args) == 2 && os.Args[1] == "healthcheck" {
-		_, port, err := net.SplitHostPort(address)
-		if err != nil {
-			os.Exit(1)
-		}
 		client := &http.Client{Timeout: 3 * time.Second}
-		response, err := client.Get("http://127.0.0.1:" + port + "/readyz")
+		response, err := client.Get("http://127.0.0.1:8080/readyz")
 		if err != nil {
 			os.Exit(1)
 		}
@@ -38,13 +34,23 @@ func main() {
 		}
 		return
 	}
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+
+	config, err := loadConfig()
+	if err != nil {
+		logger.Error("configuración inválida", "servicio", serviceName, "version", version, "error", err.Error())
+		os.Exit(1)
+	}
 	fixtures, err := store.NewFixtures()
 	if err != nil {
-		log.Fatal(err)
+		logger.Error("no se pudieron cargar los fixtures", "servicio", serviceName, "version", version, "error", err.Error())
+		os.Exit(1)
 	}
-	database, err := store.OpenPostgres(os.Getenv("DATABASE_URL"))
+	database, err := store.OpenPostgres(config.databaseURL)
 	if err != nil {
-		log.Print("Configuración inválida de PostgreSQL")
+		logger.Error("DATABASE_URL no permite configurar PostgreSQL", "servicio", serviceName, "version", version)
+		os.Exit(1)
 	}
 	defer database.Close()
 	docsDir := os.Getenv("API_DOCS_DIR")
@@ -52,33 +58,42 @@ func main() {
 		docsDir = "/docs"
 	}
 	svc := service.New(fixtures, database)
-	if url := os.Getenv("NOTIFICACIONES_URL"); url != "" && os.Getenv("API_ENV") == "dev" {
-		sender, err := notificaciones.NewSender(url, os.Getenv("NOTIFICACIONES_DEMO_DESTINATARIO"))
+	if config.notificationsURL != "" {
+		sender, err := notificaciones.NewSender(config.notificationsURL, config.notificationsRecipient)
 		if err != nil {
-			log.Fatal(err)
+			logger.Error("configuración inválida de Notificaciones", "servicio", serviceName, "version", version, "error", err.Error())
+			os.Exit(1)
 		}
 		svc.SetNotifier(sender)
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	issuer, audience, jwksURL := os.Getenv("BOOKING_JWT_ISSUER"), os.Getenv("BOOKING_JWT_AUDIENCE"), os.Getenv("BOOKING_JWKS_URL")
 	var authorizer api.Authorizer
-	if issuer != "" || audience != "" || jwksURL != "" {
-		authorizer, err = api.NewJWTAuthorizer(ctx, issuer, audience, jwksURL)
+	if config.jwksURL != "" {
+		authorizer, err = api.NewJWTAuthorizer(ctx, config.issuer, config.audience, config.jwksURL)
 		if err != nil {
-			log.Fatal(err)
+			logger.Error("AUTH_JWKS_URL no permite inicializar las llaves de Identidad", "servicio", serviceName, "version", version)
+			os.Exit(1)
 		}
 	}
-	handler := api.NewWithAuthorizer(svc, authorizer)
-	server := &http.Server{Addr: address, Handler: routes(handler, os.Getenv("API_ENV"), docsDir), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 15 * time.Second, IdleTimeout: 60 * time.Second}
+	handler := api.NewWithAuthorizer(svc, authorizer, config.frontendURL, config.cookieName)
+	server := &http.Server{
+		Addr:              ":8080",
+		Handler:           routes(handler, config.env, docsDir, logger),
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      15 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
 	go func() {
 		<-ctx.Done()
 		shutdown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		_ = server.Shutdown(shutdown)
 	}()
-	log.Printf("BookingMS MOCK en http://%s — datos prefijados, sin persistencia ni autenticación real", address)
+	logger.Info("servicio iniciado", "servicio", serviceName, "version", version, "entorno", config.env, "direccion", ":8080")
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatal(err)
+		logger.Error("error al detener el servidor HTTP", "servicio", serviceName, "version", version, "error", err.Error())
+		os.Exit(1)
 	}
 }

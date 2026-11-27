@@ -20,13 +20,20 @@ test('crea una reserva y reintenta un conflicto', async ({ page }) => {
   await page.goto('/#/reservas/nueva')
   await page.getByLabel('Recurso').selectOption({ label: 'Recurso 1' })
   await page.getByLabel('Fecha').fill('2026-11-10')
-  await page.getByRole('button', { name: /\d\d:\d\d .* \d\d:\d\d/ }).first().click()
+  await page
+    .getByRole('button', { name: /\d\d:\d\d .* \d\d:\d\d/ })
+    .first()
+    .click()
   await page.getByLabel('Escritura').selectOption('conflict')
   await page.getByRole('button', { name: 'Confirmar reserva' }).click()
   await expect(page.getByRole('alert')).toBeVisible()
+  await expect(page.getByText(/envío del correo de confirmación/)).toHaveCount(0)
   await page.getByLabel('Escritura').selectOption('normal')
   await page.getByRole('button', { name: 'Confirmar reserva' }).click()
   await expect(page.getByText('Reserva confirmada')).toBeVisible()
+  await expect(page.getByRole('status')).toContainText(
+    'Se simuló el envío del correo de confirmación.',
+  )
 })
 
 test('consulta y cancela una reserva', async ({ page }) => {
@@ -40,5 +47,7 @@ test('muestra el listado en pantalla móvil', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 })
   await page.goto('/#/reservas')
   await expect(page.getByRole('article')).toHaveCount(4)
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375)
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(375)
 })

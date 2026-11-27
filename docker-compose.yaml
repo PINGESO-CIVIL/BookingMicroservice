@@ -2,7 +2,8 @@ name: bookingms-demo
 
 x-database-client: &database-client
   DATABASE_URL: &bookingms-dsn postgres://bookingms@postgres:5432/bookingms?sslmode=disable
-  PGPASSWORD: ${BOOKING_DB_PASSWORD:-bookingms-local-demo}
+  PGPASSWORD: ${BOOKING_DB_PASSWORD:?Configura BOOKING_DB_PASSWORD en .env}
+  TZ: America/Santiago
 
 services:
   postgres:
@@ -10,7 +11,7 @@ services:
     environment:
       POSTGRES_DB: bookingms
       POSTGRES_USER: bookingms
-      POSTGRES_PASSWORD: ${BOOKING_DB_PASSWORD:-bookingms-local-demo}
+      POSTGRES_PASSWORD: ${BOOKING_DB_PASSWORD:?Configura BOOKING_DB_PASSWORD en .env}
     volumes:
       - bookingms_data:/var/lib/postgresql/data
     healthcheck:
@@ -28,7 +29,7 @@ services:
     environment:
       GOOSE_DRIVER: postgres
       GOOSE_DBSTRING: *bookingms-dsn
-      PGPASSWORD: ${BOOKING_DB_PASSWORD:-bookingms-local-demo}
+      PGPASSWORD: ${BOOKING_DB_PASSWORD:?Configura BOOKING_DB_PASSWORD en .env}
     depends_on:
       postgres:
         condition: service_healthy
@@ -43,18 +44,20 @@ services:
       dockerfile: apps/api/Dockerfile
     environment:
       <<: *database-client
-      MOCK_ADDR: 0.0.0.0:8080
-      API_ENV: ${API_ENV-dev}
+      API_PORT: '8080'
+      API_ENV: ${API_ENV:?Configura API_ENV en .env}
+      FRONTEND_URL: ${FRONTEND_URL:?Configura FRONTEND_URL en .env}
       BOOKING_JWT_ISSUER: ${BOOKING_JWT_ISSUER:-}
       BOOKING_JWT_AUDIENCE: ${BOOKING_JWT_AUDIENCE:-}
-      BOOKING_JWKS_URL: ${BOOKING_JWKS_URL:-}
+      AUTH_JWKS_URL: ${AUTH_JWKS_URL:-}
+      AUTH_COOKIE_NAME: ${AUTH_COOKIE_NAME:-}
       NOTIFICACIONES_URL: ${NOTIFICACIONES_URL:-}
       NOTIFICACIONES_DEMO_DESTINATARIO: ${NOTIFICACIONES_DEMO_DESTINATARIO:-}
     depends_on:
       migrate:
         condition: service_completed_successfully
     ports:
-      - "127.0.0.1:5191:8080"
+      - '127.0.0.1:5191:8080'
     read_only: true
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
@@ -72,7 +75,7 @@ services:
     environment:
       BOOKING_API_URL: http://backend:8080
     ports:
-      - "127.0.0.1:5190:8080"
+      - '127.0.0.1:5190:8080'
     read_only: true
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]

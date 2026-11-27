@@ -26,7 +26,7 @@ func newHandler(t *testing.T) http.Handler {
 	if err != nil {
 		t.Fatal(err)
 	}
-	return api.New(service.New(fixtures, database))
+	return api.NewWithAuthorizer(service.New(fixtures, database), nil, "http://127.0.0.1:5190", "")
 }
 
 func call(handler http.Handler, method, path, body, token, scenario string) *httptest.ResponseRecorder {

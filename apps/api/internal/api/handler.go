@@ -22,9 +22,11 @@ import (
 )
 
 type handler struct {
-	service   *service.Service
-	sequence  atomic.Uint64
-	authorize Authorizer
+	service        *service.Service
+	sequence       atomic.Uint64
+	authorize      Authorizer
+	frontendOrigin string
+	cookieName     string
 }
 
 type operation struct {
@@ -37,11 +39,11 @@ type operation struct {
 
 // New connects the HTTP routes to the application service.
 func New(svc *service.Service) http.Handler {
-	return NewWithAuthorizer(svc, nil)
+	return NewWithAuthorizer(svc, nil, "", "")
 }
 
-func NewWithAuthorizer(svc *service.Service, authorize Authorizer) http.Handler {
-	s := &handler{service: svc, authorize: authorize}
+func NewWithAuthorizer(svc *service.Service, authorize Authorizer, frontendOrigin, cookieName string) http.Handler {
+	s := &handler{service: svc, authorize: authorize, frontendOrigin: frontendOrigin, cookieName: cookieName}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
 		s.reply(w, 200, HealthResponse{Status: "ok", Mode: "mock", Persistent: false})
@@ -64,12 +66,12 @@ func NewWithAuthorizer(svc *service.Service, authorize Authorizer) http.Handler 
 		w.Header().Set("X-Mock-Response", "true")
 		w.Header().Set("Cache-Control", "no-store")
 		origin := r.Header.Get("Origin")
-		switch origin {
-		case "http://localhost:5190", "http://127.0.0.1:5190", "http://localhost:5173", "http://127.0.0.1:5173", "http://127.0.0.1:5180":
+		w.Header().Add("Vary", "Origin")
+		if origin != "" && origin == frontendOrigin {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
-			w.Header().Set("Vary", "Origin")
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
-			w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Idempotency-Key, X-Mock-Scenario, X-Request-Id")
+			w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Idempotency-Key, X-Mock-Scenario, X-Mock-Role, X-Request-Id")
 			w.Header().Set("Access-Control-Expose-Headers", "X-Mock-Response")
 		}
 		if r.Method == http.MethodOptions {
@@ -136,10 +138,20 @@ type validatedInputKey struct{}
 func (s *handler) validate(op operation, ctx huma.Context, next func(huma.Context)) {
 	r, w := humago.Unwrap(ctx)
 	scenario := r.Header.Get("X-Mock-Scenario")
+	authorization := r.Header.Get("Authorization")
 	actor := service.Anonymous
 	var subject string
 	if s.authorize != nil {
-		authenticatedSubject, fault := s.authorize(r.Header.Get("Authorization"), operationPermission(op))
+		scenario = ""
+		if cookie, err := r.Cookie(s.cookieName); err == nil {
+			if r.Method != http.MethodGet && r.Header.Get("Origin") != s.frontendOrigin {
+				response := s.fault(&service.Fault{Example: "Forbidden"})
+				s.reply(w, response.status, response.ErrorResponse)
+				return
+			}
+			authorization = "Bearer " + cookie.Value
+		}
+		authenticatedSubject, fault := s.authorize(authorization, operationPermission(op))
 		if fault != nil {
 			response := s.fault(fault)
 			s.reply(w, response.status, response.ErrorResponse)
@@ -151,7 +163,15 @@ func (s *handler) validate(op operation, ctx huma.Context, next func(huma.Contex
 			actor = service.DemoAdmin
 		}
 	} else {
-		switch r.Header.Get("Authorization") {
+		if authorization == "" {
+			switch r.Header.Get("X-Mock-Role") {
+			case "user":
+				authorization = "Bearer demo-user"
+			case "admin":
+				authorization = "Bearer demo-admin"
+			}
+		}
+		switch authorization {
 		case "Bearer demo-user":
 			actor = service.DemoUser
 		case "Bearer demo-admin":
@@ -204,7 +224,7 @@ func (s *handler) validate(op operation, ctx huma.Context, next func(huma.Contex
 			s.fail(w, 400, "INVALID_REQUEST", "Idempotency-Key debe tener entre 1 y 128 caracteres.")
 			return
 		}
-		confirmation.Authorization = r.Header.Get("Authorization")
+		confirmation.Authorization = authorization
 		confirmation.RequestID = r.Header.Get("X-Request-Id")
 		if confirmation.RequestID == "" {
 			confirmation.RequestID = rand.Text()
@@ -227,9 +247,11 @@ func (s *handler) validate(op operation, ctx huma.Context, next func(huma.Contex
 			s.fail(w, http.StatusBadRequest, "INVALID_REQUEST", message)
 			return
 		}
-		// Keep the existing cursor representation and scope across the refactor.
 		query.Del("cursor")
-		input.Query.CursorScope = r.URL.Path + "|" + r.Header.Get("Authorization") + "|" + scenario + "|" + query.Encode()
+		if subject == "" {
+			subject = authorization
+		}
+		input.Query.CursorScope = r.URL.Path + "|" + subject + "|" + scenario + "|" + query.Encode()
 	case "getResourceAvailability":
 		if queryAllowed(query, "from to") {
 			from, to, err := rangeQuery(query, true)

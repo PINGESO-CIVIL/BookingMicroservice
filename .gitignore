@@ -6,8 +6,7 @@
 .env
 .env.*
 !.env.example
-/spec/*
-!/spec/contratos/
+/spec/
 /docs/*
 !/docs/modos-de-falla.md
 

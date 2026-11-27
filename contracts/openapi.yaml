@@ -1255,11 +1255,10 @@ components:
   securitySchemes:
     BearerAuth:
       description: |
-        Referencia de autenticación para el contrato. En el mock se utilizarán
-        demo-user o demo-admin como valores de demostración, no credenciales reales.
-        La presencia de esta
-        definición no implementa identidad ni autorización. El emisor y el
-        formato de producción permanecen pendientes; no se presupone JWT.
+        Autenticación HTTP entre servicios. En el mock dev se admiten demo-user
+        y demo-admin. El navegador usa la cookie de sesión emitida por Usuarios
+        y Roles. Su nombre se configura en Agenda con AUTH_COOKIE_NAME según
+        el contrato de ese servicio.
       scheme: bearer
       type: http
 info:

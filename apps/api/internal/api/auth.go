@@ -35,15 +35,19 @@ func NewJWTAuthorizer(ctx context.Context, issuer, audience, jwksURL string) (Au
 	if err != nil {
 		return nil, err
 	}
+	return jwtAuthorizer(issuer, audience, keys.Keyfunc), nil
+}
+
+func jwtAuthorizer(issuer, audience string, keyFunc jwt.Keyfunc) Authorizer {
 	parser := jwt.NewParser(jwt.WithIssuer(issuer), jwt.WithAudience(audience), jwt.WithExpirationRequired(),
-		jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Alg()}))
+		jwt.WithValidMethods([]string{jwt.SigningMethodEdDSA.Alg(), jwt.SigningMethodRS256.Alg()}))
 	return func(header, permission string) (string, *service.Fault) {
 		raw, ok := strings.CutPrefix(header, "Bearer ")
 		if !ok || raw == "" {
 			return "", &service.Fault{Example: "Unauthenticated"}
 		}
 		var claims agendaClaims
-		token, err := parser.ParseWithClaims(raw, &claims, keys.Keyfunc)
+		token, err := parser.ParseWithClaims(raw, &claims, keyFunc)
 		if err != nil || !token.Valid || claims.Subject == "" {
 			return "", &service.Fault{Example: "Unauthenticated"}
 		}
@@ -51,7 +55,7 @@ func NewJWTAuthorizer(ctx context.Context, issuer, audience, jwksURL string) (Au
 			return "", &service.Fault{Example: "Forbidden"}
 		}
 		return claims.Subject, nil
-	}, nil
+	}
 }
 
 func operationPermission(op operation) string {

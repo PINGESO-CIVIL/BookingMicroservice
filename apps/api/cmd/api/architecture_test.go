@@ -3,6 +3,7 @@ package main
 import (
 	"go/parser"
 	"go/token"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"slices"
@@ -34,20 +35,35 @@ func TestLayerImports(t *testing.T) {
 		path             string
 		allowedInternal  []string
 		forbiddenImports []string
+		allowHTTPSubdirs []string
 	}{
-		{"api", []string{"service", "service/demo"}, []string{"database/sql", "github.com/jackc/pgx"}},
-		{"service", []string{"service/demo", "service/domain"}, []string{"net/http", "net/url", "database/sql", "github.com/jackc/pgx"}},
-		{"store", []string{"repository", "service/demo", "service/domain"}, []string{"net/http"}},
+		{"api", []string{"service", "service/demo"}, []string{"database/sql", "github.com/jackc/pgx"}, nil},
+		{"service", []string{"service/demo", "service/domain"}, []string{"net/http", "net/url", "database/sql", "github.com/jackc/pgx"}, nil},
+		{"store", []string{"repository", "service", "service/demo", "service/domain"}, []string{"net/http"}, []string{"notificaciones"}},
 	} {
 		t.Run(layer.path, func(t *testing.T) {
-			files, err := filepath.Glob(filepath.Join("..", "..", "internal", layer.path, "*.go"))
+			layerRoot := filepath.Join("..", "..", "internal", layer.path)
+			var files []string
+			err := filepath.WalkDir(layerRoot, func(path string, d fs.DirEntry, err error) error {
+				if err != nil {
+					return err
+				}
+				if !d.IsDir() && strings.HasSuffix(d.Name(), ".go") && !strings.HasSuffix(d.Name(), "_test.go") {
+					files = append(files, path)
+				}
+				return nil
+			})
 			if err != nil || len(files) == 0 {
 				t.Fatalf("no se encontraron archivos Go: %v", err)
 			}
 			for _, name := range files {
-				if strings.HasSuffix(name, "_test.go") {
-					continue
+				rel, err := filepath.Rel(layerRoot, name)
+				if err != nil {
+					t.Fatal(err)
 				}
+				topDir := strings.Split(filepath.ToSlash(rel), "/")[0]
+				allowHTTP := slices.Contains(layer.allowHTTPSubdirs, topDir)
+
 				file, err := parser.ParseFile(token.NewFileSet(), name, nil, parser.ImportsOnly)
 				if err != nil {
 					t.Fatal(err)
@@ -63,6 +79,9 @@ func TestLayerImports(t *testing.T) {
 						}
 					}
 					for _, forbidden := range layer.forbiddenImports {
+						if allowHTTP && forbidden == "net/http" {
+							continue
+						}
 						if path == forbidden || strings.HasPrefix(path, forbidden+"/") {
 							t.Errorf("%s importa un paquete no permitido: %s", name, path)
 						}

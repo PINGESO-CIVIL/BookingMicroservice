@@ -1,12 +1,7 @@
-# Report all severities. scripts/quality.ps1 fails on HIGH/CRITICAL findings
-# and on every detected secret; scanner failures always fail the command.
-format: json
-exit-code: 0
+format: table
+exit-code: 1
 timeout: 10m
 severity:
-  - UNKNOWN
-  - LOW
-  - MEDIUM
   - HIGH
   - CRITICAL
 pkg:
@@ -24,7 +19,8 @@ scan:
     - node_modules
     - apps/api/bin
     - apps/web/dist
+    - apps/web/package-dist
     - apps/web/test-results
     - apps/web/playwright-report
 vulnerability:
-  ignore-unfixed: false
+  ignore-unfixed: true

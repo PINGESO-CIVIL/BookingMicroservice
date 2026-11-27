@@ -3,7 +3,14 @@
   "private": true,
   "scripts": {
     "codegen:externos": "go -C apps/api generate ./internal/store/notificaciones",
-    "codegen": "go -C apps/api run ./cmd/openapi ../../contracts/openapi.yaml && pnpm --dir apps/web run contracts"
+    "codegen": "go -C apps/api run ./cmd/openapi ../../contracts/openapi.yaml && pnpm --dir apps/web run contracts",
+    "lint": "oxlint --deny-warnings apps/web/src apps/web/tests",
+    "format": "prettier --write --ignore-unknown \"apps/web/**/*.{ts,tsx,css,json}\"",
+    "format:check": "prettier --check --ignore-unknown \"apps/web/**/*.{ts,tsx,css,json}\"",
+    "typecheck": "pnpm --dir apps/web exec tsc --noEmit",
+    "test": "pnpm --dir apps/web test",
+    "test:api": "go -C apps/api test ./...",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm --dir apps/web build"
   },
   "devDependencies": {
     "lefthook": "2.1.10",

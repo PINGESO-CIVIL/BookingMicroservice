@@ -2,17 +2,32 @@ package main
 
 import (
 	_ "embed"
+	"log/slog"
 	"net/http"
 	"path/filepath"
+	"strings"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 //go:embed docs.html
 var docsHTML []byte
 
-func routes(handler http.Handler, environment, docsDir string) http.Handler {
+type statusRecorder struct {
+	http.ResponseWriter
+	status int
+}
+
+func (r *statusRecorder) WriteHeader(code int) {
+	r.status = code
+	r.ResponseWriter.WriteHeader(code)
+}
+
+func routes(handler http.Handler, environment, docsDir string, logger *slog.Logger) http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("/", handler)
-	if environment == "dev" {
+	if environment == "dev" || environment == "test" {
 		mux.HandleFunc("GET /api/docs", func(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/api/docs/", http.StatusTemporaryRedirect)
 		})
@@ -30,5 +45,28 @@ func routes(handler http.Handler, environment, docsDir string) http.Handler {
 			}
 		})
 	}
-	return mux
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		requestID := strings.TrimSpace(r.Header.Get("X-Request-Id"))
+		if requestID == "" {
+			requestID = uuid.NewString()
+			r.Header.Set("X-Request-Id", requestID)
+		}
+		w.Header().Set("X-Request-Id", requestID)
+
+		recorder := &statusRecorder{ResponseWriter: w, status: http.StatusOK}
+		mux.ServeHTTP(recorder, r)
+
+		if logger != nil {
+			logger.Info("http_request",
+				"servicio", serviceName,
+				"version", version,
+				"request_id", requestID,
+				"metodo", r.Method,
+				"ruta", r.URL.Path,
+				"estado", recorder.status,
+				"duracion_ms", time.Since(start).Milliseconds(),
+			)
+		}
+	})
 }
