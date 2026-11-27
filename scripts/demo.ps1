@@ -6,7 +6,7 @@ Push-Location $projectRoot
 try {
     switch ($Action) {
         'Start' { & docker compose up --build -d --wait }
-        'Status' { & docker compose ps }
+        'Status' { & docker compose ps -a }
         'Stop' { & docker compose stop }
     }
     if ($LASTEXITCODE -ne 0) { throw "Docker Compose fallo (codigo $LASTEXITCODE)." }

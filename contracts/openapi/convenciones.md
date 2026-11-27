@@ -18,7 +18,7 @@ Ampliación posterior del usuario: `GET /api/v1/admin/reservas` permite al admin
 - Identificadores opacos, no vacíos; no se impone UUID ni ObjectID al contrato público.
 - Fechas de entrada en RFC 3339 con desplazamiento explícito o `Z`. Se comparan instantes, no cadenas. Las respuestas se normalizan a UTC con `Z`.
 - Intervalos semiabiertos `[startAt, endAt)`, con inicio estrictamente anterior al término.
-- Duraciones de la API expresadas en segundos enteros, no negativos. La precisión temporal admitida se cerrará al traducir a OpenAPI y MongoDB; no se permitirá truncamiento silencioso que altere una reserva.
+- Duraciones de la API expresadas en segundos enteros, no negativos. La precisión temporal admitida se cerrará al traducir a OpenAPI y PostgreSQL; no se permitirá truncamiento silencioso que altere una reserva.
 - `attributes` siempre representa un objeto validado según el contexto, nunca `null`. El esquema genérico admite `{}`; las claves específicas se habilitan por esquema explícito.
 - Las consultas GET no reciben cuerpo.
 
@@ -66,7 +66,7 @@ La primera versión no promete un total global ni una fotografía inmutable entr
 ```
 
 - `code`: código estable para decisiones del cliente, sin depender del texto de `message`.
-- `details`: lista opcional de errores públicos de campos, con `field` y `code`. No incluir cuerpos, tokens, consultas MongoDB ni datos de terceros.
+- `details`: lista opcional de errores públicos de campos, con `field` y `code`. No incluir cuerpos, tokens, consultas PostgreSQL ni datos de terceros.
 - `requestId`: identificador de correlación generado o validado por el servidor.
 - `400 INVALID_REQUEST`: forma, tipo, campo, filtro o cursor no admitido.
 - `401 UNAUTHENTICATED`: no existe una identidad autenticada válida.
@@ -86,4 +86,4 @@ La precedencia entre validaciones se formalizará en OpenAPI y en los mocks; las
 
 El archivo `openapi.yaml` formaliza las catorce operaciones con OpenAPI 3.1 y se valida mediante Redocly CLI 2.75.0. Define formas, respuestas y ejemplos; no ejecuta reglas entre solicitudes. La autenticación Bearer describe el contrato sin presuponer JWT ni un proveedor real. En el contexto genérico `attributes` admite `{}`; las adaptaciones futuras deberán definir sus propios esquemas explícitos.
 
-Swagger UI está expuesto en `http://localhost:8080/docs/` con Try it out habilitado contra el mock HTTP Go de `localhost:4010`. El contrato descargable está en `/docs/openapi.yaml`. Se usan valores Bearer sintéticos `demo-user` y `demo-admin`; la cabecera `X-Mock-Scenario` selecciona respuestas de ejemplo. La fase actual no implementa lógica productiva, persistencia ni estado compartido de reservas; esas capacidades corresponden al Hito 2. Ver instrucciones de validación y arranque en [README](README.md) y [entrega del Hito 1](../../docs/hito-1.md).
+Con `API_ENV=dev`, el backend de Compose sirve Swagger en `http://127.0.0.1:5191/api/docs` y el contrato en `/api/docs/openapi.yaml`. **Try it out** llama al mismo origen. Se usan los valores Bearer de demostración `demo-user` y `demo-admin`. La cabecera `X-Mock-Scenario` selecciona respuestas de ejemplo. Las operaciones devuelven fixtures y la persistencia de reservas corresponde al Hito 2. Ver [instrucciones de validación y arranque](README.md).

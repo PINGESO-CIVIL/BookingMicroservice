@@ -2,6 +2,6 @@
   "name": "bookingms",
   "private": true,
   "scripts": {
-    "codegen": "npm --prefix Frontend run contracts"
+    "codegen": "npm --prefix apps/web run contracts"
   }
 }

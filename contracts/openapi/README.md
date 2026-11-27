@@ -2,7 +2,7 @@
 
 Actualización 0.3.0: el usuario confirmó bloques de duración fija configurables por recurso. `ResourcePolicy` incluye `slotDurationSeconds` (minutos enteros expresados en segundos); disponibilidad incluye esa duración y `availableSlots`, manteniendo `availableWindows` como ventanas continuas. La interfaz selecciona bloques completos y no solicita escribir horas. El frontend calcula los bloques sobre configuración y ocupación de ejemplo, sin persistencia; el backend real sigue pendiente.
 
-El [contrato OpenAPI 3.1](../openapi.yaml) es la fuente de las catorce operaciones, sus tipos y los ejemplos del mock. Desde la raíz, instalar las dependencias con `npm ci --prefix Frontend` y ejecutar `pnpm codegen` para regenerar los tipos TypeScript y los fixtures. Para validar el YAML y sus ejemplos, usar `npm ci --prefix contracts` y `npm run validate --prefix contracts`.
+El [contrato OpenAPI 3.1](../openapi.yaml) es la fuente de las catorce operaciones, sus tipos y los ejemplos del mock. Desde la raíz, instalar las dependencias con `npm ci --prefix apps/web` y ejecutar `pnpm codegen` para regenerar los tipos TypeScript y los fixtures. Para validar el YAML y sus ejemplos, usar `npm ci --prefix contracts` y `npm run validate --prefix contracts`.
 
 ## Transición a 0.4.0
 
@@ -55,21 +55,19 @@ Validar el contrato no ejecuta comparaciones temporales ni demuestra idempotenci
 
 ## Swagger UI local
 
-- Documentación: [http://localhost:8080/docs/](http://localhost:8080/docs/).
-- Contrato servido: [http://localhost:8080/docs/openapi.yaml](http://localhost:8080/docs/openapi.yaml).
+- Documentación: [http://127.0.0.1:5191/api/docs](http://127.0.0.1:5191/api/docs).
+- Contrato servido: [http://127.0.0.1:5191/api/docs/openapi.yaml](http://127.0.0.1:5191/api/docs/openapi.yaml).
 - Contiene las catorce operaciones, parámetros, cuerpos, ejemplos, códigos de respuesta y esquemas.
-- **Try it out** está habilitado contra `localhost:4010`. En **Authorize**, usar `demo-user` o `demo-admin`; son valores de demostración. `X-Mock-Scenario` selecciona ejemplos de éxito/error. Las escrituras no guardan cambios.
+- **Try it out** llama al mismo backend que sirve la documentación. En **Authorize**, usar `demo-user` o `demo-admin`. `X-Mock-Scenario` selecciona ejemplos de éxito y error. Las escrituras devuelven fixtures y dejan intactas las consultas.
 
 Desde la raíz del repositorio:
 
 ```powershell
-docker compose up -d --wait
+docker compose up -d --build
 docker compose ps
 ```
 
-El `compose.yaml` de la raíz construye e inicia Vue/Nginx, la API mock Go y Swagger. Usar `docker compose up --build -d --wait`. No inicia MongoDB. La instalación de calidad mantiene su Compose y sus datos independientes; sus auditorías se ejecutan explícitamente mediante `scripts/quality.ps1`.
-
-El contrato se monta como solo lectura y la imagen de Swagger lo copia al directorio público al iniciar. Después de editar y validar el YAML, ejecutar `docker compose restart swagger-ui` y recargar el navegador. Para detener la documentación, `docker compose stop swagger-ui`.
+La API incluye el YAML y los archivos estáticos de Swagger en su imagen. Después de editar y validar el YAML, ejecutar `docker compose up -d --build backend` y recargar el navegador. `API_ENV=dev` habilita los archivos de documentación. El valor predeterminado de Compose es `dev`.
 
 La validación se realiza localmente con Redocly; Swagger UI no envía el contrato al validador público de swagger.io. La dirección local servida fue verificada contra el archivo original y sus catorce operaciones se comprobaron en el navegador.
 
@@ -83,7 +81,7 @@ La validación se realiza localmente con Redocly; Swagger UI no envía el contra
 - Incluir `attributes` en creación y respuesta para datos específicos de la reserva, con validación explícita por contexto. En el caso genérico puede omitirse en la solicitud o enviarse vacío.
 - Representar explícitamente instantes y unidades de duración; no exponer directamente `time.Duration` ni tipos BSON como contrato público.
 - Mantener el contrato versionado y comprobar su validez y compatibilidad en integración continua.
-- Mapear los tipos de transporte a los modelos internos; los documentos MongoDB pertenecen al repositorio.
+- Mapear los tipos de transporte a los modelos internos; los documentos PostgreSQL pertenecen al repositorio.
 
 Se ha seleccionado OpenAPI 3.1 y Redocly CLI 2.75.0 para esta entrega. Los tipos TypeScript se generan desde OpenAPI y Vue consume el mock HTTP Go. La publicación es local; un despliegue remoto debe acordarse. La lógica real corresponde al Hito 2.
 

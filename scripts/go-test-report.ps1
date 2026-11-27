@@ -7,11 +7,12 @@ param(
 $ErrorActionPreference = 'Stop'
 $ProjectRoot = [IO.Path]::GetFullPath($ProjectRoot)
 $tests = @{}
-Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'Backend') -Filter '*_test.go' -Recurse | ForEach-Object {
+$apiRoot = Join-Path $ProjectRoot 'apps/api'
+Get-ChildItem -LiteralPath $apiRoot -Filter '*_test.go' -Recurse | ForEach-Object {
     $relative = $_.FullName.Substring($ProjectRoot.Length + 1).Replace('\', '/')
     $package = $ModuleName
-    if ($_.DirectoryName -ne (Join-Path $ProjectRoot 'Backend')) {
-        $package += '/' + $relative.Substring(8, $relative.LastIndexOf('/') - 8)
+    if ($_.DirectoryName -ne $apiRoot) {
+        $package += '/' + $_.DirectoryName.Substring($apiRoot.Length + 1).Replace('\', '/')
     }
     foreach ($match in [regex]::Matches([IO.File]::ReadAllText($_.FullName), '(?m)^func\s+(Test\w+)\s*\(')) {
         $tests[$package + ':' + $match.Groups[1].Value] = $relative

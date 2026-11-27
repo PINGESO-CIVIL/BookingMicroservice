@@ -7,7 +7,7 @@ reports
 **/test-results
 **/playwright-report
 **/.scannerwork
-Backend/bin
+apps/api/bin
 .env
 .env.*
 **/.env

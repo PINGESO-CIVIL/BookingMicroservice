@@ -2,7 +2,7 @@
 
 ## Estado y alcance
 
-El stack es Go, Vue, OpenAPI y MongoDB. El usuario ha establecido SonarQube y Trivy como herramientas obligatorias para calidad y seguridad continua.
+El stack es Go, Vue, OpenAPI y PostgreSQL. El usuario ha establecido SonarQube y Trivy como herramientas obligatorias para calidad y seguridad continua.
 
 La configuración local se implementa con Docker Compose y `scripts/quality.ps1`. SonarQube analiza Go, TypeScript, Vue y los scripts del frontend en el proyecto privado existente `bookingms-backend` (se conserva la clave y su historial). Trivy analiza el repositorio y, mediante un comando independiente, las imágenes de la demo. La plataforma de integración continua todavía no está definida: no se ha creado un pipeline ni una automatización periódica.
 
@@ -25,7 +25,7 @@ Requisitos para auditorías de código: Docker Desktop iniciado en modo Linux, D
 
 ```powershell
 ./scripts/quality.ps1 Init
-npm --prefix Frontend ci
+npm --prefix apps/web ci
 ./scripts/quality.ps1 Validate
 ./scripts/quality.ps1 Start
 ./scripts/quality.ps1 Setup
@@ -39,7 +39,7 @@ npm --prefix Frontend ci
 - `Start`: inicia SonarQube y su base; espera a que estén saludables. El primer inicio puede tardar varios minutos.
 - `Setup`: cambia la contraseña inicial de la instalación local, crea el proyecto privado y genera un token de análisis limitado al proyecto, con vencimiento de 90 días. Una nueva ejecución conserva un token que siga siendo válido. No modifica credenciales desconocidas de una instalación existente.
 - `Check`: compila Vue y genera cobertura de Go y Vue/TypeScript antes de SonarQube; ejecuta Trivy sobre el repositorio aunque falle Sonar y devuelve error si cualquiera falla. La importación de ambas coberturas y el Quality Gate forman parte del análisis SonarQube.
-- `TrivyImages`: revisa las imágenes ya construidas `bookingms/mock-api:demo`, `bookingms/frontend:demo` y la imagen fijada de Swagger. Exporta archivos temporales con `docker image save`, analiza vulnerabilidades y secretos, conserva un JSON por imagen e intenta las tres aunque alguna falle. No monta el socket Docker en Trivy. El control bloqueante es el mismo que para el repositorio. Se ejecuta por separado para distinguir código fuente e imágenes.
+- `TrivyImages`: revisa `bookingms/api:demo` (incluye los archivos de Swagger), `bookingms/frontend:demo` y `bookingms/migrate:demo`. Exporta las imágenes con `docker image save`, analiza vulnerabilidades y secretos y conserva un reporte JSON por imagen. Aplica el mismo control bloqueante que el análisis del repositorio.
 
 Para ejecutar por separado:
 
@@ -51,7 +51,7 @@ Para ejecutar por separado:
 ./scripts/quality.ps1 Stop
 ```
 
-`Coverage` ejecuta `go vet` y `go test` con JSON y cobertura nativa Go, compila Vue y ejecuta Vitest con cobertura V8/LCOV. Corrige las rutas de ambos perfiles para que coincidan con `Backend/` y `Frontend/` al analizar desde la raíz. Se eliminan los perfiles anteriores antes de ejecutar; un fallo impide enviarlos como si fueran válidos. No se excluyen vistas sin pruebas ni se genera cobertura artificial. Las pruebas de navegador siguen siendo un comando separado y no se mezclan con LCOV de pruebas unitarias.
+`Coverage` ejecuta `go vet` y `go test` con JSON y cobertura nativa Go, compila Vue y ejecuta Vitest con cobertura V8/LCOV. Corrige las rutas de ambos perfiles para que coincidan con `apps/api/` y `apps/web/` al analizar desde la raíz. Se eliminan los perfiles anteriores antes de ejecutar; un fallo impide enviarlos como si fueran válidos. No se excluyen vistas sin pruebas ni se genera cobertura artificial. Las pruebas de navegador siguen siendo un comando separado y no se mezclan con LCOV de pruebas unitarias.
 
 SonarQube está disponible únicamente en [localhost:9000](http://localhost:9000). Usuario: `admin`. La contraseña está en `SONAR_ADMIN_PASSWORD` dentro del archivo local `.quality/local.env`; no se publica en documentación ni consola. El token y la contraseña de base también están en ese archivo, excluido de Git. No compartirlo ni copiarlo a configuración versionada. Si se pierde el archivo, conservar los volúmenes y recuperar el acceso: no borrar datos para regenerar contraseñas.
 
@@ -66,7 +66,7 @@ SonarQube está disponible únicamente en [localhost:9000](http://localhost:9000
 | SonarScanner CLI en Docker | Imagen `12.3.0.4285_8.1.0` |
 | Trivy | `0.76.1` |
 
-Las imágenes están fijadas también por digest en `infra/quality/compose.yaml`. No se actualizan silenciosamente mediante `latest`. La base PostgreSQL es infraestructura interna de SonarQube y no expone un puerto al host; el microservicio de reservas sigue utilizando MongoDB. No se cambian ajustes globales de WSL ni se desactivan comprobaciones de Elasticsearch para arrancar.
+Las imágenes están fijadas también por digest en `infra/quality/compose.yaml`. No se actualizan silenciosamente mediante `latest`. La base PostgreSQL de SonarQube pertenece a su infraestructura interna. BookingMS usa un PostgreSQL independiente en el Compose raíz. No se cambian ajustes globales de WSL ni se desactivan comprobaciones de Elasticsearch para arrancar.
 
 El código se monta como solo lectura en los analizadores; únicamente `reports/` y las cachés necesarias son escribibles. No se monta el socket Docker en Trivy.
 
@@ -92,7 +92,7 @@ Los reportes y `.quality/` están excluidos de Git. Los reportes de seguridad pu
 - Se excluyen `.git`, `.quality`, reportes, `.scannerwork` y dependencias descargadas de frontend del recorrido del scanner; se mantienen los manifiestos y futuros archivos de dependencias bloqueadas para análisis. Las credenciales generadas en `.quality` son solo locales y nunca deben versionarse.
 - El análisis del repositorio excluye también binarios locales anteriores, `dist` y salidas de pruebas de navegador. Los manifiestos y lockfiles siguen incluidos; `TrivyImages` analiza por separado los artefactos que realmente se construyeron para ejecutar la demo. No se agregaron excepciones de vulnerabilidades individuales.
 
-Actualmente existen imágenes configuradas para Vue/Nginx y el servidor mock Go, junto a Swagger, en el Compose raíz. SonarQube incluye Go, Vue, TypeScript y los scripts del frontend; importa cobertura Go y LCOV de Vitest. La preparación no ejecuta las auditorías ni afirma que pasen los umbrales: esos resultados se obtienen cuando el usuario lanza los comandos. Trivy solo analiza formatos que soporta; habilitar `misconfig` no garantiza que todos los archivos YAML tengan reglas aplicables. Los umbrales del código real corresponden al Hito 2.
+El Compose raíz construye imágenes para Vue/Nginx, el backend Go con los archivos de Swagger y el proceso de migraciones Goose. SonarQube incluye Go, Vue, TypeScript y los scripts del frontend e importa cobertura Go y LCOV de Vitest. Los umbrales del código real corresponden al Hito 2.
 
 ## Verificaciones previstas
 
@@ -101,7 +101,7 @@ Actualmente existen imágenes configuradas para Vue/Nginx y el servidor mock Go,
 | Formato, compilación y análisis Go | Detectar problemas básicos antes de integrar | Cambios del backend |
 | Pruebas Go y Vue | Verificar comportamiento; generar cobertura cuando existan pruebas | Cambios de código |
 | Validación OpenAPI | Comprobar estructura del contrato y detectar cambios incompatibles | Cambios de contrato e integración |
-| Integración MongoDB | Verificar atomicidad, concurrencia, idempotencia, versiones y aislamiento contra una instancia real | Cambios de persistencia y casos de uso |
+| Integración PostgreSQL | Verificar atomicidad, concurrencia, idempotencia, versiones y aislamiento contra una instancia real | Cambios de persistencia y casos de uso |
 | SonarQube | Analizar calidad y seguridad del código y evaluar su Quality Gate | Integración de cambios; publicación condicionada al resultado |
 | Trivy sobre repositorio | Detectar vulnerabilidades en dependencias compatibles, secretos y configuraciones soportadas | Integración de cambios |
 | Trivy sobre imágenes | Analizar la imagen que se pretende desplegar, cuando exista | Antes de publicar/desplegar esa imagen |
@@ -119,11 +119,9 @@ SonarQube y Trivy complementan las pruebas del dominio. No demuestran por sí mi
 - Conservar reportes y relacionarlos con la revisión del código y la imagen analizada. Un fallo de ejecución del analizador no equivale a un análisis aprobado.
 - Determinar frecuencia de reevaluación de dependencias e imágenes existentes; no se ha creado ninguna automatización periódica.
 
-## Consideraciones MongoDB
+## Persistencia de reservas
 
-La estrategia de persistencia debe proteger la exclusividad entre reservas diferentes del mismo recurso y los cambios de disponibilidad concurrentes. Una transacción no debe tratarse como prueba automática de ausencia de solapamientos: se diseñará una coordinación por recurso u otra estrategia equivalente y se demostrará mediante pruebas concurrentes.
-
-Si se adoptan transacciones multidocumento, los entornos de desarrollo, pruebas y VPS deberán proporcionar una topología MongoDB compatible. Un despliegue standalone no admite esas transacciones. La topología, persistencia, copias de seguridad y recuperación se diseñarán antes del despliegue; todavía no están configuradas.
+La demo usa PostgreSQL para Goose y para comprobar disponibilidad. El diseño del Hito 2 debe impedir reservas solapadas incluso con solicitudes concurrentes y verificar ese comportamiento contra PostgreSQL real.
 
 ## Referencias oficiales
 
@@ -132,4 +130,3 @@ Si se adoptan transacciones multidocumento, los entornos de desarrollo, pruebas 
 - [SonarQube: cobertura JavaScript/TypeScript con LCOV](https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/test-coverage/javascript-typescript-test-coverage) y [Vitest: generación de cobertura](https://vitest.dev/guide/coverage.html).
 - [SonarQube: Docker](https://docs.sonarsource.com/sonarqube-community-build/server-installation/from-docker-image/set-up-and-start-container), [requisitos de base](https://docs.sonarsource.com/sonarqube-community-build/server-installation/installing-the-database) y [cobertura Go](https://docs.sonarsource.com/sonarqube-server/2025.3/analyzing-source-code/test-coverage/go-test-coverage).
 - [Trivy: vulnerabilidades](https://github.com/aquasecurity/trivy/blob/main/docs/guide/scanner/vulnerability.md), [secretos](https://www.trivy.dev/docs/latest/guide/scanner/secret/) y [configuración de escáneres](https://github.com/aquasecurity/trivy/blob/main/docs/guide/configuration/skipping.md).
-- [MongoDB: transacciones](https://www.mongodb.com/docs/manual/core/transactions/) y [consideraciones de producción y concurrencia](https://www.mongodb.com/docs/manual/core/transactions-production-consideration/).

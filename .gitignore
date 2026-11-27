@@ -7,9 +7,10 @@
 .env.local
 .env.*.local
 /spec
-/docs
+/docs/*
+!/docs/modos-de-falla.md
 
 # Build outputs and future frontend dependencies.
-Backend/bin/
+apps/api/bin/
 node_modules/
 dist/

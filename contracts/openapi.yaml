@@ -25,7 +25,7 @@ info:
     cambiar horario o recurso. Estas comparaciones requieren lógica posterior;
     no quedan demostradas por validar este archivo.
 servers:
-  - url: http://127.0.0.1:4010
+  - url: /
     description: Servidor HTTP mock del Hito 1. Respuestas de demostración sin persistencia.
 tags:
   - name: Reservas

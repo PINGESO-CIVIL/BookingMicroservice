@@ -64,7 +64,7 @@ function Write-GoCoverageReports {
     foreach ($path in @($coveragePath, $testPath, $executionPath)) {
         if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path }
     }
-    Push-Location (Join-Path $projectRoot 'Backend')
+    Push-Location (Join-Path $projectRoot 'apps/api')
     try {
         $moduleName = & go list -m
         if ($LASTEXITCODE -ne 0) { throw 'No se pudo resolver el modulo Go.' }
@@ -80,7 +80,7 @@ function Write-GoCoverageReports {
         # Go reports use module paths; the scanner runs from the repository root.
         $prefix = [regex]::Escape($moduleName.Trim() + '/')
         $coverageLines = [System.IO.File]::ReadAllLines($coveragePath) | ForEach-Object {
-            $_ -replace ('^' + $prefix), 'Backend/'
+            $_ -replace ('^' + $prefix), 'apps/api/'
         }
         [System.IO.File]::WriteAllLines($coveragePath, [string[]]$coverageLines, $utf8)
         $events = @($testOutput | ForEach-Object { $_ | ConvertFrom-Json })
@@ -95,11 +95,11 @@ function Write-FrontendCoverageReports {
     if (-not (Get-Command node -ErrorAction SilentlyContinue) -or -not (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
         throw 'Instala Node.js y npm para generar cobertura del frontend.'
     }
-    $frontendRoot = Join-Path $projectRoot 'Frontend'
+    $frontendRoot = Join-Path $projectRoot 'apps/web'
     $lcovPath = Join-Path $reportDirectory 'frontend/lcov.info'
     if (Test-Path -LiteralPath $lcovPath) { Remove-Item -LiteralPath $lcovPath }
     if (-not (Test-Path -LiteralPath (Join-Path $frontendRoot 'node_modules/@vitest/coverage-v8'))) {
-        throw 'Faltan dependencias del frontend. Ejecuta npm ci desde Frontend y vuelve a ejecutar.'
+        throw 'Faltan dependencias del frontend. Ejecuta npm ci desde apps/web y vuelve a ejecutar.'
     }
     Push-Location $frontendRoot
     try {
@@ -111,14 +111,14 @@ function Write-FrontendCoverageReports {
             throw 'Las pruebas Vue/TypeScript fallaron; no se enviara cobertura a SonarQube.'
         }
         if (-not (Test-Path -LiteralPath $lcovPath)) { throw 'Vitest no genero reports/frontend/lcov.info.' }
-        # LCOV is produced from Frontend; SonarScanner resolves paths from the repo root.
+        # LCOV is produced from apps/web; SonarScanner resolves paths from the repo root.
         $frontendPrefix = [IO.Path]::GetFullPath($frontendRoot).TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
         $normalized = foreach ($line in [IO.File]::ReadAllLines($lcovPath)) {
             if ($line.StartsWith('SF:')) {
                 $source = $line.Substring(3)
                 if ([IO.Path]::IsPathRooted($source)) {
                     $absoluteSource = [IO.Path]::GetFullPath($source)
-                } elseif ($source.Replace('\', '/').StartsWith('Frontend/')) {
+                } elseif ($source.Replace('\', '/').StartsWith('apps/web/')) {
                     $absoluteSource = [IO.Path]::GetFullPath((Join-Path $projectRoot $source))
                 } else {
                     $absoluteSource = [IO.Path]::GetFullPath((Join-Path $frontendRoot $source))
@@ -245,9 +245,9 @@ function Invoke-TrivyImageAnalysis {
     $imageReports = Join-Path $reportDirectory 'images'
     New-Item -ItemType Directory -Force $imageReports | Out-Null
     $targets = @(
-        @{ Name = 'bookingms/mock-api:demo'; File = 'mock-api' },
+        @{ Name = 'bookingms/api:demo'; File = 'api' },
         @{ Name = 'bookingms/frontend:demo'; File = 'frontend' },
-        @{ Name = 'bookingms/swagger-ui:demo'; File = 'swagger-ui' }
+        @{ Name = 'bookingms/migrate:demo'; File = 'migrate' }
     )
     $failed = @()
     foreach ($target in $targets) {
